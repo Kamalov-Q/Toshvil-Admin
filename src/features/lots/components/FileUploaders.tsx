@@ -1,4 +1,3 @@
-import { apiClient } from "@/api/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader, Upload, X } from "lucide-react";
@@ -53,6 +52,7 @@ export const FileUploader = React.forwardRef<
             try {
 
                 const formData = new FormData();
+                formData.append('folder', folder);
 
                 if (multiple) {
                     Array.from(files).forEach((file) => {
@@ -62,25 +62,26 @@ export const FileUploader = React.forwardRef<
                     formData.append('file', files[0]);
                 }
 
-                formData.append('folder', folder);
-
                 const endpoint = multiple ? '/upload/multiple' : '/upload/single';
-                const response = await apiClient.post<{ urls?: string[], url?: string }>(
-                    endpoint, formData, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
+                    method: 'POST',
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                     },
-                    onUploadProgress(progressEvent) {
-                        const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1));
-                        setUploadProgress(percentCompleted);
-                    },
+                    body: formData
                 });
 
-                if (multiple && response.data.urls) {
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'File upload failed');
+                }
+
+                if (multiple && data.urls) {
                     const currentUrls = Array.isArray(field.value) ? field.value : [];
-                    field.onChange([...currentUrls, ...response.data.urls]);
-                } else if (!multiple && response.data.url) {
-                    field.onChange(response.data.url);
+                    field.onChange([...currentUrls, ...data.urls]);
+                } else if (!multiple && data.url) {
+                    field.onChange(data.url);
                 }
 
                 setUploadProgress(100);
@@ -91,7 +92,7 @@ export const FileUploader = React.forwardRef<
                 }
 
             } catch (error: any) {
-                const errorMessage = error.response.data?.message || error.message || 'File upload failed. Please try again.';
+                const errorMessage = error.message || 'File upload failed. Please try again.';
                 setError(errorMessage);
                 console.error('Upload error: ', error);
             } finally {
