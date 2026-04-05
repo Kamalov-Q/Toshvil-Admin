@@ -1,8 +1,9 @@
-import { apiClient } from "@/api/axios";
-import type { CreateLotDto, Lot, UpdateLotDto } from "../schemas/schemas";
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '../../../api/axios';
+import type { CreateLotDto, UpdateLotDto, Lot } from '../schemas/schemas';
+import { toast } from '../../../utils/toast';
 
-interface GetLotsParams {
+export interface GetLotsParams {
     page?: number;
     limit?: number;
     status?: string;
@@ -12,15 +13,15 @@ interface GetLotsParams {
     search?: string;
 }
 
-interface LotsResponse {
-    data: Lot[],
+export interface LotsResponse {
+    data: Lot[];
     total: number;
     page: number;
     limit: number;
 }
 
 // Get all lots with pagination and filters
-export const useLots = (params: GetLotsParams) => {
+export const useLots = (params: GetLotsParams = {}) => {
     return useQuery<LotsResponse>({
         queryKey: ['lots', params],
         queryFn: async () => {
@@ -32,29 +33,31 @@ export const useLots = (params: GetLotsParams) => {
                     ...(params.paymentType && { paymentType: params.paymentType }),
                     ...(params.tradeType && { tradeType: params.tradeType }),
                     ...(params.districtId && { districtId: params.districtId }),
-                    ...(params.search && { search: params.search })
-                }
+                    ...(params.search && { search: params.search }),
+                },
             });
             return response.data;
         },
         staleTime: 5 * 60 * 1000, // 5 minutes
-        gcTime: 10 * 60 * 1000 // 10 minutes
+        gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+        retry: 1,
     });
 };
 
+// Get single lot by ID
 export const useLot = (id: string) => {
     return useQuery<Lot>({
         queryKey: ['lot', id],
         queryFn: async () => {
             const response = await apiClient.get<Lot>(`/lots/admin/${id}`);
-            return response.data
+            return response.data;
         },
         enabled: !!id,
         staleTime: 5 * 60 * 1000,
-    })
-}
+    });
+};
 
-// Create Lot 
+// Create new lot
 export const useCreateLot = () => {
     const queryClient = useQueryClient();
 
@@ -64,36 +67,50 @@ export const useCreateLot = () => {
             return response.data;
         },
         onSuccess: (data) => {
+            // Invalidate and refetch
             queryClient.invalidateQueries({ queryKey: ['lots'] });
-
-            // Adding to cache
+            // Add to cache
             queryClient.setQueryData(['lot', data.id], data);
+            toast.success(`Lot #${data.lotNumber} created successfully`);
         },
         onError: (error: any) => {
-            console.error('Create lot error: ', error.response.data || error.message);
+            const errorMessage =
+                error?.response?.data?.message ||
+                error?.response?.data?.error ||
+                error?.message ||
+                'Failed to create lot';
+            toast.error(errorMessage);
+            console.error('Create lot error:', error);
         },
     });
 };
 
-// Update lot 
+// Update existing lot
 export const useUpdateLot = (id: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async (data: UpdateLotDto) => {
-            const response = await apiClient.patch(`/lots/admin/${id}`, data);
+            const response = await apiClient.patch<Lot>(`/lots/admin/${id}`, data);
             return response.data;
         },
         onSuccess: (data) => {
+            // Invalidate related queries
             queryClient.invalidateQueries({ queryKey: ['lots'] });
             queryClient.invalidateQueries({ queryKey: ['lot', id] });
-
-            // Updating the cache
+            // Update cache
             queryClient.setQueryData(['lot', id], data);
+            toast.success(`Lot #${data.lotNumber} updated successfully`);
         },
         onError: (error: any) => {
-            console.error('Update lot error: ', error.response.data || error.message);
-        }
+            const errorMessage =
+                error?.response?.data?.message ||
+                error?.response?.data?.error ||
+                error?.message ||
+                'Failed to update lot';
+            toast.error(errorMessage);
+            console.error('Update lot error:', error);
+        },
     });
 };
 
@@ -106,10 +123,18 @@ export const useDeleteLot = () => {
             await apiClient.delete(`/lots/admin/${id}`);
         },
         onSuccess: () => {
+            // Invalidate all lots queries
             queryClient.invalidateQueries({ queryKey: ['lots'] });
+            toast.success('Lot deleted successfully');
         },
         onError: (error: any) => {
-            console.error('Delete lot error: ', error.response.data || error.message);
-        }
+            const errorMessage =
+                error?.response?.data?.message ||
+                error?.response?.data?.error ||
+                error?.message ||
+                'Failed to delete lot';
+            toast.error(errorMessage);
+            console.error('Delete lot error:', error);
+        },
     });
 };

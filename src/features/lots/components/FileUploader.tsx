@@ -1,148 +1,277 @@
-import { apiClient } from '@/api/axios';
-import { Input } from '@/components/ui/input';
 import React, { useCallback, useState } from 'react';
-import { useController, type Control, type FieldValues, type Path } from 'react-hook-form';
-import { Upload, X } from 'lucide-react';
+import { useController, type FieldValues, type Control, type Path } from 'react-hook-form';
+import { apiClient } from '../../../api/axios';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Upload, X, Loader, Image as ImageIcon } from 'lucide-react';
+import { toast } from '../../../utils/toast';
 
 interface FileUploaderProps<T extends FieldValues> {
-    control: Control<T>,
-    name: Path<T>,
+    control: Control<T>;
+    name: Path<T>;
     folder: string;
     accept?: string;
     multiple?: boolean;
     label?: string;
+    description?: string;
+    maxSize?: number; // in MB
 }
 
-export const FileUploader = React.forwardRef<
-    HTMLDivElement,
-    FileUploaderProps<any>
->(({ control, name, folder, accept = "image/*", multiple = false, label }, ref) => {
-    const { field } = useController({
-        control,
-        name
-    });
+export const FileUploader = <T extends FieldValues>({
+    control,
+    name,
+    folder,
+    accept = 'image/*',
+    multiple = false,
+    label,
+    description,
+    maxSize = 10,
+}: FileUploaderProps<T>) => {
+        const { field } = useController({
+            control,
+            name,
+        });
 
-    const [uploading, setUploading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+        const [uploading, setUploading] = useState(false);
+        const [error, setError] = useState<string | null>(null);
+        const [uploadProgress, setUploadProgress] = useState(0);
+        const inputRef = React.useRef<HTMLInputElement>(null);
 
-    const handleFileUpload = useCallback(
-        async (files: FileList | null) => {
-            if (!files || files.length === 0) return;
+        const handleFileUpload = useCallback(
+            async (files: FileList | null) => {
+                if (!files || files.length === 0) return;
 
-            setUploading(true);
-            setError(null);
-
-            try {
-
-                const formData = new FormData();
-
-                if (multiple) {
-                    Array.from(files).forEach((file) => {
-                        formData.append('files', file);
-                    });
-                } else {
-                    formData.append('file', files[0]);
-                }
-
-                formData.append('folder', folder);
-
-                const endpoint = multiple ? '/upload/multiple' : '/upload/single';
-                const response = await apiClient.post<{ urls?: string[], url?: string }>(
-                    endpoint,
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        },
+                // Validate file sizes
+                const maxSizeBytes = maxSize * 1024 * 1024;
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].size > maxSizeBytes) {
+                        setError(`File "${files[i].name}" exceeds ${maxSize}MB limit`);
+                        toast.error(`File exceeds ${maxSize}MB limit`);
+                        return;
                     }
-                );
-
-                if (multiple && response.data.urls) {
-                    field.onChange(response.data.urls);
-                } else if (!multiple && response.data.url) {
-                    field.onChange(response.data.url);
                 }
-            } catch (error) {
-                setError('File upload failed. Please try again.');
-                console.error('Upload error: ', error);
+
+                setUploading(true);
+                setError(null);
+                setUploadProgress(0);
+
+                try {
+                    const formData = new FormData();
+
+                    if (multiple) {
+                        Array.from(files).forEach((file) => {
+                            formData.append('files', file);
+                        });
+                    } else {
+                        formData.append('file', files[0]);
+                    }
+
+                    formData.append('folder', folder);
+
+                    const endpoint = multiple ? '/upload/multiple' : '/upload/single';
+                    const response = await apiClient.post<{
+                        urls?: string[];
+                        url?: string;
+                    }>(endpoint, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' },
+                        onUploadProgress: (progressEvent) => {
+                            const percentCompleted = Math.round(
+                                (progressEvent.loaded * 100) / (progressEvent.total || 1)
+                            );
+                            setUploadProgress(percentCompleted);
+                        },
+                    });
+
+                    if (multiple && response.data.urls) {
+                        const currentUrls = Array.isArray(field.value) ? field.value : [];
+                        field.onChange([...currentUrls, ...response.data.urls]);
+                        toast.success(`${response.data.urls.length} file(s) uploaded successfully`);
+                    } else if (!multiple && response.data.url) {
+                        field.onChange(response.data.url);
+                        toast.success('File uploaded successfully');
+                    }
+
+                    setUploadProgress(100);
+                    setTimeout(() => setUploadProgress(0), 1000);
+
+                    if (inputRef.current) {
+                        inputRef.current.value = '';
+                    }
+                } catch (err: any) {
+                    const errorMessage =
+                        err.response?.data?.message ||
+                        err.message ||
+                        'File upload failed. Please try again.';
+                    setError(errorMessage);
+                    toast.error(errorMessage);
+                    console.error('Upload error:', err);
+                } finally {
+                    setUploading(false);
+                }
+            },
+            [field, folder, multiple, maxSize]
+        );
+
+        const handleRemoveFile = (index?: number) => {
+            if (multiple && Array.isArray(field.value)) {
+                const updated = field.value.filter((_: string, i: number) => i !== index);
+                field.onChange(updated);
+                toast.success('Image removed');
+            } else {
+                field.onChange(multiple ? [] : '');
             }
-            finally {
-                setUploading(false);
-            }
-        },
-        [field, folder, multiple]
-    );
+        };
 
-    const handleRemoveFile = (index?: number) => {
-        if (multiple && Array.isArray(field.value)) {
-            const updated = field.value.filter((_: string, i: number) => i !== index);
-            field.onChange(updated);
-        } else {
-            field.onChange(multiple ? [] : "");
-        }
-    };
+        const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+            e.preventDefault();
+            e.stopPropagation();
+        };
 
-    return (
-        <div ref={ref} className='space-y-2'>
-            {label && <label className='text-sm font-medium'>{label}</label>}
+        const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleFileUpload(e.dataTransfer.files);
+        };
 
-            <div className='relative'>
-                <Input
-                    type='file'
-                    accept={accept}
-                    multiple={multiple}
-                    onChange={(e) => handleFileUpload(e.target.files)}
-                    disabled={uploading}
-                    className='hidden'
-                    id={name}
-                />
-                <label htmlFor={name}
-                    className='flex items-center justify-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors'
-                >
-                    <Upload
-                        className='w-5 h-5'
+        return (
+            <div className="space-y-3">
+                {label && (
+                    <label className="block text-sm font-semibold text-gray-700">{label}</label>
+                )}
+
+                {description && (
+                    <p className="text-xs text-gray-500">{description}</p>
+                )}
+
+                <div className="relative">
+                    <Input
+                        ref={inputRef}
+                        type="file"
+                        accept={accept}
+                        multiple={multiple}
+                        onChange={(e) => handleFileUpload(e.target.files)}
+                        disabled={uploading}
+                        className="hidden"
+                        id={`file-input-${name}`}
                     />
-                    <span className='text-sm text-gray-600'>
-                        {uploading ? 'Uploading' : 'Click to upload or drag and drop'}
-                    </span>
-                </label>
-            </div>
 
-            {error && <p className='text-sm text-red-500'>{error}</p>}
-
-            {/* Displaying uploaded files */}
-            {multiple && Array.isArray(field.value) && field.value.length > 0 && (
-                <div className='space-y-2'>
-                    {field.value.map((url: string, index: number) => (
-                        <div key={index} className='flex items-center justify-between p-3 bg-gray-50 rounded'>
-                            <span className='text-sm text-gray-600 truncate'>{url}</span>
-                            <button
-                                type='button'
-                                onClick={() => handleRemoveFile(index)}
-                                className='text-red-500 hover:text-red-700'
-                            >
-                                <X className='w-4 h-4' />
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {!multiple && field.value && (
-                <div className='flex items-center justify-between p-3 bg-gray-50 rounded'>
-                    <span className='text-sm text-gray-600 truncate'>{field.value}</span>
-                    <button
-                        type='button'
-                        onClick={() => handleRemoveFile()}
-                        className='text-red-500 hover:text-red-700'
+                    <label
+                        htmlFor={`file-input-${name}`}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                        className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200"
                     >
-                        <X className='w-4 h-4' />
-                    </button>
+                        {uploading ? (
+                            <>
+                                <Loader className="w-8 h-8 text-blue-600 animate-spin" />
+                                <div className="text-center">
+                                    <span className="text-sm font-medium text-blue-600">
+                                        Uploading... {uploadProgress}%
+                                    </span>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <Upload className="w-8 h-8 text-gray-400" />
+                                <div className="text-center">
+                                    <span className="text-sm font-semibold text-gray-600">
+                                        Click to upload or drag and drop
+                                    </span>
+                                    <span className="block text-xs text-gray-500 mt-1">
+                                        {multiple
+                                            ? `PNG, JPG, GIF up to ${maxSize}MB each`
+                                            : `PNG, JPG, GIF up to ${maxSize}MB`}
+                                    </span>
+                                </div>
+                            </>
+                        )}
+                    </label>
+
+                    {/* Upload Progress Bar */}
+                    {uploading && uploadProgress > 0 && (
+                        <div className="mt-3 w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                            <div
+                                className="bg-gradient-to-r from-blue-600 to-blue-400 h-2.5 rounded-full transition-all duration-300"
+                                style={{ width: `${uploadProgress}%` }}
+                            />
+                        </div>
+                    )}
                 </div>
-            )}
 
-        </div>
-    );
-});
+                {/* Error Message */}
+                {error && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-sm text-red-700 font-medium">{error}</p>
+                    </div>
+                )}
 
-FileUploader.displayName = 'FileUploader';
+                {/* Display uploaded files */}
+                {multiple && Array.isArray(field.value) && field.value.length > 0 && (
+                    <div className="space-y-2 mt-4">
+                        <div className="flex items-center justify-between">
+                            <p className="text-sm font-semibold text-gray-700">
+                                <ImageIcon className="inline w-4 h-4 mr-1" />
+                                Uploaded Images ({field.value.length})
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {field.value.map((url: string, index: number) => (
+                                <div
+                                    key={index}
+                                    className="relative group overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
+                                >
+                                    <img
+                                        src={url}
+                                        alt={`Uploaded ${index}`}
+                                        className="w-full h-32 object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => handleRemoveFile(index)}
+                                            className="text-white hover:text-red-300"
+                                        >
+                                            <X className="w-5 h-5" />
+                                        </Button>
+                                    </div>
+                                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent p-2">
+                                        <p className="text-xs text-white truncate font-mono">
+                                            {url.split('/').pop()}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {!multiple && field.value && (
+                    <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg">
+                        <div className="flex items-center gap-4">
+                            <img
+                                src={field.value}
+                                alt="Uploaded"
+                                className="w-16 h-16 object-cover rounded border border-blue-300"
+                            />
+                            <div className="flex-1 min-w-0">
+                                <p className="text-xs text-gray-600 truncate font-mono">
+                                    {field.value.split('/').pop()}
+                                </p>
+                            </div>
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleRemoveFile()}
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            >
+                                <X className="w-4 h-4" />
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+};
