@@ -7,7 +7,6 @@ import {
 } from '../components/ui/card';
 import { useLots } from '../features/lots/api/hooks';
 import { useNews } from '../features/news/api/hooks';
-import { useDistricts } from '../features/districts/api/hooks';
 import {
     BarChart,
     Bar,
@@ -22,6 +21,7 @@ import {
     Cell,
 } from 'recharts';
 import { Activity, FileText, MapPin, Newspaper } from 'lucide-react';
+import { useDistricts } from '@/features/lots/districts/api/hooks';
 
 export default function DashboardPage() {
     const { data: lots } = useLots({ limit: 100 });
@@ -44,7 +44,7 @@ export default function DashboardPage() {
         { name: 'Cancelled', value: lots?.data.filter((l) => l.status === 'cancelled').length || 0 },
     ];
 
-    const COLORS = ['#10b981', '#3b82f6', '#gray', '#ef4444'];
+    const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'];
 
     return (
         <div className="space-y-6">
@@ -134,31 +134,81 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Lot Status Distribution</CardTitle>
-                        <CardDescription>Current status breakdown</CardDescription>
+                <Card className="shadow-lg border-none bg-gradient-to-br from-white to-gray-50/50">
+                    <CardHeader className="pb-0">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <CardTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+                                    Status Distribution
+                                </CardTitle>
+                                <CardDescription>Real-time breakdown of lot statuses</CardDescription>
+                            </div>
+                            <div className="bg-blue-100 p-2 rounded-lg">
+                                <Activity className="w-5 h-5 text-blue-600" />
+                            </div>
+                        </div>
                     </CardHeader>
-                    <CardContent>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <PieChart>
-                                <Pie
-                                    data={statusData}
-                                    cx="50%"
-                                    cy="50%"
-                                    labelLine={false}
-                                    label={({ name, value }) => `${name} (${value})`}
-                                    outerRadius={100}
-                                    fill="#8884d8"
-                                    dataKey="value"
-                                >
-                                    {statusData.map((_, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </ResponsiveContainer>
+                    <CardContent className="pt-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <div className="h-[280px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Pie
+                                            data={statusData}
+                                            cx="50%"
+                                            cy="50%"
+                                            innerRadius={70}
+                                            outerRadius={100}
+                                            paddingAngle={8}
+                                            dataKey="value"
+                                            stroke="none"
+                                        >
+                                            {statusData.map((_, index) => (
+                                                <Cell 
+                                                    key={`cell-${index}`} 
+                                                    fill={COLORS[index % COLORS.length]}
+                                                    className="transition-all duration-300 hover:opacity-80 cursor-pointer"
+                                                />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip 
+                                            content={({ active, payload }) => {
+                                                if (active && payload && payload.length) {
+                                                    return (
+                                                        <div className="bg-white p-3 shadow-xl rounded-lg border border-gray-100">
+                                                            <p className="text-sm font-bold text-gray-900">{payload[0].name}</p>
+                                                            <p className="text-xs text-gray-600 mt-0.5">
+                                                                {payload[0].value} Lots ({((payload[0].value as number / (lots?.total || 1)) * 100).toFixed(1)}%)
+                                                            </p>
+                                                        </div>
+                                                    );
+                                                }
+                                                return null;
+                                            }}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="space-y-4">
+                                {statusData.map((status, index) => (
+                                    <div key={status.name} className="flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 group">
+                                        <div className="flex items-center gap-3">
+                                            <div 
+                                                className="w-3 h-3 rounded-full shadow-sm" 
+                                                style={{ backgroundColor: COLORS[index] }}
+                                            />
+                                            <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                                                {status.name}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-bold text-gray-900">{status.value}</span>
+                                            <span className="text-[10px] text-gray-400 font-medium">lots</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
             </div>

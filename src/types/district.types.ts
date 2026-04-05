@@ -19,21 +19,21 @@ export const CreateDistrictSchema = z.object({
     addressRu: z.string().min(1, 'Address RU is required'),
     addressEn: z.string().min(1, 'Address EN is required'),
     phone: z.string().min(1, 'Phone is required'),
-    website: z.string().url('Website must be a valid URL').optional(),
-    email: z.string().email('Invalid email address'),
-    eXat: z.string().optional(),
+    website: z.string().url('Website must be a valid URL').optional().or(z.literal('')),
+    email: z.string().email('Invalid email address').optional().or(z.literal('')),
+    eXat: z.string().optional().or(z.literal('')),
     receptionDaysUz: z.string().min(1, 'Reception days UZ is required'),
     receptionDaysRu: z.string().min(1, 'Reception days RU is required'),
     receptionDaysEn: z.string().min(1, 'Reception days EN is required'),
-    latitude: z.number().refine(
+    latitude: z.coerce.number().refine(
         (lat) => lat >= -90 && lat <= 90,
         'Latitude must be between -90 and 90'
     ),
-    longitude: z.number().refine(
+    longitude: z.coerce.number().refine(
         (lng) => lng >= -180 && lng <= 180,
         'Longitude must be between -180 and 180'
     ),
-    sortOrder: z.number().min(0, 'Sort order must be non-negative'),
+    sortOrder: z.coerce.number().min(0, 'Sort order must be non-negative'),
 });
 
 export const UpdateDistrictSchema = CreateDistrictSchema.partial();
@@ -45,6 +45,21 @@ export type District = CreateDistrictDto & {
     createdAt: string;
     updatedAt: string;
 };
+
+export interface GetDistrictsParams {
+    page?: number;
+    limit?: number;
+    type?: string;
+    search?: string;
+}
+
+export interface DistrictsResponse {
+    data: District[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
 
 export const DISTRICT_TYPE_OPTIONS = [
     { value: 'tuman', label: 'District (Tuman)' },

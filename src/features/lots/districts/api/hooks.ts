@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { CreateDistrictDto, UpdateDistrictDto, District } from '../../../districts/schemas/schema';
+import type { CreateDistrictDto, UpdateDistrictDto, District } from '../../../../types/district.types';
 import { apiClient } from '@/api/axios';
 import toast from 'react-hot-toast';
 

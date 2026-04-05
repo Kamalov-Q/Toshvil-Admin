@@ -1,48 +1,30 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from '../../../api/axios';
-import type { CreateDistrictDto, UpdateDistrictDto, District } from '../schemas/schema';
-import { toast } from '../../../utils/toast';
-
-export interface GetDistrictsParams {
-    page?: number;
-    limit?: number;
-    type?: string;
-    search?: string;
-}
-
-export interface DistrictsResponse {
-    data: District[];
-    total: number;
-    page: number;
-    limit: number;
-}
+import { 
+    getDistricts, 
+    getDistrict, 
+    createDistrict, 
+    updateDistrict, 
+    deleteDistrict 
+} from '../api/districts.api';
+import type {
+    UpdateDistrictDto, 
+    GetDistrictsParams 
+} from '../types/district.types';
+import { toast } from '../utils/toast';
 
 export const useDistricts = (params: GetDistrictsParams = {}) => {
-    return useQuery<DistrictsResponse>({
+    return useQuery({
         queryKey: ['districts', params],
-        queryFn: async () => {
-            const response = await apiClient.get<DistrictsResponse>('/districts', {
-                params: {
-                    page: params.page || 1,
-                    limit: params.limit || 10,
-                    ...(params.type && { type: params.type }),
-                    ...(params.search && { search: params.search }),
-                },
-            });
-            return response.data;
-        },
+        queryFn: () => getDistricts(params),
         staleTime: 10 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
     });
 };
 
 export const useDistrict = (id: string) => {
-    return useQuery<District>({
+    return useQuery({
         queryKey: ['district', id],
-        queryFn: async () => {
-            const response = await apiClient.get<District>(`/districts/${id}`);
-            return response.data;
-        },
+        queryFn: () => getDistrict(id),
         enabled: !!id,
     });
 };
@@ -51,10 +33,7 @@ export const useCreateDistrict = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data: CreateDistrictDto) => {
-            const response = await apiClient.post<District>('/districts/admin', data);
-            return response.data;
-        },
+        mutationFn: createDistrict,
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['districts'] });
             toast.success(`District "${data.nameUz}" created successfully`);
@@ -70,10 +49,7 @@ export const useUpdateDistrict = (id: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data: UpdateDistrictDto) => {
-            const response = await apiClient.patch<District>(`/districts/admin/${id}`, data);
-            return response.data;
-        },
+        mutationFn: (data: UpdateDistrictDto) => updateDistrict(id, data),
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['districts'] });
             queryClient.invalidateQueries({ queryKey: ['district', id] });
@@ -90,9 +66,7 @@ export const useDeleteDistrict = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (id: string) => {
-            await apiClient.delete(`/districts/admin/${id}`);
-        },
+        mutationFn: deleteDistrict,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['districts'] });
             toast.success('District deleted successfully');

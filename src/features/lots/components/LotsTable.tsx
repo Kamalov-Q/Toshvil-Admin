@@ -452,7 +452,7 @@ export default function LotsTable() {
 
             {/* Create/Edit Modal */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0">
+                <DialogContent className="sm:max-w-[1600px] w-[95vw] max-h-[95vh] overflow-y-auto p-0">
                     <DialogHeader className="sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg">
                         <DialogTitle className="text-xl">
                             {editingLot ? `Edit Lot #${editingLot.lotNumber}` : 'Create New Lot'}

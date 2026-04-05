@@ -18,13 +18,13 @@ export const CreateLotSchema = z.object({
     titleUz: z.string().min(1, 'Title UZ is required').max(255),
     titleRu: z.string().min(1, 'Title RU is required').max(255),
     titleEn: z.string().min(1, 'Title EN is required').max(255),
-    lotNumber: z.number().min(1, 'Lot number must be positive').int(),
+    lotNumber: z.coerce.number().min(1, 'Lot number must be positive').int(),
     lotCode: z.string().min(1, 'Lot code is required').max(50),
     status: LotStatusEnum,
 
     // Payment Information
     paymentType: PaymentTypeEnum,
-    paymentMonths: z.number().min(1, 'Payment months must be at least 1').int(),
+    paymentMonths: z.coerce.number().min(1, 'Payment months must be at least 1').int(),
 
     // Trade Information
     tradeType: TradeTypeEnum,
@@ -51,18 +51,18 @@ export const CreateLotSchema = z.object({
 
     // Land Information
     landRightType: LandRightTypeEnum,
-    leaseYears: z.number().min(1, 'Lease years must be at least 1').int(),
+    leaseYears: z.coerce.number().min(1, 'Lease years must be at least 1').int(),
     permittedUseUz: z.string().min(1, 'Permitted use UZ is required'),
     permittedUseRu: z.string().min(1, 'Permitted use RU is required'),
     permittedUseEn: z.string().min(1, 'Permitted use EN is required'),
     landCategoryUz: z.string().min(1, 'Land category UZ is required'),
     landCategoryRu: z.string().min(1, 'Land category RU is required'),
     landCategoryEn: z.string().min(1, 'Land category EN is required'),
-    landArea: z.number().min(0.1, 'Land area must be greater than 0'),
+    landArea: z.coerce.number().min(0.1, 'Land area must be greater than 0'),
     distanceToRoad: z.string().min(1, 'Distance to road is required'),
 
     // Investment Information
-    jobsToCreate: z.number().min(0, 'Jobs to create cannot be negative').int(),
+    jobsToCreate: z.coerce.number().min(0, 'Jobs to create cannot be negative').int(),
     requiredInvestmentUz: z.string().min(1, 'Required investment UZ is required'),
     requiredInvestmentRu: z.string().min(1, 'Required investment RU is required'),
     requiredInvestmentEn: z.string().min(1, 'Required investment EN is required'),
@@ -75,14 +75,14 @@ export const CreateLotSchema = z.object({
 
     // Building
     hasBuilding: z.boolean().default(false),
-    buildingArea: z.number().min(0).optional(),
+    buildingArea: z.coerce.number().min(0).optional(),
 
     // Coordinates
-    latitude: z.number().refine(
+    latitude: z.coerce.number().refine(
         (lat) => lat >= -90 && lat <= 90,
         'Latitude must be between -90 and 90'
     ),
-    longitude: z.number().refine(
+    longitude: z.coerce.number().refine(
         (lng) => lng >= -180 && lng <= 180,
         'Longitude must be between -180 and 180'
     ),
@@ -109,7 +109,7 @@ export const CreateLotSchema = z.object({
     customerEmail: z.string().email().optional().or(z.literal('')),
 
     // Images
-    imageUrls: z.array(z.string().url()).default([]),
+    imageUrls: z.array(z.string()).default([]),
 });
 
 // Update Lot DTO - All fields optional
@@ -122,6 +122,12 @@ export type Lot = CreateLotDto & {
     id: string;
     createdAt: string;
     updatedAt: string;
+    images?: Array<{
+        id: string;
+        url: string;
+        isMain: boolean;
+        sortOrder: number;
+    }>;
 };
 
 // Constants for UI

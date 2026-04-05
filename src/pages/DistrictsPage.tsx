@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDebounce } from '../hooks/useDebounce';
 import { Building2, Plus, Edit2, Trash2, Search, RotateCcw, AlertCircle } from 'lucide-react';
 import {
     Table,
@@ -17,10 +18,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from '../components/ui/select';
-import { useDistricts, useDeleteDistrict } from '../features/districts/api/hooks';
-import { DISTRICT_TYPE_OPTIONS, getDistrictTypeLabel } from '../features/districts/schemas/schema';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from '../components/ui/dialog';
+import { useDistricts, useDeleteDistrict } from '../hooks/useDistricts';
+import { DISTRICT_TYPE_OPTIONS, getDistrictTypeLabel } from '../types/district.types';
 import { formatDate } from '../utils/formatters';
 import ConfirmDialog from '@/features/lots/components/modals/ConfirmDialog';
+import DistrictForm from '../features/districts/components/DistrictForm';
 
 export default function DistrictsPage() {
     const [pagination, setPagination] = useState({ page: 1, limit: 10 });
@@ -31,10 +39,15 @@ export default function DistrictsPage() {
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [districtToDelete, setDistrictToDelete] = useState<any | null>(null);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingDistrict, setEditingDistrict] = useState<any | null>(null);
+
+    const debouncedSearch = useDebounce(filters.search, 500);
+
     const { data, isLoading, error } = useDistricts({
         page: pagination.page,
         limit: pagination.limit,
-        search: filters.search || undefined,
+        search: debouncedSearch || undefined,
         type: filters.type || undefined,
     });
 
@@ -52,6 +65,21 @@ export default function DistrictsPage() {
         } catch (err) {
             console.error('Delete error:', err);
         }
+    };
+
+    const handleCreate = () => {
+        setEditingDistrict(null);
+        setIsModalOpen(true);
+    };
+
+    const handleEdit = (district: any) => {
+        setEditingDistrict(district);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setEditingDistrict(null);
     };
 
     return (
@@ -100,9 +128,9 @@ export default function DistrictsPage() {
                     />
 
                     <Select
-                        value={filters.type}
+                        value={filters.type || 'all'}
                         onValueChange={(val) => {
-                            setFilters({ ...filters, type: val });
+                            setFilters({ ...filters, type: val === 'all' ? '' : val });
                             setPagination({ page: 1, limit: 10 });
                         }}
                     >
@@ -110,7 +138,7 @@ export default function DistrictsPage() {
                             <SelectValue placeholder="All Types" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="">All Types</SelectItem>
+                            <SelectItem value="all">All Types</SelectItem>
                             {DISTRICT_TYPE_OPTIONS.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
                                     {option.label}
@@ -135,7 +163,10 @@ export default function DistrictsPage() {
 
             {/* Create Button */}
             <div className="flex justify-end">
-                <Button className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-md">
+                <Button 
+                    onClick={handleCreate}
+                    className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-md"
+                >
                     <Plus className="w-5 h-5" />
                     Create District
                 </Button>
@@ -214,6 +245,7 @@ export default function DistrictsPage() {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
+                                                onClick={() => handleEdit(district)}
                                                 className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
                                             >
                                                 <Edit2 className="w-4 h-4" />
@@ -240,6 +272,64 @@ export default function DistrictsPage() {
                     </TableBody>
                 </Table>
             </div>
+            
+            {/* Pagination */}
+            {data && data.totalPages > 1 && (
+                <div className="flex items-center justify-between px-4 py-3 bg-white border border-t-0 rounded-b-lg shadow-sm">
+                    <div className="flex flex-1 justify-between sm:hidden">
+                        <Button
+                            variant="outline"
+                            onClick={() => setPagination(prev => ({ ...prev, page: Math.max(prev.page - 1, 1) }))}
+                            disabled={pagination.page === 1}
+                        >
+                            Previous
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.page + 1, data.totalPages) }))}
+                            disabled={pagination.page === data.totalPages}
+                        >
+                            Next
+                        </Button>
+                    </div>
+                    <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                        <div>
+                            <p className="text-sm text-gray-700">
+                                Showing <span className="font-medium">{(pagination.page - 1) * pagination.limit + 1}</span> to{' '}
+                                <span className="font-medium">
+                                    {Math.min(pagination.page * pagination.limit, data.total)}
+                                </span>{' '}
+                                of <span className="font-medium">{data.total}</span> results
+                            </p>
+                        </div>
+                        <div className="flex gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setPagination(prev => ({ ...prev, page: Math.max(prev.page - 1, 1) }))}
+                                disabled={pagination.page === 1}
+                                className="gap-2"
+                            >
+                                ← Previous
+                            </Button>
+                            <div className="flex items-center px-4">
+                                <span className="text-sm font-medium">
+                                    Page {pagination.page} of {data.totalPages}
+                                </span>
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.page + 1, data.totalPages) }))}
+                                disabled={pagination.page === data.totalPages}
+                                className="gap-2"
+                            >
+                                Next →
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Delete Confirmation */}
             <ConfirmDialog
@@ -258,6 +348,22 @@ export default function DistrictsPage() {
                 onConfirm={handleConfirmDelete}
                 icon="warning"
             />
+
+            {/* Modal */}
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="sm:max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>
+                            {editingDistrict ? 'Edit District' : 'Create District'}
+                        </DialogTitle>
+                    </DialogHeader>
+                    <DistrictForm
+                        initialData={editingDistrict || undefined}
+                        onSuccess={handleCloseModal}
+                        onCancel={handleCloseModal}
+                    />
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

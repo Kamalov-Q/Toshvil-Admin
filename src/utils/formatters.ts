@@ -72,3 +72,16 @@ export const toTitleCase = (str: string): string => {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 };
+
+export const getFileUrl = (path: string | null | undefined): string => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    
+    // Get the base URL from the API URL (e.g., http://localhost:3000/api -> http://localhost:3000)
+    const apiUrl = import.meta.env.VITE_API_URL as string;
+    const baseUrl = apiUrl?.replace(/\/api\/?$/, '') || '';
+    
+    // Ensure accurate path joining
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return `${baseUrl}${cleanPath}`;
+};

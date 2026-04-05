@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Upload, X, Loader, Image as ImageIcon } from 'lucide-react';
 import { toast } from '../../../utils/toast';
+import { getFileUrl } from '../../../utils/formatters';
 
 interface FileUploaderProps<T extends FieldValues> {
     control: Control<T>;
@@ -69,10 +70,7 @@ export const FileUploader = <T extends FieldValues>({
                     formData.append('folder', folder);
 
                     const endpoint = multiple ? '/upload/multiple' : '/upload/single';
-                    const response = await apiClient.post<{
-                        urls?: string[];
-                        url?: string;
-                    }>(endpoint, formData, {
+                    const response = await apiClient.post<any>(endpoint, formData, {
                         headers: { 'Content-Type': 'multipart/form-data' },
                         onUploadProgress: (progressEvent) => {
                             const percentCompleted = Math.round(
@@ -82,13 +80,19 @@ export const FileUploader = <T extends FieldValues>({
                         },
                     });
 
-                    if (multiple && response.data.urls) {
+                    if (multiple && Array.isArray(response.data)) {
+                        const newUrls = response.data.map((item: any) => item.url).filter(Boolean);
+                        const currentUrls = Array.isArray(field.value) ? field.value : [];
+                        field.onChange([...currentUrls, ...newUrls]);
+                        toast.success(`${newUrls.length} file(s) uploaded successfully`);
+                    } else if (!multiple && response.data?.url) {
+                        field.onChange(response.data.url);
+                        toast.success('File uploaded successfully');
+                    } else if (multiple && response.data?.urls) {
+                        // Fallback for old/other format if needed
                         const currentUrls = Array.isArray(field.value) ? field.value : [];
                         field.onChange([...currentUrls, ...response.data.urls]);
                         toast.success(`${response.data.urls.length} file(s) uploaded successfully`);
-                    } else if (!multiple && response.data.url) {
-                        field.onChange(response.data.url);
-                        toast.success('File uploaded successfully');
                     }
 
                     setUploadProgress(100);
@@ -221,7 +225,7 @@ export const FileUploader = <T extends FieldValues>({
                                     className="relative group overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
                                 >
                                     <img
-                                        src={url}
+                                        src={getFileUrl(url)}
                                         alt={`Uploaded ${index}`}
                                         className="w-full h-32 object-cover"
                                     />
@@ -251,7 +255,7 @@ export const FileUploader = <T extends FieldValues>({
                     <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg">
                         <div className="flex items-center gap-4">
                             <img
-                                src={field.value}
+                                src={getFileUrl(field.value)}
                                 alt="Uploaded"
                                 className="w-16 h-16 object-cover rounded border border-blue-300"
                             />

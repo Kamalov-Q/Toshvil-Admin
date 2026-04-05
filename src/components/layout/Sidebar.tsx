@@ -21,6 +21,8 @@ import { useLogout } from '../../features/auth/api/hooks';
 import { Button } from '../ui/button';
 import { toast } from '../../utils/toast';
 import { useNewsList } from '../../hooks/useNewsQueries';
+import { useDistricts } from '../../hooks/useDistricts';
+import { useLots } from '../../features/lots/api/hooks';
 
 interface MenuItem {
     icon: React.ReactNode;
@@ -100,6 +102,12 @@ export default function Sidebar() {
 
     const { data: newsData } = useNewsList({ limit: 1 });
     const totalNews = newsData?.total || 0;
+
+    const { data: districtsData } = useDistricts({ limit: 1 });
+    const totalDistricts = districtsData?.total || 0;
+
+    const { data: lotsData } = useLots({ limit: 1 });
+    const totalLots = lotsData?.total || 0;
 
     const handleLogout = async () => {
         try {
@@ -233,12 +241,24 @@ export default function Sidebar() {
                                         </div>
                                         {item.path === '/news' ? (
                                             totalNews > 0 && (
-                                                <span className="bg-blue-600 text-white text-xs font-bold rounded-full px-2 py-0.5 group-hover:bg-blue-700">
+                                                <span className="bg-blue-500/20 text-blue-400 text-[10px] font-bold rounded-full px-2 py-0.5 border border-blue-500/30">
                                                     {totalNews}
                                                 </span>
                                             )
+                                        ) : item.path === '/districts' ? (
+                                            totalDistricts > 0 && (
+                                                <span className="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-full px-2 py-0.5 border border-emerald-500/30">
+                                                    {totalDistricts}
+                                                </span>
+                                            )
+                                        ) : item.path === '/lots' ? (
+                                            totalLots > 0 && (
+                                                <span className="bg-amber-500/20 text-amber-400 text-[10px] font-bold rounded-full px-2 py-0.5 border border-amber-500/30">
+                                                    {totalLots}
+                                                </span>
+                                            )
                                         ) : item.badge && (
-                                            <span className="bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5 group-hover:bg-red-700">
+                                            <span className="bg-red-500/20 text-red-400 text-[10px] font-bold rounded-full px-2 py-0.5 border border-red-500/30">
                                                 {item.badge}
                                             </span>
                                         )}
@@ -274,17 +294,6 @@ export default function Sidebar() {
 
                 {/* Sidebar Footer */}
                 <div className="px-3 py-6 border-t border-gray-700 space-y-3">
-                    {/* Storage Info */}
-                    <div className="px-4 py-3 bg-gray-700/50 rounded-lg">
-                        <div className="flex justify-between items-center mb-2">
-                            <p className="text-xs text-gray-400">Storage</p>
-                            <p className="text-xs font-semibold text-white">65%</p>
-                        </div>
-                        <div className="w-full bg-gray-600 rounded-full h-2">
-                            <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-2 rounded-full w-[65%]"></div>
-                        </div>
-                    </div>
-
                     {/* Logout Button */}
                     <Button
                         onClick={handleLogout}

@@ -33,25 +33,48 @@ import {
     LAND_RIGHT_TYPE_OPTIONS,
 } from '../schemas/schemas';
 import { useCreateLot, useUpdateLot } from '../api/hooks';
-import { useDistricts } from '../../districts/api/hooks';
 import { AlertCircle, Loader, Save, X } from 'lucide-react';
+import { useDistricts } from '@/features/lots/districts/api/hooks';
 
 interface LotModalProps {
     lot?: Lot;
     onClose: () => void;
 }
 
+const formatDateForInput = (dateStr?: string) => {
+    if (!dateStr) return '';
+    try {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return '';
+        return date.toISOString().slice(0, 16);
+    } catch {
+        return '';
+    }
+};
+
 export default function LotModal({ lot, onClose }: LotModalProps) {
     const isEditing = !!lot;
     const createMutation = useCreateLot();
     const updateMutation = useUpdateLot(lot?.id || '');
-    const { data: districtData } = useDistricts({ limit: 1000 });
+    const { data: districtData } = useDistricts({ limit: 100 });
     const [activeTab, setActiveTab] = useState('basic');
 
-    const form = useForm<CreateLotDto | UpdateLotDto>({
-        resolver: zodResolver(isEditing ? UpdateLotSchema : CreateLotSchema),
+    const form = useForm<CreateLotDto>({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        resolver: zodResolver(isEditing ? UpdateLotSchema : CreateLotSchema) as any,
         mode: 'onChange',
-        defaultValues: lot || {
+        defaultValues: lot ? {
+            ...lot,
+            tradeDate: formatDateForInput(lot.tradeDate),
+            applicationDeadline: formatDateForInput(lot.applicationDeadline),
+            lotNumber: lot.lotNumber ?? 0,
+            landArea: lot.landArea ? parseFloat(String(lot.landArea)) : 0,
+            jobsToCreate: lot.jobsToCreate ?? 0,
+            buildingArea: lot.buildingArea ? parseFloat(String(lot.buildingArea)) : 0,
+            latitude: lot.latitude ? parseFloat(String(lot.latitude)) : 0,
+            longitude: lot.longitude ? parseFloat(String(lot.longitude)) : 0,
+            imageUrls: lot.images?.map(img => img.url) ?? lot.imageUrls ?? [],
+        } : {
             titleUz: '',
             titleRu: '',
             titleEn: '',
@@ -114,12 +137,12 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
         },
     });
 
-    const onSubmit = async (data: CreateLotDto | UpdateLotDto) => {
+    const onSubmit = async (data: CreateLotDto) => {
         try {
             if (isEditing) {
                 await updateMutation.mutateAsync(data as UpdateLotDto);
             } else {
-                await createMutation.mutateAsync(data as CreateLotDto);
+                await createMutation.mutateAsync(data);
             }
             onClose();
         } catch (error) {
@@ -149,7 +172,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                 )}
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <TabsList className="grid w-full grid-cols-5 mb-4">
+                    <TabsList className="flex flex-wrap w-full h-auto bg-gray-100 p-1 gap-1 mb-4">
                         <TabsTrigger value="basic" className="relative">
                             Basic
                             {Object.keys(form.formState.errors).some((key) =>
@@ -247,7 +270,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 <Input
                                                     type="number"
                                                     {...field}
-                                                    onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                                    onChange={(e) => field.onChange(e.target.value)}
                                                     placeholder="e.g., 1"
                                                     className="focus:ring-blue-500"
                                                 />
@@ -275,7 +298,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Status *</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
                                                         <SelectValue />
@@ -306,7 +329,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>District *</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
                                                         <SelectValue placeholder="Select a district" />
@@ -364,7 +387,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Trade Type *</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
                                                         <SelectValue />
@@ -483,7 +506,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Payment Type *</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
                                                         <SelectValue />
@@ -511,7 +534,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 <Input
                                                     type="number"
                                                     {...field}
-                                                    onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                                    onChange={(e) => field.onChange(e.target.value)}
                                                     placeholder="Number of months"
                                                     className="focus:ring-blue-500"
                                                 />
@@ -541,7 +564,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                     type="number"
                                                     step="0.01"
                                                     {...field}
-                                                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                                    onChange={(e) => field.onChange(e.target.value)}
                                                     placeholder="e.g., 5000.50"
                                                     className="focus:ring-blue-500"
                                                 />
@@ -573,7 +596,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Land Right Type *</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
                                                         <SelectValue />
@@ -604,7 +627,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 <Input
                                                     type="number"
                                                     {...field}
-                                                    onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                                    onChange={(e) => field.onChange(e.target.value)}
                                                     placeholder="e.g., 25"
                                                     className="focus:ring-blue-500"
                                                 />
@@ -623,7 +646,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 <Input
                                                     type="number"
                                                     {...field}
-                                                    onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                                    onChange={(e) => field.onChange(e.target.value)}
                                                     placeholder="Number of jobs"
                                                     className="focus:ring-blue-500"
                                                 />
@@ -830,54 +853,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Building</h3>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="hasBuilding"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 pt-2">
-                                            <FormControl>
-                                                <Checkbox
-                                                    checked={field.value}
-                                                    onCheckedChange={field.onChange}
-                                                    className="h-5 w-5 border-gray-300"
-                                                />
-                                            </FormControl>
-                                            <FormLabel className="font-normal cursor-pointer">
-                                                Has Building
-                                            </FormLabel>
-                                        </FormItem>
-                                    )}
-                                />
-                                {form.watch('hasBuilding') && (
-                                    <FormField
-                                        control={form.control}
-                                        name="buildingArea"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Building Area (m²)</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        type="number"
-                                                        step="0.01"
-                                                        {...field}
-                                                        onChange={(e) =>
-                                                            field.onChange(parseFloat(e.target.value) || 0)
-                                                        }
-                                                        placeholder="e.g., 2000"
-                                                        className="focus:ring-blue-500"
-                                                    />
-                                                </FormControl>
-                                                <FormMessage className="text-xs text-red-600" />
-                                            </FormItem>
-                                        )}
-                                    />
-                                )}
-                            </div>
-                        </div>
 
                         <div className="space-y-4">
                             <h3 className="font-semibold text-lg text-gray-900">GPS Coordinates</h3>
@@ -894,9 +870,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                     type="number"
                                                     step="0.000001"
                                                     {...field}
-                                                    onChange={(e) =>
-                                                        field.onChange(parseFloat(e.target.value) || 0)
-                                                    }
+                                                    onChange={(e) => field.onChange(e.target.value)}
                                                     placeholder="e.g., 41.2995"
                                                     className="focus:ring-blue-500"
                                                 />
@@ -916,9 +890,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                     type="number"
                                                     step="0.000001"
                                                     {...field}
-                                                    onChange={(e) =>
-                                                        field.onChange(parseFloat(e.target.value) || 0)
-                                                    }
+                                                    onChange={(e) => field.onChange(e.target.value)}
                                                     placeholder="e.g., 69.2401"
                                                     className="focus:ring-blue-500"
                                                 />
@@ -1373,6 +1345,53 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         />
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="font-semibold text-lg text-gray-900">Building Information</h3>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="hasBuilding"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 pt-2">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={field.onChange}
+                                                    className="h-5 w-5 border-gray-300"
+                                                />
+                                            </FormControl>
+                                            <FormLabel className="font-normal cursor-pointer">
+                                                Has Building
+                                            </FormLabel>
+                                        </FormItem>
+                                    )}
+                                />
+                                {form.watch('hasBuilding') && (
+                                    <FormField
+                                        control={form.control}
+                                        name="buildingArea"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Building Area (m²)</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="number"
+                                                        step="0.01"
+                                                        {...field}
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        placeholder="e.g., 2000"
+                                                        className="focus:ring-blue-500"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage className="text-xs text-red-600" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                )}
                             </div>
                         </div>
 
