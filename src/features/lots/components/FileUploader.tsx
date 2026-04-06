@@ -161,7 +161,7 @@ export const FileUploader = <T extends FieldValues>({
                     htmlFor={`file-input-${name}`}
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
-                    className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200"
+                    className="flex flex-col items-center justify-center gap-3 p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200"
                 >
                     {uploading ? (
                         <>
@@ -240,7 +240,7 @@ export const FileUploader = <T extends FieldValues>({
                                 </div>
                                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent p-2">
                                     <p className="text-xs text-white truncate font-mono">
-                                        {url.split('/').pop()}
+                                        {url.split('?')[0].split('/').pop()}
                                     </p>
                                 </div>
                             </div>
@@ -259,7 +259,7 @@ export const FileUploader = <T extends FieldValues>({
                         />
                         <div className="flex-1 min-w-0">
                             <p className="text-xs text-gray-600 truncate font-mono">
-                                {field.value.split('/').pop()}
+                                {field.value.split('?')[0].split('/').pop()}
                             </p>
                         </div>
                         <Button

@@ -260,7 +260,7 @@ export default function NewsForm({
                                                 <Textarea
                                                     {...field}
                                                     placeholder="Uzbek description"
-                                                    rows={6}
+                                                    rows={4}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -277,7 +277,7 @@ export default function NewsForm({
                                                 <Textarea
                                                     {...field}
                                                     placeholder="Russian description"
-                                                    rows={6}
+                                                    rows={4}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -294,7 +294,7 @@ export default function NewsForm({
                                                 <Textarea
                                                     {...field}
                                                     placeholder="English description"
-                                                    rows={6}
+                                                    rows={4}
                                                 />
                                             </FormControl>
                                             <FormMessage />
