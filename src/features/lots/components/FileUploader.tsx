@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useController, type FieldValues, type Control, type Path } from 'react-hook-form';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
-import { Upload, X, Loader, Image as ImageIcon } from 'lucide-react';
+import { Upload, X, Loader, Image as ImageIcon, FileText } from 'lucide-react';
 import { toast } from '../../../utils/toast';
 import { getFileUrl } from '../../../utils/formatters';
 
@@ -181,8 +181,8 @@ export const FileUploader = <T extends FieldValues>({
                                 </span>
                                 <span className="block text-xs text-gray-500 mt-1">
                                     {multiple
-                                        ? `PNG, JPG, GIF up to ${maxSize}MB each`
-                                        : `PNG, JPG, GIF up to ${maxSize}MB`}
+                                        ? `Accepted files up to ${maxSize}MB each`
+                                        : `Accepted files up to ${maxSize}MB`}
                                 </span>
                             </div>
                         </>
@@ -222,11 +222,17 @@ export const FileUploader = <T extends FieldValues>({
                                 key={index}
                                 className="relative group overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
                             >
-                                <img
-                                    src={getFileUrl(url)}
-                                    alt={`Uploaded ${index}`}
-                                    className="w-full h-32 object-cover"
-                                />
+                                {url.match(/\.(jpeg|jpg|gif|png|webp|svg|avif)$/i) ? (
+                                    <img
+                                        src={getFileUrl(url)}
+                                        alt={`Uploaded ${index}`}
+                                        className="w-full h-32 object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-32 flex items-center justify-center bg-gray-100">
+                                        <FileText className="w-12 h-12 text-gray-400" />
+                                    </div>
+                                )}
                                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                                     <Button
                                         type="button"
@@ -252,11 +258,17 @@ export const FileUploader = <T extends FieldValues>({
             {!multiple && field.value && (
                 <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg">
                     <div className="flex items-center gap-4">
-                        <img
-                            src={getFileUrl(field.value)}
-                            alt="Uploaded"
-                            className="w-16 h-16 object-cover rounded border border-blue-300"
-                        />
+                        {field.value.match(/\.(jpeg|jpg|gif|png|webp|svg|avif)$/i) ? (
+                            <img
+                                src={getFileUrl(field.value)}
+                                alt="Uploaded"
+                                className="w-16 h-16 object-cover rounded border border-blue-300"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded border border-blue-300">
+                                <FileText className="w-8 h-8 text-gray-500" />
+                            </div>
+                        )}
                         <div className="flex-1 min-w-0">
                             <p className="text-xs text-gray-600 truncate font-mono">
                                 {field.value.split('?')[0].split('/').pop()}

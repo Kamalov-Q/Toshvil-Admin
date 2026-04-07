@@ -14,6 +14,8 @@ import {
     Users,
     BarChart3,
     HelpCircle,
+    FolderTree,
+    FileStack,
 } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
@@ -62,6 +64,16 @@ const menuItems: MenuItem[] = [
         icon: <MessageSquare className="w-5 h-5" />,
         label: 'Comments',
         path: '/comments',
+    },
+    {
+        icon: <FolderTree className="w-5 h-5" />,
+        label: 'Categories',
+        path: '/categories',
+    },
+    {
+        icon: <FileStack className="w-5 h-5" />,
+        label: 'Docs',
+        path: '/docs',
     },
     {
         icon: <Users className="w-5 h-5" />,

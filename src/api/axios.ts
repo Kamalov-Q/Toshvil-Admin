@@ -1,4 +1,5 @@
-import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from "axios"
+import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from "axios";
+import { useAuthStore } from "../store/authStore";
 export interface ApiErrorResponse {
     message: string;
     statusCode: number;
@@ -43,9 +44,8 @@ const createAxiosInstance = (): AxiosInstance => {
 
                     const refreshToken = localStorage.getItem('refreshToken');
                     if (!refreshToken) {
-                        // Clear auth and redirect to login
-                        localStorage.removeItem('accessToken');
-                        localStorage.removeItem('refreshToken');
+                        // Clear auth state properly via Zustand store
+                        useAuthStore.getState().logout();
                         window.location.href = '/login';
                         return Promise.reject(error);
                     }
@@ -59,8 +59,7 @@ const createAxiosInstance = (): AxiosInstance => {
                     return instance(originalRequest);
 
                 } catch (error) {
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
+                    useAuthStore.getState().logout();
                     window.location.href = '/login';
                     return Promise.reject(error);
                 }
@@ -77,10 +76,11 @@ const createAxiosInstance = (): AxiosInstance => {
 }
 
 const refreshAccessToken = async (
-    instance: AxiosInstance,
+    _instance: AxiosInstance,
     refreshToken: string
 ): Promise<string> => {
-    const response = await instance.post('/auth/refresh', {
+    // Normal axios.post is used here to avoid attaching expired tokens via instance interceptor
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/refresh`, {
         refreshToken
     });
 

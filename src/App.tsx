@@ -8,6 +8,8 @@ import DashboardPage from './pages/DashboardPage';
 import LotsPage from './pages/LotsPage';
 import DistrictsPage from './pages/DistrictsPage';
 import NewsPage from './pages/NewsPage';
+import CategoriesPage from './pages/CategoriesPage';
+import DocsPage from './pages/DocsPage';
 import { useAuthStore } from './store/authStore';
 import DashboardLayout from './components/layout/Dashboard';
 
@@ -52,6 +54,8 @@ export default function App() {
             <Route path="lots" element={<LotsPage />} />
             <Route path="districts" element={<DistrictsPage />} />
             <Route path="news" element={<NewsPage />} />
+            <Route path="categories" element={<CategoriesPage />} />
+            <Route path="docs" element={<DocsPage />} />
           </Route>
 
           {/* Fallback */}
