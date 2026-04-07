@@ -354,7 +354,7 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                             multiple={false}
                                             label="Upload Featured Image"
                                             description="PNG, JPG, GIF up to 10MB. Recommended size: 1200x600px"
-                                            maxSize={10}
+                                            maxSize={50}
                                         />
                                         <FormMessage className="text-xs text-red-600" />
                                         {field.value && (

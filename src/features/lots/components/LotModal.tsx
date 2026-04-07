@@ -1405,7 +1405,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                 multiple={true}
                                 label="Upload Lot Images"
                                 description="You can upload multiple images to showcase the lot (PNG, JPG, GIF up to 10MB each)"
-                                maxSize={10}
+                                maxSize={50}
                             />
                         </div>
                     </TabsContent>

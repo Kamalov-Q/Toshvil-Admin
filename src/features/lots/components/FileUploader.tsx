@@ -25,7 +25,7 @@ export const FileUploader = <T extends FieldValues>({
     multiple = false,
     label,
     description,
-    maxSize = 10,
+    maxSize = 50,
 }: FileUploaderProps<T>) => {
     const { field } = useController({
         control,
