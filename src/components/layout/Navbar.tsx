@@ -26,7 +26,7 @@ export default function Navbar() {
         try {
             await logoutMutation.mutateAsync();
         } catch (error: any) {
-            toast.error('Logout failed');
+            toast.error('Chiqishda xatolik yuz berdi');
             console.error('Logout error:', error);
         }
     };
@@ -34,7 +34,7 @@ export default function Navbar() {
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         console.log('Search:', searchQuery);
-        toast.info(`Searching for: ${searchQuery}`);
+        toast.info(`Qidirilmoqda: ${searchQuery}`);
     };
 
     return (
@@ -56,7 +56,7 @@ export default function Navbar() {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                             <Input
                                 type="text"
-                                placeholder="Search..."
+                                placeholder="Qidirish..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="pl-10 bg-gray-50 border-gray-200 focus:bg-white"
@@ -78,7 +78,7 @@ export default function Navbar() {
                     {/* Notification Dropdown */}
                     <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
                         <div className="p-4 border-b border-gray-200">
-                            <h3 className="font-semibold text-gray-900">Notifications</h3>
+                            <h3 className="font-semibold text-gray-900">Bildirishnomalar</h3>
                         </div>
                         <div className="max-h-96 overflow-y-auto">
                             {[1, 2, 3].map((notification) => (
@@ -87,17 +87,17 @@ export default function Navbar() {
                                     className="px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
                                 >
                                     <p className="text-sm font-medium text-gray-900">
-                                        New lot created
+                                        Yangi lot yaratildi
                                     </p>
                                     <p className="text-xs text-gray-500 mt-1">
-                                        5 minutes ago
+                                        5 daqiqa oldin
                                     </p>
                                 </div>
                             ))}
                         </div>
                         <div className="p-4 border-t border-gray-200">
                             <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                                View all notifications
+                                Barcha bildirishnomalarni ko'rish
                             </button>
                         </div>
                     </div>
@@ -107,7 +107,7 @@ export default function Navbar() {
                 <button
                     onClick={toggleTheme}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors hidden md:flex items-center justify-center"
-                    title="Toggle theme"
+                    title="Mavzuni o'zgartirish"
                 >
                     {isDarkMode ? (
                         <Sun className="w-5 h-5 text-gray-600" />
@@ -129,7 +129,7 @@ export default function Navbar() {
                         </div>
                         <div className="hidden lg:flex flex-col items-start">
                             <p className="text-sm font-medium text-gray-900">
-                                {user?.email?.split('@')[0] || 'User'}
+                                {user?.email?.split('@')[0] || 'Foydalanuvchi'}
                             </p>
                             <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
                         </div>
@@ -145,11 +145,11 @@ export default function Navbar() {
                         <div className="p-2 space-y-1">
                             <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors flex items-center gap-2">
                                 <User className="w-4 h-4" />
-                                Profile
+                                Profil
                             </button>
                             <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors flex items-center gap-2">
                                 <Settings className="w-4 h-4" />
-                                Settings
+                                Sozlamalar
                             </button>
                             <hr className="my-1" />
                             <button
@@ -158,7 +158,7 @@ export default function Navbar() {
                                 className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded transition-colors flex items-center gap-2"
                             >
                                 <LogOut className="w-4 h-4" />
-                                {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+                                {logoutMutation.isPending ? 'Chiqilmoqda...' : 'Chiqish'}
                             </button>
                         </div>
                     </div>

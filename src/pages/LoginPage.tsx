@@ -22,12 +22,12 @@ import { toast } from '../utils/toast';
 const LoginSchema = z.object({
     email: z
         .string()
-        .min(1, 'Email is required')
-        .email('Invalid email address'),
+        .min(1, 'Email manzilini kiritish majburiy')
+        .email('Email manzili noto\'g\'ri'),
     password: z
         .string()
-        .min(1, 'Password is required')
-        .min(6, 'Password must be at least 6 characters'),
+        .min(1, 'Parolni kiritish majburiy')
+        .min(6, 'Parol kamida 6 ta belgidan iborat bo\'lishi kerak'),
 });
 
 type LoginFormValues = z.infer<typeof LoginSchema>;
@@ -61,7 +61,7 @@ export default function LoginPage() {
             const errorMessage =
                 error?.response?.data?.message ||
                 error?.message ||
-                'Login failed. Please try again.';
+                'Kirishda xatolik yuz berdi. Iltimos, qaytadan urinib ko\'ring.';
             toast.error(errorMessage);
             console.error('Login error:', error);
         }
@@ -83,8 +83,8 @@ export default function LoginPage() {
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-lg mb-4">
                         <Lock className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-4xl font-bold text-gray-900 mb-2">Admin Panel</h1>
-                    <p className="text-gray-600">Manage your system with ease</p>
+                    <h1 className="text-4xl font-bold text-gray-900 mb-2">Admin Paneli</h1>
+                    <p className="text-gray-600">Tizimni osongina boshqaring</p>
                 </div>
 
                 {/* Login card */}
@@ -93,10 +93,10 @@ export default function LoginPage() {
                     <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-6">
                         <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                             <LogIn className="w-6 h-6" />
-                            Sign In
+                            Kirish
                         </h2>
                         <p className="text-blue-100 text-sm mt-1">
-                            Enter your credentials to access the admin panel
+                            Admin paneliga kirish uchun ma'lumotlaringizni kiriting
                         </p>
                     </div>
 
@@ -110,7 +110,7 @@ export default function LoginPage() {
                                         <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                                         <div>
                                             <h3 className="font-semibold text-red-900 text-sm">
-                                                Please check your input
+                                                Iltimos, ma'lumotlarni tekshiring
                                             </h3>
                                             {form.formState.errors.email && (
                                                 <p className="text-xs text-red-700 mt-1">
@@ -132,14 +132,14 @@ export default function LoginPage() {
                                     name="email"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-gray-700 font-semibold">Email Address</FormLabel>
+                                            <FormLabel className="text-gray-700 font-semibold">Email manzili</FormLabel>
                                             <FormControl>
                                                 <div className="relative">
                                                     <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                                                     <Input
                                                         {...field}
                                                         type="email"
-                                                        placeholder="admin@example.com"
+                                                        placeholder="admin@misol.uz"
                                                         disabled={isLoading}
                                                         className="pl-10 h-11 border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-base"
                                                         autoComplete="email"
@@ -158,12 +158,12 @@ export default function LoginPage() {
                                     render={({ field }) => (
                     <FormItem>
                       <div className="flex items-center justify-between">
-                        <FormLabel className="text-gray-700 font-semibold">Password</FormLabel>
+                        <FormLabel className="text-gray-700 font-semibold">Parol</FormLabel>
                         <a
                           href="#"
                           className="text-xs text-blue-600 hover:text-blue-700 font-medium"
                         >
-                          Forgot?
+                          Unutdingizmi?
                         </a>
                       </div>
                       <FormControl>
@@ -192,7 +192,7 @@ export default function LoginPage() {
                                     className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                 />
                                 <label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
-                                    Remember me
+                                    Meni eslab qol
                                 </label>
                             </div>
 
@@ -229,7 +229,7 @@ export default function LoginPage() {
                                 ) : (
                                     <>
                                         <LogIn className="w-5 h-5" />
-                                        Sign In
+                                        Kirish
                                     </>
                                 )}
                             </Button>
@@ -238,7 +238,7 @@ export default function LoginPage() {
 
                     {/* Demo credentials info */}
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p className="text-xs font-semibold text-blue-900 mb-2">Demo Credentials</p>
+                        <p className="text-xs font-semibold text-blue-900 mb-2">Demo ma'lumotlar</p>
                         <div className="space-y-1 text-xs text-blue-700">
                             <p>
                                 <span className="font-medium">Email:</span> admin@example.com
@@ -253,9 +253,9 @@ export default function LoginPage() {
                 {/* Card footer */}
                 <div className="bg-gray-50 border-t border-gray-200 px-6 py-4">
                     <p className="text-center text-sm text-gray-600">
-                        Need help?{' '}
+                        Yordam kerakmi?{' '}
                         <a href="#" className="text-blue-600 hover:text-blue-700 font-semibold">
-                            Contact support
+                            Qo'llab-quvvatlash xizmati
                         </a>
                     </p>
                 </div>
@@ -263,7 +263,7 @@ export default function LoginPage() {
 
             {/* Footer text */}
             <p className="text-center text-xs text-gray-600 mt-6">
-                © 2024 Admin Panel. All rights reserved.
+                © 2024 Admin Paneli. Barcha huquqlar himoyalangan.
             </p>
         </div>
 

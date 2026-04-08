@@ -90,10 +90,10 @@ export default function DistrictsPage() {
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <Building2 className="w-8 h-8" />
-                            <h1 className="text-3xl font-bold">Districts Management</h1>
+                            <h1 className="text-3xl font-bold">Tumanlarni boshqarish</h1>
                         </div>
                         <p className="text-green-100 max-w-2xl">
-                            Manage administrative districts and cities. Control district information, hokim details, and reception information.
+                            Ma'muriy tumanlar va shaharlarni boshqaring. Tuman ma'lumotlari, hokim ma'lumotlari va qabulxona ma'lumotlarini nazorat qiling.
                         </p>
                     </div>
                 </div>
@@ -104,7 +104,7 @@ export default function DistrictsPage() {
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
                     <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <div>
-                        <h3 className="font-semibold text-red-900">Error loading districts</h3>
+                        <h3 className="font-semibold text-red-900">Tumanlarni yuklashda xatolik</h3>
                         <p className="text-sm text-red-700 mt-1">{error.message}</p>
                     </div>
                 </div>
@@ -114,11 +114,11 @@ export default function DistrictsPage() {
             <div className="bg-white rounded-lg border p-4 shadow-sm">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <Search className="w-5 h-5 text-green-600" />
-                    Filters
+                    Filtrlar
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                     <Input
-                        placeholder="Search districts..."
+                        placeholder="Tumanlarni qidirish..."
                         value={filters.search}
                         onChange={(e) => {
                             setFilters({ ...filters, search: e.target.value });
@@ -135,10 +135,10 @@ export default function DistrictsPage() {
                         }}
                     >
                         <SelectTrigger className="focus:ring-green-500">
-                            <SelectValue placeholder="All Types" />
+                            <SelectValue placeholder="Barcha turlar" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Types</SelectItem>
+                            <SelectItem value="all">Barcha turlar</SelectItem>
                             {DISTRICT_TYPE_OPTIONS.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
                                     {option.label}
@@ -156,7 +156,7 @@ export default function DistrictsPage() {
                         className="gap-2 col-span-2 md:col-span-1"
                     >
                         <RotateCcw className="w-4 h-4" />
-                        Reset
+                        Tozalash
                     </Button>
                 </div>
             </div>
@@ -168,7 +168,7 @@ export default function DistrictsPage() {
                     className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-md"
                 >
                     <Plus className="w-5 h-5" />
-                    Create District
+                    Tuman yaratish
                 </Button>
             </div>
 
@@ -178,25 +178,25 @@ export default function DistrictsPage() {
                     <TableHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b">
                         <TableRow>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Name
+                                Nomi
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Type
+                                Turi
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
                                 Hokim
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Phone
+                                Telefon
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
                                 Email
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Created
+                                Yaratilgan
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Actions
+                                Amallar
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -265,7 +265,7 @@ export default function DistrictsPage() {
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={7} className="text-center py-8">
-                                    <span className="text-gray-500">No districts found</span>
+                                    <span className="text-gray-500">Tumanlar topilmadi</span>
                                 </TableCell>
                             </TableRow>
                         )}
@@ -282,24 +282,23 @@ export default function DistrictsPage() {
                             onClick={() => setPagination(prev => ({ ...prev, page: Math.max(prev.page - 1, 1) }))}
                             disabled={pagination.page === 1}
                         >
-                            Previous
+                            Oldingi
                         </Button>
                         <Button
                             variant="outline"
                             onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.page + 1, data.totalPages) }))}
                             disabled={pagination.page === data.totalPages}
                         >
-                            Next
+                            Keyingi
                         </Button>
                     </div>
                     <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                         <div>
                             <p className="text-sm text-gray-700">
-                                Showing <span className="font-medium">{(pagination.page - 1) * pagination.limit + 1}</span> to{' '}
+                                <span className="font-medium">{data.total}</span> ta natijadan <span className="font-medium">{(pagination.page - 1) * pagination.limit + 1}</span> dan{' '}
                                 <span className="font-medium">
                                     {Math.min(pagination.page * pagination.limit, data.total)}
-                                </span>{' '}
-                                of <span className="font-medium">{data.total}</span> results
+                                </span> gachasi ko'rsatilmoqda
                             </p>
                         </div>
                         <div className="flex gap-2">
@@ -310,11 +309,11 @@ export default function DistrictsPage() {
                                 disabled={pagination.page === 1}
                                 className="gap-2"
                             >
-                                ← Previous
+                                ← Oldingi
                             </Button>
                             <div className="flex items-center px-4">
                                 <span className="text-sm font-medium">
-                                    Page {pagination.page} of {data.totalPages}
+                                    Sahifa {pagination.page} / {data.totalPages}
                                 </span>
                             </div>
                             <Button
@@ -324,7 +323,7 @@ export default function DistrictsPage() {
                                 disabled={pagination.page === data.totalPages}
                                 className="gap-2"
                             >
-                                Next →
+                                Keyingi →
                             </Button>
                         </div>
                     </div>
@@ -335,15 +334,15 @@ export default function DistrictsPage() {
             <ConfirmDialog
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
-                title="Delete District?"
+                title="Tumanni o'chirish?"
                 description={
                     districtToDelete
-                        ? `Are you sure you want to permanently delete the district "${districtToDelete.nameUz}"? This action cannot be undone.`
-                        : 'Are you sure?'
+                        ? `Haqiqatan ham "${districtToDelete.nameUz}" tumanini butunlay o'chirmoqchimisiz? Ushbu amalni ortga qaytarib bo'lmaydi.`
+                        : 'Ishonchingiz komilmi?'
                 }
                 destructive={true}
-                confirmText="Delete Permanently"
-                cancelText="Keep It"
+                confirmText="Butunlay o'chirish"
+                cancelText="Bekor qilish"
                 loading={deleteQuery.isPending}
                 onConfirm={handleConfirmDelete}
                 icon="warning"
@@ -354,7 +353,7 @@ export default function DistrictsPage() {
                 <DialogContent className="sm:max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>
-                            {editingDistrict ? 'Edit District' : 'Create District'}
+                            {editingDistrict ? 'Tumanni tahrirlash' : 'Tuman yaratish'}
                         </DialogTitle>
                     </DialogHeader>
                     <DistrictForm

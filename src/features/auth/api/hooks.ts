@@ -14,13 +14,13 @@ export const useLogin = () => {
         },
         onSuccess: (data) => {
             setAuth(data?.admin as any, data.accessToken, data.refreshToken);
-            toast.success(`Welcome back, ${data.admin.email}!`);
+            toast.success(`Xush kelibsiz, ${data.admin.email}!`);
         },
         onError: (error: any) => {
             const errorMessage =
                 error?.response?.data?.message ||
                 error?.response?.data?.error ||
-                'Login failed. Please check your credentials.';
+                'Kirishda xatolik. Iltimos, ma\'lumotlaringizni tekshiring.';
             toast.error(errorMessage);
             console.error('Login error:', error);
         },
@@ -36,11 +36,11 @@ export const useLogout = () => {
         },
         onSuccess: () => {
             logout();
-            toast.success('Logged out successfully');
+            toast.success('Tizimdan muvaffaqiyatli chiqildi');
             window.location.href = '/login';
         },
         onError: (error: any) => {
-            const errorMessage = error?.response?.data?.message || 'Logout failed';
+            const errorMessage = error?.response?.data?.message || 'Chiqishda xatolik yuz berdi';
             toast.error(errorMessage);
             logout(); // Still logout locally
         },

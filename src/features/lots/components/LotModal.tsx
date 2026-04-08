@@ -162,10 +162,10 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                         <div>
                             <h3 className="font-semibold text-red-900">
-                                {errorCount} field{errorCount !== 1 ? 's have' : ' has'} error{errorCount !== 1 ? 's' : ''}
+                                {errorCount} ta maydonda xatolik bor
                             </h3>
                             <p className="text-sm text-red-700 mt-1">
-                                Please scroll to each tab and fix the errors below
+                                Iltimos, har bir tabdagi belgilangan maydonlarni tekshiring
                             </p>
                         </div>
                     </div>
@@ -174,7 +174,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <TabsList className="flex flex-wrap w-full h-auto bg-gray-100 p-1 gap-1 mb-4">
                         <TabsTrigger value="basic" className="relative">
-                            Basic
+                            Asosiy
                             {Object.keys(form.formState.errors).some((key) =>
                                 ['titleUz', 'titleRu', 'titleEn', 'lotNumber', 'lotCode', 'status', 'districtId', 'region'].includes(key)
                             ) && (
@@ -182,7 +182,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                 )}
                         </TabsTrigger>
                         <TabsTrigger value="trade" className="relative">
-                            Trade
+                            Savdo
                             {Object.keys(form.formState.errors).some((key) =>
                                 ['tradeType', 'tradeDate', 'applicationDeadline', 'tradeLocationUz', 'paymentType', 'paymentMonths'].includes(key)
                             ) && (
@@ -190,7 +190,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                 )}
                         </TabsTrigger>
                         <TabsTrigger value="land" className="relative">
-                            Land
+                            Yer
                             {Object.keys(form.formState.errors).some((key) =>
                                 ['landArea', 'distanceToRoad', 'landRightType', 'leaseYears', 'permittedUseUz', 'latitude'].includes(key)
                             ) && (
@@ -198,20 +198,20 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                 )}
                         </TabsTrigger>
                         <TabsTrigger value="investment" className="relative">
-                            Investment
+                            Investitsiya
                             {Object.keys(form.formState.errors).some((key) =>
                                 ['requiredInvestmentUz', 'jobsToCreate'].includes(key)
                             ) && (
                                     <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
                                 )}
                         </TabsTrigger>
-                        <TabsTrigger value="additional">Additional</TabsTrigger>
+                        <TabsTrigger value="additional">Qo'shimcha</TabsTrigger>
                     </TabsList>
 
                     {/* TAB 1: BASIC INFORMATION */}
                     <TabsContent value="basic" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Lot Titles</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Lot nomlari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
@@ -219,9 +219,9 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="titleUz"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Title (UZ) *</FormLabel>
+                                            <FormLabel>Nomi (UZ) *</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder="Lot title in Uzbek" className="focus:ring-blue-500" />
+                                                <Input {...field} placeholder="Lot nomi (o'zbekcha)" className="focus:ring-blue-500" />
                                             </FormControl>
                                             <FormMessage className="text-xs text-red-600" />
                                         </FormItem>
@@ -232,9 +232,9 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="titleRu"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Title (RU) *</FormLabel>
+                                            <FormLabel>Nomi (RU) *</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder="Lot title in Russian" className="focus:ring-blue-500" />
+                                                <Input {...field} placeholder="Lot nomi (ruscha)" className="focus:ring-blue-500" />
                                             </FormControl>
                                             <FormMessage className="text-xs text-red-600" />
                                         </FormItem>
@@ -245,9 +245,9 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="titleEn"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Title (EN) *</FormLabel>
+                                            <FormLabel>Nomi (EN) *</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder="Lot title in English" className="focus:ring-blue-500" />
+                                                <Input {...field} placeholder="Lot nomi (inglizcha)" className="focus:ring-blue-500" />
                                             </FormControl>
                                             <FormMessage className="text-xs text-red-600" />
                                         </FormItem>
@@ -257,7 +257,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Lot Details</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Lot tafsilotlari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
@@ -265,13 +265,13 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="lotNumber"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Lot Number *</FormLabel>
+                                            <FormLabel>Lot raqami *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="e.g., 1"
+                                                    placeholder="masalan, 1"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -284,9 +284,9 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="lotCode"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Lot Code *</FormLabel>
+                                            <FormLabel>Lot kodi *</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder="e.g., LOT-001" className="focus:ring-blue-500" />
+                                                <Input {...field} placeholder="masalan, LOT-001" className="focus:ring-blue-500" />
                                             </FormControl>
                                             <FormMessage className="text-xs text-red-600" />
                                         </FormItem>
@@ -297,7 +297,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="status"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Status *</FormLabel>
+                                            <FormLabel>Holati *</FormLabel>
                                             <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
@@ -320,7 +320,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Location</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Joylashuv</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
@@ -328,11 +328,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="districtId"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>District *</FormLabel>
+                                            <FormLabel>Tuman *</FormLabel>
                                             <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
-                                                        <SelectValue placeholder="Select a district" />
+                                                        <SelectValue placeholder="Tumanni tanlang" />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent className="max-h-60">
@@ -344,7 +344,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                         ))
                                                     ) : (
                                                         <SelectItem value="none" disabled>
-                                                            No districts available
+                                                            Tumanlar mavjud emas
                                                         </SelectItem>
                                                     )}
                                                 </SelectContent>
@@ -359,11 +359,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="region"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Region *</FormLabel>
+                                            <FormLabel>Viloyat *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="e.g., Tashkent City"
+                                                    placeholder="masalan, Toshkent shahri"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -378,7 +378,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                     {/* TAB 2: TRADE INFORMATION */}
                     <TabsContent value="trade" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Trade Details</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Savdo tafsilotlari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
@@ -386,7 +386,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="tradeType"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Trade Type *</FormLabel>
+                                            <FormLabel>Savdo turi *</FormLabel>
                                             <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
@@ -410,7 +410,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="tradeDate"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Trade Date & Time *</FormLabel>
+                                            <FormLabel>Savdo sanasi va vaqti *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="datetime-local"
@@ -427,7 +427,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="applicationDeadline"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Application Deadline *</FormLabel>
+                                            <FormLabel>Ariza topshirish muddati *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="datetime-local"
@@ -447,11 +447,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="tradeLocationUz"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Trade Location (UZ) *</FormLabel>
+                                            <FormLabel>Savdo joyi (UZ) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Location in Uzbek"
+                                                    placeholder="Joylashuv (o'zbekcha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -464,11 +464,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="tradeLocationRu"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Trade Location (RU) *</FormLabel>
+                                            <FormLabel>Savdo joyi (RU) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Location in Russian"
+                                                    placeholder="Joylashuv (ruscha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -481,11 +481,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="tradeLocationEn"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Trade Location (EN) *</FormLabel>
+                                            <FormLabel>Savdo joyi (EN) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Location in English"
+                                                    placeholder="Joylashuv (inglizcha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -497,7 +497,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Payment Information</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">To'lov ma'lumotlari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
@@ -505,7 +505,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="paymentType"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Payment Type *</FormLabel>
+                                            <FormLabel>To'lov turi *</FormLabel>
                                             <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
@@ -529,13 +529,13 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="paymentMonths"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Payment Months *</FormLabel>
+                                            <FormLabel>To'lov oylari *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="Number of months"
+                                                    placeholder="Oylar soni"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -550,7 +550,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                     {/* TAB 3: LAND INFORMATION */}
                     <TabsContent value="land" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Land Details</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Yer tafsilotlari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
@@ -558,14 +558,14 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="landArea"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Land Area (m²) *</FormLabel>
+                                            <FormLabel>Yer maydoni (m²) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
                                                     step="0.01"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="e.g., 5000.50"
+                                                    placeholder="masalan, 5000.50"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -578,11 +578,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="distanceToRoad"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Distance to Road *</FormLabel>
+                                            <FormLabel>Yo'lgacha bo'lgan masofa *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="e.g., 100 meters"
+                                                    placeholder="masalan, 100 metr"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -595,7 +595,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="landRightType"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Land Right Type *</FormLabel>
+                                            <FormLabel>Yerga egalik huquqi turi *</FormLabel>
                                             <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                                 <FormControl>
                                                     <SelectTrigger className="focus:ring-blue-500">
@@ -622,13 +622,13 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="leaseYears"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Lease Years *</FormLabel>
+                                            <FormLabel>Ijaraga berish yillari *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="e.g., 25"
+                                                    placeholder="masalan, 25"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -641,13 +641,13 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="jobsToCreate"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Jobs to Create *</FormLabel>
+                                            <FormLabel>Yaratiladigan ish o'rinlari *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="Number of jobs"
+                                                    placeholder="Ish o'rinlari soni"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -659,7 +659,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Permitted Use</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Ruxsat etilgan foydalanish</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
@@ -667,11 +667,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="permittedUseUz"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Permitted Use (UZ) *</FormLabel>
+                                            <FormLabel>Ruxsat etilgan foydalanish (UZ) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Use in Uzbek"
+                                                    placeholder="Foydalanish (o'zbekcha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -684,11 +684,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="permittedUseRu"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Permitted Use (RU) *</FormLabel>
+                                            <FormLabel>Ruxsat etilgan foydalanish (RU) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Use in Russian"
+                                                    placeholder="Foydalanish (ruscha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -701,11 +701,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="permittedUseEn"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Permitted Use (EN) *</FormLabel>
+                                            <FormLabel>Ruxsat etilgan foydalanish (EN) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Use in English"
+                                                    placeholder="Foydalanish (inglizcha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -717,7 +717,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Land Category</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Yer toifasi</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
@@ -725,11 +725,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="landCategoryUz"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Land Category (UZ) *</FormLabel>
+                                            <FormLabel>Yer toifasi (UZ) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Category in Uzbek"
+                                                    placeholder="Toifa (o'zbekcha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -742,11 +742,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="landCategoryRu"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Land Category (RU) *</FormLabel>
+                                            <FormLabel>Yer toifasi (RU) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Category in Russian"
+                                                    placeholder="Toifa (ruscha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -759,11 +759,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="landCategoryEn"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Land Category (EN) *</FormLabel>
+                                            <FormLabel>Yer toifasi (EN) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Category in English"
+                                                    placeholder="Toifa (inglizcha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -775,7 +775,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Infrastructure</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Infratuzilma</h3>
 
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                 <FormField
@@ -791,7 +791,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Has Gas
+                                                Gaz bor
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -809,7 +809,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Has Electricity
+                                                Elektr bor
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -827,7 +827,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Has Water
+                                                Suv bor
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -845,7 +845,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Has Sewage
+                                                Kanalizatsiya bor
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -856,7 +856,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
 
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">GPS Coordinates</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">GPS koordinatalari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
@@ -864,14 +864,14 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="latitude"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Latitude *</FormLabel>
+                                            <FormLabel>Kenglik (Latitude) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
                                                     step="0.000001"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="e.g., 41.2995"
+                                                    placeholder="masalan, 41.2995"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -884,14 +884,14 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="longitude"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Longitude *</FormLabel>
+                                            <FormLabel>Uzunlik (Longitude) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
                                                     step="0.000001"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="e.g., 69.2401"
+                                                    placeholder="masalan, 69.2401"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -903,22 +903,22 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Addresses</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Manzillar</h3>
 
                             <div className="space-y-4">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-700 mb-2">Physical Address</p>
+                                    <p className="text-sm font-medium text-gray-700 mb-2">Jismoniy manzil</p>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <FormField
                                             control={form.control}
                                             name="addressUz"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Address (UZ) *</FormLabel>
+                                                    <FormLabel className="text-xs">Manzil (UZ) *</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             {...field}
-                                                            placeholder="Address in Uzbek"
+                                                            placeholder="Manzil (o'zbekcha)"
                                                             className="focus:ring-blue-500"
                                                         />
                                                     </FormControl>
@@ -931,11 +931,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             name="addressRu"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Address (RU) *</FormLabel>
+                                                    <FormLabel className="text-xs">Manzil (RU) *</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             {...field}
-                                                            placeholder="Address in Russian"
+                                                            placeholder="Manzil (ruscha)"
                                                             className="focus:ring-blue-500"
                                                         />
                                                     </FormControl>
@@ -948,11 +948,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             name="addressEn"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Address (EN) *</FormLabel>
+                                                    <FormLabel className="text-xs">Manzil (EN) *</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             {...field}
-                                                            placeholder="Address in English"
+                                                            placeholder="Manzil (inglizcha)"
                                                             className="focus:ring-blue-500"
                                                         />
                                                     </FormControl>
@@ -964,18 +964,18 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                 </div>
 
                                 <div>
-                                    <p className="text-sm font-medium text-gray-700 mb-2">Location Address</p>
+                                    <p className="text-sm font-medium text-gray-700 mb-2">Joylashuv manzili</p>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <FormField
                                             control={form.control}
                                             name="locationAddressUz"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Location (UZ) *</FormLabel>
+                                                    <FormLabel className="text-xs">Joylashuv (UZ) *</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             {...field}
-                                                            placeholder="Location in Uzbek"
+                                                            placeholder="Joylashuv (o'zbekcha)"
                                                             className="focus:ring-blue-500"
                                                         />
                                                     </FormControl>
@@ -988,11 +988,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             name="locationAddressRu"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Location (RU) *</FormLabel>
+                                                    <FormLabel className="text-xs">Joylashuv (RU) *</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             {...field}
-                                                            placeholder="Location in Russian"
+                                                            placeholder="Joylashuv (ruscha)"
                                                             className="focus:ring-blue-500"
                                                         />
                                                     </FormControl>
@@ -1005,11 +1005,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             name="locationAddressEn"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Location (EN) *</FormLabel>
+                                                    <FormLabel className="text-xs">Joylashuv (EN) *</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             {...field}
-                                                            placeholder="Location in English"
+                                                            placeholder="Joylashuv (inglizcha)"
                                                             className="focus:ring-blue-500"
                                                         />
                                                     </FormControl>
@@ -1026,11 +1026,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                     {/* TAB 4: INVESTMENT INFORMATION */}
                     <TabsContent value="investment" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Investment Requirements</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Investitsiya talablari</h3>
 
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                                 <p className="text-sm text-blue-700">
-                                    Specify the investment amounts required for this lot in different currencies or formats.
+                                    Ushbu lot uchun talab qilinadigan investitsiya miqdorini ko'rsating.
                                 </p>
                             </div>
 
@@ -1040,11 +1040,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="requiredInvestmentUz"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Required Investment (UZ) *</FormLabel>
+                                            <FormLabel>Talab qilinadigan investitsiya (UZ) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="e.g., 100,000,000 USD"
+                                                    placeholder="masalan, 100,000,000 USD"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -1057,11 +1057,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="requiredInvestmentRu"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Required Investment (RU) *</FormLabel>
+                                            <FormLabel>Talab qilinadigan investitsiya (RU) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="e.g., 100,000,000 USD"
+                                                    placeholder="masalan, 100,000,000 USD"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -1074,11 +1074,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="requiredInvestmentEn"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Required Investment (EN) *</FormLabel>
+                                            <FormLabel>Talab qilinadigan investitsiya (EN) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="e.g., 100,000,000 USD"
+                                                    placeholder="masalan, 100,000,000 USD"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -1093,7 +1093,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                     {/* TAB 5: ADDITIONAL INFORMATION */}
                     <TabsContent value="additional" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Customer Information</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Mijoz ma'lumotlari</h3>
 
                             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1102,11 +1102,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerName"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Customer Name</FormLabel>
+                                                <FormLabel>Mijoz nomi</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
-                                                        placeholder="Customer name"
+                                                        placeholder="Mijoz nomi"
                                                         className="focus:ring-blue-500"
                                                     />
                                                 </FormControl>
@@ -1119,11 +1119,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerType"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Customer Type</FormLabel>
+                                                <FormLabel>Mijoz turi</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
-                                                        placeholder="e.g., Individual, Company"
+                                                        placeholder="masalan, Jismoniy shaxs, Kompaniya"
                                                         className="focus:ring-blue-500"
                                                     />
                                                 </FormControl>
@@ -1136,7 +1136,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerPhone"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Customer Phone</FormLabel>
+                                                <FormLabel>Mijoz telefoni</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
@@ -1153,7 +1153,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerExtraPhone"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Extra Phone</FormLabel>
+                                                <FormLabel>Qo'shimcha telefon</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
@@ -1170,7 +1170,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerEmail"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Customer Email</FormLabel>
+                                                <FormLabel>Mijoz elektron pochtasi</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         type="email"
@@ -1188,11 +1188,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerDistrict"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Customer District</FormLabel>
+                                                <FormLabel>Mijoz tumani</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
-                                                        placeholder="District name"
+                                                        placeholder="Tuman nomi"
                                                         className="focus:ring-blue-500"
                                                     />
                                                 </FormControl>
@@ -1207,11 +1207,11 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="customerAddress"
                                     render={({ field }) => (
                                         <FormItem className="mt-4">
-                                            <FormLabel>Customer Address</FormLabel>
+                                            <FormLabel>Mijoz manzili</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Full address"
+                                                    placeholder="To'liq manzil"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -1223,23 +1223,23 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Notes & Warnings</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Eslatmalar va ogohlantirishlar</h3>
 
                             <div className="space-y-4">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-700 mb-2">Notes</p>
+                                    <p className="text-sm font-medium text-gray-700 mb-2">Eslatmalar</p>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <FormField
                                             control={form.control}
                                             name="noteUz"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Note (UZ)</FormLabel>
+                                                    <FormLabel className="text-xs">Eslatma (UZ)</FormLabel>
                                                     <FormControl>
                                                         <textarea
                                                             {...field}
                                                             rows={3}
-                                                            placeholder="Note in Uzbek"
+                                                            placeholder="Eslatma (o'zbekcha)"
                                                             className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500"
                                                         />
                                                     </FormControl>
@@ -1252,12 +1252,12 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             name="noteRu"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Note (RU)</FormLabel>
+                                                    <FormLabel className="text-xs">Eslatma (RU)</FormLabel>
                                                     <FormControl>
                                                         <textarea
                                                             {...field}
                                                             rows={3}
-                                                            placeholder="Note in Russian"
+                                                            placeholder="Eslatma (ruscha)"
                                                             className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500"
                                                         />
                                                     </FormControl>
@@ -1270,12 +1270,12 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             name="noteEn"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Note (EN)</FormLabel>
+                                                    <FormLabel className="text-xs">Eslatma (EN)</FormLabel>
                                                     <FormControl>
                                                         <textarea
                                                             {...field}
                                                             rows={3}
-                                                            placeholder="Note in English"
+                                                            placeholder="Eslatma (inglizcha)"
                                                             className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500"
                                                         />
                                                     </FormControl>
@@ -1287,19 +1287,19 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                 </div>
 
                                 <div>
-                                    <p className="text-sm font-medium text-gray-700 mb-2">Usage Warnings</p>
+                                    <p className="text-sm font-medium text-gray-700 mb-2">Foydalanish bo'yicha ogohlantirishlar</p>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <FormField
                                             control={form.control}
                                             name="usageWarningUz"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Warning (UZ)</FormLabel>
+                                                    <FormLabel className="text-xs">Ogohlantirish (UZ)</FormLabel>
                                                     <FormControl>
                                                         <textarea
                                                             {...field}
                                                             rows={3}
-                                                            placeholder="Warning in Uzbek"
+                                                            placeholder="Ogohlantirish (o'zbekcha)"
                                                             className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500"
                                                         />
                                                     </FormControl>
@@ -1312,12 +1312,12 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             name="usageWarningRu"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Warning (RU)</FormLabel>
+                                                    <FormLabel className="text-xs">Ogohlantirish (RU)</FormLabel>
                                                     <FormControl>
                                                         <textarea
                                                             {...field}
                                                             rows={3}
-                                                            placeholder="Warning in Russian"
+                                                            placeholder="Ogohlantirish (ruscha)"
                                                             className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500"
                                                         />
                                                     </FormControl>
@@ -1330,12 +1330,12 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             name="usageWarningEn"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs">Warning (EN)</FormLabel>
+                                                    <FormLabel className="text-xs">Ogohlantirish (EN)</FormLabel>
                                                     <FormControl>
                                                         <textarea
                                                             {...field}
                                                             rows={3}
-                                                            placeholder="Warning in English"
+                                                            placeholder="Ogohlantirish (inglizcha)"
                                                             className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500"
                                                         />
                                                     </FormControl>
@@ -1349,7 +1349,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Building Information</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Bino ma'lumotlari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
@@ -1365,7 +1365,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Has Building
+                                                Bino mavjud
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -1376,14 +1376,14 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="buildingArea"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Building Area (m²)</FormLabel>
+                                                <FormLabel>Bino maydoni (m²)</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         type="number"
                                                         step="0.01"
                                                         {...field}
                                                         onChange={(e) => field.onChange(e.target.value)}
-                                                        placeholder="e.g., 2000"
+                                                        placeholder="masalan, 2000"
                                                         className="focus:ring-blue-500"
                                                     />
                                                 </FormControl>
@@ -1396,15 +1396,15 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Images</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Rasmlar</h3>
                             <FileUploader
                                 control={form.control}
                                 name="imageUrls"
                                 folder="lots"
                                 accept="image/*"
                                 multiple={true}
-                                label="Upload Lot Images"
-                                description="You can upload multiple images to showcase the lot (PNG, JPG, GIF up to 10MB each)"
+                                label="Lot rasmlarini yuklash"
+                                description="Lotni namoyish qilish uchun bir nechta rasmlarni yuklashingiz mumkin (PNG, JPG, GIF, har biri 10MB gacha)"
                                 maxSize={50}
                             />
                         </div>
@@ -1421,7 +1421,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         className="gap-2"
                     >
                         <X className="w-4 h-4" />
-                        Cancel
+                        Bekor qilish
                     </Button>
                     <Button
                         type="submit"
@@ -1431,12 +1431,12 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         {isLoading ? (
                             <>
                                 <Loader className="w-4 h-4 animate-spin" />
-                                {isEditing ? 'Updating...' : 'Creating...'}
+                                {isEditing ? 'Yangilanmoqda...' : 'Yaratilmoqda...'}
                             </>
                         ) : (
                             <>
                                 <Save className="w-4 h-4" />
-                                {isEditing ? 'Update Lot' : 'Create Lot'}
+                                {isEditing ? 'Lotni yangilash' : 'Lotni yaratish'}
                             </>
                         )}
                     </Button>

@@ -65,13 +65,13 @@ export const useCreateNews = () => {
             if (createdId) {
                 queryClient.setQueryData(newsQueryKeys.detail(createdId), data);
             }
-            toast.success('News created successfully');
+            toast.success('Yangilik muvaffaqiyatli yaratildi');
         },
         onError: (error: any) => {
             const message =
                 error?.response?.data?.message ||
                 error?.message ||
-                'Failed to create news';
+                'Yangilikni yaratishda xatolik yuz berdi';
             toast.error(message);
         },
     });
@@ -91,13 +91,13 @@ export const useUpdateNews = (id: string) => {
                 queryKey: newsQueryKeys.lists(),
             });
             queryClient.setQueryData(newsQueryKeys.detail(id), data);
-            toast.success('News updated successfully');
+            toast.success('Yangilik muvaffaqiyatli yangilandi');
         },
         onError: (error: any) => {
             const message =
                 error?.response?.data?.message ||
                 error?.message ||
-                'Failed to update news';
+                'Yangilikni yangilashda xatolik yuz berdi';
             toast.error(message);
         },
     });
@@ -116,13 +116,13 @@ export const useDeleteNews = () => {
             queryClient.invalidateQueries({
                 queryKey: newsQueryKeys.lists(),
             });
-            toast.success('News deleted successfully');
+            toast.success('Yangilik muvaffaqiyatli o\'chirildi');
         },
         onError: (error: any) => {
             const message =
                 error?.response?.data?.message ||
                 error?.message ||
-                'Failed to delete news';
+                'Yangilikni o\'chirishda xatolik yuz berdi';
             toast.error(message);
         },
     });
@@ -144,14 +144,14 @@ export const useToggleNewsPublish = (id: string) => {
                 queryKey: newsQueryKeys.detail(id),
             });
             toast.success(
-                `News ${variables ? 'published' : 'unpublished'} successfully`
+                `Yangilik muvaffaqiyatli ${variables ? 'chop etildi' : 'qoralama qilindi'}`
             );
         },
         onError: (error: any) => {
             const message =
                 error?.response?.data?.message ||
                 error?.message ||
-                'Failed to update news status';
+                'Yangilik holatini yangilashda xatolik yuz berdi';
             toast.error(message);
         },
     });
@@ -205,13 +205,13 @@ export const useBulkPublishNews = () => {
             queryClient.invalidateQueries({
                 queryKey: newsQueryKeys.lists(),
             });
-            toast.success('News status updated successfully');
+            toast.success('Yangiliklar holati muvaffaqiyatli yangilandi');
         },
         onError: (error: any) => {
             const message =
                 error?.response?.data?.message ||
                 error?.message ||
-                'Failed to update news status';
+                'Yangiliklar holatini yangilashda xatolik yuz berdi';
             toast.error(message);
         },
     });

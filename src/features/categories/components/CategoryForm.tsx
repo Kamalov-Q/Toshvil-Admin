@@ -73,7 +73,7 @@ export default function CategoryForm({
                         name="nameUz"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Name (UZ)</FormLabel>
+                                <FormLabel>Nomi (UZ)</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -84,7 +84,7 @@ export default function CategoryForm({
                         name="nameRu"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Name (RU)</FormLabel>
+                                <FormLabel>Nomi (RU)</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -95,7 +95,7 @@ export default function CategoryForm({
                         name="nameEn"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Name (EN)</FormLabel>
+                                <FormLabel>Nomi (EN)</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -111,13 +111,13 @@ export default function CategoryForm({
                         disabled={isLoading}
                     >
                         <X className="w-4 h-4 mr-2" />
-                        Cancel
+                        Bekor qilish
                     </Button>
                     <Button type="submit" disabled={isLoading} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
                         {isLoading ? (
-                            <><Loader className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+                            <><Loader className="w-4 h-4 mr-2 animate-spin" />Saqlanmoqda...</>
                         ) : (
-                            <><Save className="w-4 h-4 mr-2" />{isEditing ? 'Update Category' : 'Create Category'}</>
+                            <><Save className="w-4 h-4 mr-2" />{isEditing ? 'Yangilash' : 'Yaratish'}</>
                         )}
                     </Button>
                 </div>

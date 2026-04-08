@@ -105,11 +105,10 @@ export default function DistrictForm({
                         <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                         <div>
                             <h3 className="font-semibold text-red-900">
-                                {errorCount} field{errorCount !== 1 ? 's have' : ' has'} error
-                                {errorCount !== 1 ? 's' : ''}
+                                {errorCount} ta maydonda xatolik bor
                             </h3>
                             <p className="text-sm text-red-700 mt-1">
-                                Please review highlighted fields in each tab
+                                Iltimos, har bir tabdagi belgilangan maydonlarni tekshiring
                             </p>
                         </div>
                     </div>
@@ -117,10 +116,10 @@ export default function DistrictForm({
 
                 <Tabs defaultValue="general" className="w-full">
                     <TabsList className="grid w-full grid-cols-4">
-                        <TabsTrigger value="general">General</TabsTrigger>
-                        <TabsTrigger value="hokim">Hokim Info</TabsTrigger>
-                        <TabsTrigger value="contact">Contact</TabsTrigger>
-                        <TabsTrigger value="media">Media & Docs</TabsTrigger>
+                        <TabsTrigger value="general">Umumiy</TabsTrigger>
+                        <TabsTrigger value="hokim">Hokim ma'lumotlari</TabsTrigger>
+                        <TabsTrigger value="contact">Aloqa</TabsTrigger>
+                        <TabsTrigger value="media">Media va hujjatlar</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="general" className="space-y-4 pt-4">
@@ -130,11 +129,11 @@ export default function DistrictForm({
                                 name="type"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>District Type</FormLabel>
+                                        <FormLabel>Tuman turi</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select type" />
+                                                    <SelectValue placeholder="Turni tanlang" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -154,7 +153,7 @@ export default function DistrictForm({
                                 name="sortOrder"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Sort Order</FormLabel>
+                                        <FormLabel>Saralash tartibi</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="number"
@@ -174,7 +173,7 @@ export default function DistrictForm({
                                 name="nameUz"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name (UZ)</FormLabel>
+                                        <FormLabel>Nomi (UZ)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -185,7 +184,7 @@ export default function DistrictForm({
                                 name="nameRu"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name (RU)</FormLabel>
+                                        <FormLabel>Nomi (RU)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -196,7 +195,7 @@ export default function DistrictForm({
                                 name="nameEn"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name (EN)</FormLabel>
+                                        <FormLabel>Nomi (EN)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -212,7 +211,7 @@ export default function DistrictForm({
                                 name="hokimNameUz"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Hokim Name (UZ)</FormLabel>
+                                        <FormLabel>Hokim ismi (UZ)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -223,7 +222,7 @@ export default function DistrictForm({
                                 name="hokimNameRu"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Hokim Name (RU)</FormLabel>
+                                        <FormLabel>Hokim ismi (RU)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -234,7 +233,7 @@ export default function DistrictForm({
                                 name="hokimNameEn"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Hokim Name (EN)</FormLabel>
+                                        <FormLabel>Hokim ismi (EN)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -248,7 +247,7 @@ export default function DistrictForm({
                                 name="receptionDaysUz"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Reception Days (UZ)</FormLabel>
+                                        <FormLabel>Qabul kunlari (UZ)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -259,7 +258,7 @@ export default function DistrictForm({
                                 name="receptionDaysRu"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Reception Days (RU)</FormLabel>
+                                        <FormLabel>Qabul kunlari (RU)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -270,7 +269,7 @@ export default function DistrictForm({
                                 name="receptionDaysEn"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Reception Days (EN)</FormLabel>
+                                        <FormLabel>Qabul kunlari (EN)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -286,7 +285,7 @@ export default function DistrictForm({
                                 name="phone"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Phone Number</FormLabel>
+                                        <FormLabel>Telefon raqami</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -308,7 +307,7 @@ export default function DistrictForm({
                                 name="website"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Website (optional)</FormLabel>
+                                        <FormLabel>Veb-sayt (ixtiyoriy)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -319,7 +318,7 @@ export default function DistrictForm({
                                 name="eXat"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>E-Xat (optional)</FormLabel>
+                                        <FormLabel>E-Xat (ixtiyoriy)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -333,7 +332,7 @@ export default function DistrictForm({
                                 name="addressUz"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Address (UZ)</FormLabel>
+                                        <FormLabel>Manzil (UZ)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -344,7 +343,7 @@ export default function DistrictForm({
                                 name="addressRu"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Address (RU)</FormLabel>
+                                        <FormLabel>Manzil (RU)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -355,7 +354,7 @@ export default function DistrictForm({
                                 name="addressEn"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Address (EN)</FormLabel>
+                                        <FormLabel>Manzil (EN)</FormLabel>
                                         <FormControl><Input {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -369,7 +368,7 @@ export default function DistrictForm({
                                 name="latitude"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Latitude</FormLabel>
+                                        <FormLabel>Kenglik (Latitude)</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="number"
@@ -387,7 +386,7 @@ export default function DistrictForm({
                                 name="longitude"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Longitude</FormLabel>
+                                        <FormLabel>Uzunlik (Longitude)</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="number"
@@ -416,7 +415,7 @@ export default function DistrictForm({
                                                 name="hokimPhoto"
                                                 accept="image/*"
                                                 folder="districts"
-                                                label="Upload Hokim Photo"
+                                                label="Hokim rasmini yuklash"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -434,7 +433,7 @@ export default function DistrictForm({
                                                 name="hokimDocumentUz"
                                                 accept=".pdf,.doc,.docx"
                                                 folder="districts"
-                                                label="Upload Document (UZ)"
+                                                label="Hujjat yuklash (UZ)"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -452,7 +451,7 @@ export default function DistrictForm({
                                                 name="hokimDocumentRu"
                                                 accept=".pdf,.doc,.docx"
                                                 folder="districts"
-                                                label="Upload Document (RU)"
+                                                label="Hujjat yuklash (RU)"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -470,7 +469,7 @@ export default function DistrictForm({
                                                 name="hokimDocumentEn"
                                                 accept=".pdf,.doc,.docx"
                                                 folder="districts"
-                                                label="Upload Document (EN)"
+                                                label="Hujjat yuklash (EN)"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -489,13 +488,13 @@ export default function DistrictForm({
                         disabled={isLoading}
                     >
                         <X className="w-4 h-4 mr-2" />
-                        Cancel
+                        Bekor qilish
                     </Button>
                     <Button type="submit" disabled={isLoading} className="flex-1 bg-green-600 hover:bg-green-700 text-white">
                         {isLoading ? (
-                            <><Loader className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+                            <><Loader className="w-4 h-4 mr-2 animate-spin" />Saqlanmoqda...</>
                         ) : (
-                            <><Save className="w-4 h-4 mr-2" />{isEditing ? 'Update District' : 'Create District'}</>
+                            <><Save className="w-4 h-4 mr-2" />{isEditing ? 'Yangilash' : 'Yaratish'}</>
                         )}
                     </Button>
                 </div>

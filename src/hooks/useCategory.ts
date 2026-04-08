@@ -38,11 +38,11 @@ export const useCreateCategory = () => {
             return data;
         },
         onSuccess: () => {
-            toast.success('Category created successfully');
+            toast.success('Kategoriya muvaffaqiyatli yaratildi');
             queryClient.invalidateQueries({ queryKey: ['categories'] });
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to create category');
+            toast.error(error.response?.data?.message || 'Kategoriyani yaratishda xatolik yuz berdi');
         },
     });
 };
@@ -56,12 +56,12 @@ export const useUpdateCategory = (id: string) => {
             return data;
         },
         onSuccess: () => {
-            toast.success('Category updated successfully');
+            toast.success('Kategoriya muvaffaqiyatli yangilandi');
             queryClient.invalidateQueries({ queryKey: ['categories'] });
             queryClient.invalidateQueries({ queryKey: ['category', id] });
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to update category');
+            toast.error(error.response?.data?.message || 'Kategoriyani yangilashda xatolik yuz berdi');
         },
     });
 };
@@ -75,11 +75,11 @@ export const useDeleteCategory = () => {
             return data;
         },
         onSuccess: () => {
-            toast.success('Category deleted successfully');
+            toast.success('Kategoriya muvaffaqiyatli o\'chirildi');
             queryClient.invalidateQueries({ queryKey: ['categories'] });
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to delete category');
+            toast.error(error.response?.data?.message || 'Kategoriyani o\'chirishda xatolik yuz berdi');
         },
     });
 };

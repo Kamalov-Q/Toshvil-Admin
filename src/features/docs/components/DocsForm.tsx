@@ -91,11 +91,11 @@ export default function DocsForm({
                         name="categoryId"
                         render={({ field }) => (
                             <FormItem className="col-span-full">
-                                <FormLabel>Category</FormLabel>
+                                <FormLabel>Kategoriya</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select a category" />
+                                            <SelectValue placeholder="Kategoriyani tanlang" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
@@ -116,7 +116,7 @@ export default function DocsForm({
                         name="titleUz"
                         render={({ field }) => (
                             <FormItem className="col-span-full sm:col-span-1">
-                                <FormLabel>Title (UZ)</FormLabel>
+                                <FormLabel>Sarlavha (UZ)</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -127,7 +127,7 @@ export default function DocsForm({
                         name="titleRu"
                         render={({ field }) => (
                             <FormItem className="col-span-full sm:col-span-1">
-                                <FormLabel>Title (RU)</FormLabel>
+                                <FormLabel>Sarlavha (RU)</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -138,7 +138,7 @@ export default function DocsForm({
                         name="titleEn"
                         render={({ field }) => (
                             <FormItem className="col-span-full sm:col-span-1">
-                                <FormLabel>Title (EN)</FormLabel>
+                                <FormLabel>Sarlavha (EN)</FormLabel>
                                 <FormControl><Input {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -150,7 +150,7 @@ export default function DocsForm({
                         name="descriptionUz"
                         render={({ field }) => (
                             <FormItem className="col-span-full">
-                                <FormLabel>Description (UZ) <span className="text-gray-400 font-normal">(Optional)</span></FormLabel>
+                                <FormLabel>Tavsif (UZ) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
                                 <FormControl><Textarea {...field} value={field.value || ''} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -161,7 +161,7 @@ export default function DocsForm({
                         name="descriptionRu"
                         render={({ field }) => (
                             <FormItem className="col-span-full">
-                                <FormLabel>Description (RU) <span className="text-gray-400 font-normal">(Optional)</span></FormLabel>
+                                <FormLabel>Tavsif (RU) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
                                 <FormControl><Textarea {...field} value={field.value || ''} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -172,7 +172,7 @@ export default function DocsForm({
                         name="descriptionEn"
                         render={({ field }) => (
                             <FormItem className="col-span-full">
-                                <FormLabel>Description (EN) <span className="text-gray-400 font-normal">(Optional)</span></FormLabel>
+                                <FormLabel>Tavsif (EN) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
                                 <FormControl><Textarea {...field} value={field.value || ''} /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -190,7 +190,7 @@ export default function DocsForm({
                                         name="url"
                                         accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf"
                                         folder="docs"
-                                        label="Upload Document"
+                                        label="Hujjatni yuklash"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -207,13 +207,13 @@ export default function DocsForm({
                         disabled={isLoading}
                     >
                         <X className="w-4 h-4 mr-2" />
-                        Cancel
+                        Bekor qilish
                     </Button>
                     <Button type="submit" disabled={isLoading} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
                         {isLoading ? (
-                            <><Loader className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+                            <><Loader className="w-4 h-4 mr-2 animate-spin" />Saqlanmoqda...</>
                         ) : (
-                            <><Save className="w-4 h-4 mr-2" />{isEditing ? 'Update Document' : 'Create Document'}</>
+                            <><Save className="w-4 h-4 mr-2" />{isEditing ? 'Yangilash' : 'Yaratish'}</>
                         )}
                     </Button>
                 </div>

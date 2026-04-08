@@ -6,8 +6,8 @@ export default function DocsPage() {
     return (
         <div className="space-y-8">
             <PageHeader
-                title="Documents Management"
-                description="Manage documents and their underlying categories"
+                title="Hujjatlarni boshqarish"
+                description="Hujjatlar va ularning tegishli kategoriyalarini boshqaring"
                 icon={<FileStack className="w-6 h-6" />}
             />
 

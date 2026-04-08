@@ -89,19 +89,19 @@ export default function CategoryTable() {
     const columns: ColumnDef<Category>[] = [
         {
             accessorKey: 'nameUz',
-            header: 'Name (UZ)',
+            header: 'Nomi (UZ)',
         },
         {
             accessorKey: 'nameRu',
-            header: 'Name (RU)',
+            header: 'Nomi (RU)',
         },
         {
             accessorKey: 'nameEn',
-            header: 'Name (EN)',
+            header: 'Nomi (EN)',
         },
         {
             id: 'actions',
-            header: 'Actions',
+            header: 'Amallar',
             cell: ({ row }) => (
                 <div className="flex gap-2">
                     <Button
@@ -144,7 +144,7 @@ export default function CategoryTable() {
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
                     <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <div>
-                        <h3 className="font-semibold text-red-900">Error loading categories</h3>
+                        <h3 className="font-semibold text-red-900">Kategoriyalarni yuklashda xatolik</h3>
                         <p className="text-sm text-red-700 mt-1">
                             {error instanceof Error ? error.message : 'Unknown error'}
                         </p>
@@ -157,7 +157,7 @@ export default function CategoryTable() {
                 <div className="relative max-w-sm w-full">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <Input
-                        placeholder="Search categories..."
+                        placeholder="Kategoriyalarni qidirish..."
                         value={search}
                         onChange={(e) => {
                             setSearch(e.target.value);
@@ -174,7 +174,7 @@ export default function CategoryTable() {
                     className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
                 >
                     <Plus className="w-5 h-5" />
-                    Create Category
+                    Kategoriya yaratish
                 </Button>
             </div>
 
@@ -206,7 +206,7 @@ export default function CategoryTable() {
                         ) : table.getRowModel().rows.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="text-center py-8">
-                                    <span className="text-gray-500">No categories found</span>
+                                    <span className="text-gray-500">Kategoriyalar topilmadi</span>
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -231,8 +231,7 @@ export default function CategoryTable() {
             {data && data.total > 0 && (
                 <div className="flex items-center justify-between bg-white rounded-lg border p-4">
                     <span className="text-sm text-gray-600">
-                        {data.total} total categories • Page {pagination.pageIndex + 1} of{' '}
-                        {data.totalPages}
+                        Jami {data.total} ta kategoriya • Sahifa {pagination.pageIndex + 1} / {data.totalPages}
                     </span>
                     <div className="flex gap-2">
                         <Button
@@ -240,7 +239,7 @@ export default function CategoryTable() {
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
                         >
-                            Previous
+                            Bekor qilish
                         </Button>
                         <Button
                             variant="outline"
@@ -258,7 +257,7 @@ export default function CategoryTable() {
                 <DialogContent className="max-w-[95vw] sm:max-w-2xl">
                     <DialogHeader>
                         <DialogTitle>
-                            {editingCategory ? 'Edit Category' : 'Create Category'}
+                            {editingCategory ? 'Kategoriyani tahrirlash' : 'Kategoriya yaratish'}
                         </DialogTitle>
                         <DialogDescription className="sr-only">
                             {editingCategory ? 'Edit the category.' : 'Create a new category.'}
@@ -276,14 +275,14 @@ export default function CategoryTable() {
             <ConfirmDialog
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
-                title="Delete Category?"
+                title="Kategoriyani o'chirish?"
                 description={
                     categoryToDelete
-                        ? `Are you sure you want to permanently delete "${categoryToDelete.nameUz}"?`
+                        ? `Haqiqatan ham "${categoryToDelete.nameUz}" kategoriyasini butunlay o'chirib tashlamoqchimisiz?`
                         : ''
                 }
-                confirmText="Delete"
-                cancelText="Cancel"
+                confirmText="O'chirish"
+                cancelText="Bekor qilish"
                 onConfirm={handleConfirmDelete}
                 loading={deleteQuery.isPending}
                 destructive

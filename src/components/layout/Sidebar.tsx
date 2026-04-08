@@ -40,54 +40,54 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
     {
         icon: <Home className="w-5 h-5" />,
-        label: 'Dashboard',
+        label: 'Boshqaruv paneli',
         path: '/dashboard',
     },
     {
         icon: <MapPin className="w-5 h-5" />,
-        label: 'Lots',
+        label: 'Lotlar',
         path: '/lots',
         badge: 12,
     },
     {
         icon: <LayoutDashboard className="w-5 h-5" />,
-        label: 'Districts',
+        label: 'Tumanlar',
         path: '/districts',
     },
     {
         icon: <Newspaper className="w-5 h-5" />,
-        label: 'News',
+        label: 'Yangiliklar',
         path: '/news',
         badge: 3,
     },
     {
         icon: <MessageSquare className="w-5 h-5" />,
-        label: 'Comments',
+        label: 'Izohlar',
         path: '/comments',
     },
     {
         icon: <FolderTree className="w-5 h-5" />,
-        label: 'Categories',
+        label: 'Kategoriyalar',
         path: '/categories',
     },
     {
         icon: <FileStack className="w-5 h-5" />,
-        label: 'Docs',
+        label: 'Hujjatlar',
         path: '/docs',
     },
     {
         icon: <Users className="w-5 h-5" />,
-        label: 'Users',
+        label: 'Foydalanuvchilar',
         path: '/users',
         subItems: [
-            { label: 'All Users', path: '/users' },
-            { label: 'Roles', path: '/users/roles' },
-            { label: 'Permissions', path: '/users/permissions' },
+            { label: 'Barcha foydalanuvchilar', path: '/users' },
+            { label: 'Rollar', path: '/users/roles' },
+            { label: 'Huquqlar', path: '/users/permissions' },
         ],
     },
     {
         icon: <BarChart3 className="w-5 h-5" />,
-        label: 'Analytics',
+        label: 'Analitika',
         path: '/analytics',
     },
 ];
@@ -95,12 +95,12 @@ const menuItems: MenuItem[] = [
 const settingsItems: MenuItem[] = [
     {
         icon: <Settings className="w-5 h-5" />,
-        label: 'Settings',
+        label: 'Sozlamalar',
         path: '/settings',
     },
     {
         icon: <HelpCircle className="w-5 h-5" />,
-        label: 'Help & Support',
+        label: 'Yordam va ko\'mak',
         path: '/help',
     },
 ];
@@ -125,7 +125,7 @@ export default function Sidebar() {
         try {
             await logoutMutation.mutateAsync();
         } catch (error: any) {
-            toast.error('Logout failed');
+            toast.error('Chiqishda xatolik yuz berdi');
             console.error('Logout error:', error);
         }
     };
@@ -152,7 +152,7 @@ export default function Sidebar() {
                         <Menu className="w-6 h-6 text-gray-600" />
                     )}
                 </button>
-                <h1 className="ml-4 text-lg font-bold text-gray-900">Admin Panel</h1>
+                <h1 className="ml-4 text-lg font-bold text-gray-900">Admin Paneli</h1>
             </div>
 
             {/* Sidebar */}
@@ -187,7 +187,7 @@ export default function Sidebar() {
                     {/* User Info */}
                     <div className="px-6 py-6 border-b border-gray-700">
                         <div className="bg-gray-700/50 rounded-lg p-4 backdrop-blur">
-                            <p className="text-xs text-gray-400 mb-1">Logged in as</p>
+                            <p className="text-xs text-gray-400 mb-1">Tizimga kirgan:</p>
                             <p className="font-semibold text-sm truncate">{user?.email}</p>
                             <p className="text-xs text-blue-400 mt-2 uppercase tracking-wider font-medium">
                                 {user?.role}
@@ -198,7 +198,7 @@ export default function Sidebar() {
                     {/* Main Menu */}
                     <nav className="px-3 py-6 space-y-1">
                         <p className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                            Main Menu
+                            Asosiy menyu
                         </p>
                         {menuItems.map((item) => (
                             <div key={item.label}>
@@ -283,7 +283,7 @@ export default function Sidebar() {
                     {/* Settings Menu */}
                     <div className="px-3 py-6 border-t border-gray-700">
                         <p className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                            Settings
+                            Sozlamalar
                         </p>
                         <nav className="space-y-1">
                             {settingsItems.map((item) => (
@@ -313,7 +313,7 @@ export default function Sidebar() {
                         className="w-full justify-start gap-3 bg-red-600 hover:bg-red-700 text-white"
                     >
                         <LogOut className="w-5 h-5" />
-                        {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+                        {logoutMutation.isPending ? 'Chiqilmoqda...' : 'Chiqish'}
                     </Button>
                 </div>
             </aside>

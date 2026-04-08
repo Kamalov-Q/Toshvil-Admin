@@ -27,11 +27,11 @@ export const useCreateDoc = () => {
             return data;
         },
         onSuccess: () => {
-            toast.success('Document created successfully');
+            toast.success('Hujjat muvaffaqiyatli yaratildi');
             queryClient.invalidateQueries({ queryKey: ['documentation'] });
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to create document');
+            toast.error(error.response?.data?.message || 'Hujjatni yaratishda xatolik yuz berdi');
         },
     });
 };
@@ -45,11 +45,11 @@ export const useUpdateDoc = (id: string) => {
             return data;
         },
         onSuccess: () => {
-            toast.success('Document updated successfully');
+            toast.success('Hujjat muvaffaqiyatli yangilandi');
             queryClient.invalidateQueries({ queryKey: ['documentation'] });
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to update document');
+            toast.error(error.response?.data?.message || 'Hujjatni yangilashda xatolik yuz berdi');
         },
     });
 };
@@ -63,11 +63,11 @@ export const useDeleteDoc = () => {
             return data;
         },
         onSuccess: () => {
-            toast.success('Document deleted successfully');
+            toast.success('Hujjat muvaffaqiyatli o\'chirildi');
             queryClient.invalidateQueries({ queryKey: ['documentation'] });
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to delete document');
+            toast.error(error.response?.data?.message || 'Hujjatni o\'chirishda xatolik yuz berdi');
         },
     });
 };

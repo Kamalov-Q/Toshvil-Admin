@@ -71,14 +71,14 @@ export const useCreateLot = () => {
             queryClient.invalidateQueries({ queryKey: ['lots'] });
             // Add to cache
             queryClient.setQueryData(['lot', data.id], data);
-            toast.success(`Lot #${data.lotNumber} created successfully`);
+            toast.success(`Lot #${data.lotNumber} muvaffaqiyatli yaratildi`);
         },
         onError: (error: any) => {
             const errorMessage =
                 error?.response?.data?.message ||
                 error?.response?.data?.error ||
                 error?.message ||
-                'Failed to create lot';
+                'Lot yaratishda xatolik yuz berdi';
             toast.error(errorMessage);
             console.error('Create lot error:', error);
         },
@@ -100,14 +100,14 @@ export const useUpdateLot = (id: string) => {
             queryClient.invalidateQueries({ queryKey: ['lot', id] });
             // Update cache
             queryClient.setQueryData(['lot', id], data);
-            toast.success(`Lot #${data.lotNumber} updated successfully`);
+            toast.success(`Lot #${data.lotNumber} muvaffaqiyatli yangilandi`);
         },
         onError: (error: any) => {
             const errorMessage =
                 error?.response?.data?.message ||
                 error?.response?.data?.error ||
                 error?.message ||
-                'Failed to update lot';
+                'Lotni yangilashda xatolik yuz berdi';
             toast.error(errorMessage);
             console.error('Update lot error:', error);
         },
@@ -125,14 +125,14 @@ export const useDeleteLot = () => {
         onSuccess: () => {
             // Invalidate all lots queries
             queryClient.invalidateQueries({ queryKey: ['lots'] });
-            toast.success('Lot deleted successfully');
+            toast.success('Lot muvaffaqiyatli o\'chirildi');
         },
         onError: (error: any) => {
             const errorMessage =
                 error?.response?.data?.message ||
                 error?.response?.data?.error ||
                 error?.message ||
-                'Failed to delete lot';
+                'Lotni o\'chirishda xatolik yuz berdi';
             toast.error(errorMessage);
             console.error('Delete lot error:', error);
         },

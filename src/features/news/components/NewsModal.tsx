@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
+import { Textarea } from '../../../components/ui/textarea';
 import {
     Select,
     SelectContent,
@@ -30,7 +31,7 @@ import {
     NEWS_CATEGORY_OPTIONS,
 } from '../schemas/schema';
 import { useCreateNews, useUpdateNews } from '../api/hooks';
-import { AlertCircle, Loader, Save, X } from 'lucide-react';
+import { AlertCircle, Loader } from 'lucide-react';
 
 interface NewsModalProps {
     news?: News;
@@ -87,49 +88,27 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                         <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                         <div>
                             <h3 className="font-semibold text-red-900">
-                                {errorCount} field{errorCount !== 1 ? 's have' : ' has'} error
-                                {errorCount !== 1 ? 's' : ''}
+                                {errorCount} ta maydonda xatolik bor
                             </h3>
                             <p className="text-sm text-red-700 mt-1">
-                                Please review the highlighted fields below
+                                Iltimos, har bir tabdagi belgilangan maydonlarni tekshiring
                             </p>
                         </div>
                     </div>
                 )}
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="content" className="relative">
-                            Content
-                            {Object.keys(form.formState.errors).some((key) =>
-                                [
-                                    'titleUz',
-                                    'titleRu',
-                                    'titleEn',
-                                    'shortDescriptionUz',
-                                    'shortDescriptionRu',
-                                    'shortDescriptionEn',
-                                    'descriptionUz',
-                                    'descriptionRu',
-                                    'descriptionEn',
-                                ].includes(key)
-                            ) && (
-                                    <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
-                                )}
-                        </TabsTrigger>
-                        <TabsTrigger value="media" className="relative">
-                            Media
-                            {Object.keys(form.formState.errors).some((key) => ['image'].includes(key)) && (
-                                <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
-                            )}
-                        </TabsTrigger>
-                        <TabsTrigger value="settings">Settings</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-4">
+                        <TabsTrigger value="content">Tarkib</TabsTrigger>
+                        <TabsTrigger value="details">Tafsilotlar</TabsTrigger>
+                        <TabsTrigger value="media">Media</TabsTrigger>
+                        <TabsTrigger value="settings">Sozlamalar</TabsTrigger>
                     </TabsList>
 
                     {/* TAB 1: CONTENT */}
                     <TabsContent value="content" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Titles</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Sarlavhalar</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
@@ -137,11 +116,11 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                     name="titleUz"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Title (UZ) *</FormLabel>
+                                            <FormLabel>Sarlavha (UZ) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="News title in Uzbek"
+                                                    placeholder="O'zbekcha sarlavha"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -154,11 +133,11 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                     name="titleRu"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Title (RU) *</FormLabel>
+                                            <FormLabel>Sarlavha (RU) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="News title in Russian"
+                                                    placeholder="Ruscha sarlavha"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -171,11 +150,11 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                     name="titleEn"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Title (EN) *</FormLabel>
+                                            <FormLabel>Sarlavha (EN) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="News title in English"
+                                                    placeholder="Inglizcha sarlavha"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -187,10 +166,7 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Short Descriptions</h3>
-                            <p className="text-sm text-gray-600">
-                                Brief descriptions shown in news lists (max 200 characters)
-                            </p>
+                            <h3 className="font-semibold text-lg text-gray-900">Qisqacha tavsif</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
@@ -198,19 +174,14 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                     name="shortDescriptionUz"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Short Description (UZ) *</FormLabel>
+                                            <FormLabel>Qisqacha tavsif (UZ)</FormLabel>
                                             <FormControl>
-                                                <textarea
+                                                <Textarea
+                                                    placeholder="Qisqacha tavsifni kiriting..."
+                                                    className="min-h-[100px] resize-none"
                                                     {...field}
-                                                    rows={3}
-                                                    placeholder="Short description in Uzbek"
-                                                    maxLength={200}
-                                                    className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
                                                 />
                                             </FormControl>
-                                            <div className="text-xs text-gray-500 mt-1">
-                                                {field.value?.length || 0}/200
-                                            </div>
                                             <FormMessage className="text-xs text-red-600" />
                                         </FormItem>
                                     )}
@@ -220,19 +191,14 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                     name="shortDescriptionRu"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Short Description (RU) *</FormLabel>
+                                            <FormLabel>Qisqacha tavsif (RU)</FormLabel>
                                             <FormControl>
-                                                <textarea
+                                                <Textarea
+                                                    placeholder="Ruscha qisqacha tavsifni kiriting..."
+                                                    className="min-h-[100px] resize-none"
                                                     {...field}
-                                                    rows={3}
-                                                    placeholder="Short description in Russian"
-                                                    maxLength={200}
-                                                    className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
                                                 />
                                             </FormControl>
-                                            <div className="text-xs text-gray-500 mt-1">
-                                                {field.value?.length || 0}/200
-                                            </div>
                                             <FormMessage className="text-xs text-red-600" />
                                         </FormItem>
                                     )}
@@ -242,87 +208,12 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                     name="shortDescriptionEn"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Short Description (EN) *</FormLabel>
+                                            <FormLabel>Qisqacha tavsif (EN)</FormLabel>
                                             <FormControl>
-                                                <textarea
+                                                <Textarea
+                                                    placeholder="Inglizcha qisqacha tavsifni kiriting..."
+                                                    className="min-h-[100px] resize-none"
                                                     {...field}
-                                                    rows={3}
-                                                    placeholder="Short description in English"
-                                                    maxLength={200}
-                                                    className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
-                                                />
-                                            </FormControl>
-                                            <div className="text-xs text-gray-500 mt-1">
-                                                {field.value?.length || 0}/200
-                                            </div>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Full Descriptions</h3>
-                            <p className="text-sm text-gray-600">
-                                Detailed descriptions for the full news article
-                            </p>
-
-                            <div className="grid grid-cols-1 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="descriptionUz"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Description (UZ) *</FormLabel>
-                                            <FormControl>
-                                                <textarea
-                                                    {...field}
-                                                    rows={5}
-                                                    placeholder="Detailed description in Uzbek"
-                                                    className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="descriptionRu"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Description (RU) *</FormLabel>
-                                            <FormControl>
-                                                <textarea
-                                                    {...field}
-                                                    rows={5}
-                                                    placeholder="Detailed description in Russian"
-                                                    className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="descriptionEn"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Description (EN) *</FormLabel>
-                                            <FormControl>
-                                                <textarea
-                                                    {...field}
-                                                    rows={5}
-                                                    placeholder="Detailed description in English"
-                                                    className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
                                                 />
                                             </FormControl>
                                             <FormMessage className="text-xs text-red-600" />
@@ -333,14 +224,55 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                         </div>
                     </TabsContent>
 
+                    <TabsContent value="details" className="space-y-6">
+                        <div className="space-y-4">
+                            <h3 className="font-semibold text-lg text-gray-900">To'liq tavsif</h3>
+                            <FormField
+                                control={form.control}
+                                name="descriptionUz"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Tavsif (UZ) *</FormLabel>
+                                        <FormControl>
+                                            <Textarea {...field} rows={5} placeholder="To'liq tavsif (UZ)" className="resize-none" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="descriptionRu"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Tavsif (RU) *</FormLabel>
+                                        <FormControl>
+                                            <Textarea {...field} rows={5} placeholder="To'liq tavsif (RU)" className="resize-none" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="descriptionEn"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Tavsif (EN) *</FormLabel>
+                                        <FormControl>
+                                            <Textarea {...field} rows={5} placeholder="To'liq tavsif (EN)" className="resize-none" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </TabsContent>
+
                     {/* TAB 2: MEDIA */}
                     <TabsContent value="media" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Featured Image</h3>
-                            <p className="text-sm text-gray-600">
-                                The main image displayed with the news article
-                            </p>
-
+                            <h3 className="font-semibold text-lg text-gray-900">Asosiy rasm</h3>
                             <FormField
                                 control={form.control}
                                 name="image"
@@ -352,14 +284,14 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                             folder="news"
                                             accept="image/*"
                                             multiple={false}
-                                            label="Upload Featured Image"
-                                            description="PNG, JPG, GIF up to 10MB. Recommended size: 1200x600px"
+                                            label="Rasm yuklash"
+                                            description="PNG, JPG, GIF 10MB gacha."
                                             maxSize={50}
                                         />
                                         <FormMessage className="text-xs text-red-600" />
                                         {field.value && (
                                             <div className="mt-4">
-                                                <p className="text-sm font-medium text-gray-700 mb-2">Preview</p>
+                                                <p className="text-sm font-medium text-gray-700">Oldindan ko'rish</p>
                                                 <div className="relative overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
                                                     <img
                                                         src={field.value}
@@ -378,18 +310,17 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                     {/* TAB 3: SETTINGS */}
                     <TabsContent value="settings" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Category</h3>
-
+                            <h3 className="font-semibold text-lg text-gray-900">Kategoriya</h3>
                             <FormField
                                 control={form.control}
                                 name="category"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>News Category *</FormLabel>
+                                        <FormLabel>Kategoriya</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
-                                                <SelectTrigger className="focus:ring-blue-500">
-                                                    <SelectValue />
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Kategoriyani tanlang" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -400,56 +331,29 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage className="text-xs text-red-600" />
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
                         </div>
 
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Publication Status</h3>
-
+                            <h3 className="font-semibold text-lg text-gray-900">Holati</h3>
                             <FormField
                                 control={form.control}
                                 name="isPublished"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center space-x-3 space-y-0 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <FormItem className="flex flex-row items-center space-x-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                                         <FormControl>
-                                            <Checkbox
-                                                checked={field.value}
-                                                onCheckedChange={field.onChange}
-                                                className="h-5 w-5 border-blue-300"
-                                            />
+                                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                                         </FormControl>
-                                        <div className="flex-1">
-                                            <FormLabel className="font-semibold cursor-pointer text-blue-900">
-                                                Publish this news
-                                            </FormLabel>
-                                            <p className="text-xs text-blue-700 mt-1">
-                                                {field.value
-                                                    ? 'This news is published and visible to the public'
-                                                    : 'This news is in draft mode and not visible to the public'}
-                                            </p>
+                                        <div className="space-y-1 leading-none">
+                                            <FormLabel>Chop etish</FormLabel>
+                                            <p className="text-xs text-gray-500">Ushbu yangilikni hamma ko'ra oladigan qiling</p>
                                         </div>
                                     </FormItem>
                                 )}
                             />
-                        </div>
-
-                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                            <h4 className="font-medium text-gray-900 mb-2">Information</h4>
-                            {isEditing && news && (
-                                <div className="space-y-2 text-sm text-gray-600">
-                                    <p>
-                                        <span className="font-medium">Created:</span>{' '}
-                                        {new Date(news.createdAt).toLocaleString()}
-                                    </p>
-                                    <p>
-                                        <span className="font-medium">Last Updated:</span>{' '}
-                                        {new Date(news.updatedAt).toLocaleString()}
-                                    </p>
-                                </div>
-                            )}
                         </div>
                     </TabsContent>
                 </Tabs>
@@ -461,26 +365,14 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                         variant="outline"
                         onClick={onClose}
                         disabled={isLoading}
-                        className="gap-2"
                     >
-                        <X className="w-4 h-4" />
-                        Cancel
+                        Bekor qilish
                     </Button>
-                    <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
-                    >
+                    <Button type="submit" disabled={isLoading} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-200">
                         {isLoading ? (
-                            <>
-                                <Loader className="w-4 h-4 animate-spin" />
-                                {isEditing ? 'Updating...' : 'Creating...'}
-                            </>
+                            <><Loader className="w-4 h-4 mr-2 animate-spin" />Saqlanmoqda...</>
                         ) : (
-                            <>
-                                <Save className="w-4 h-4" />
-                                {isEditing ? 'Update News' : 'Create News'}
-                            </>
+                            <>{isEditing ? 'Yangilash' : 'Chop etish'}</>
                         )}
                     </Button>
                 </div>

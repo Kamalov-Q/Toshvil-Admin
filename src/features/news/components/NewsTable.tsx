@@ -61,11 +61,11 @@ import ConfirmDialog from '@/features/lots/components/modals/ConfirmDialog';
 import { useDebounce } from '@/hooks/useDebounce';
 
 const NEWS_CATEGORIES = [
-    { value: NewsCategoryEnum.ANNOUNCEMENTS, label: 'Announcements' },
-    { value: NewsCategoryEnum.EVENTS, label: 'Events' },
-    { value: NewsCategoryEnum.TECHNOLOGY, label: 'Technology' },
-    { value: NewsCategoryEnum.PRESS_RELEASE, label: 'Press Release' },
-    { value: NewsCategoryEnum.OTHER, label: 'Other' },
+    { value: NewsCategoryEnum.ANNOUNCEMENTS, label: 'E\'lonlar' },
+    { value: NewsCategoryEnum.EVENTS, label: 'Tadbirlar' },
+    { value: NewsCategoryEnum.TECHNOLOGY, label: 'Texnologiya' },
+    { value: NewsCategoryEnum.PRESS_RELEASE, label: 'Press-reliz' },
+    { value: NewsCategoryEnum.OTHER, label: 'Boshqa' },
 ];
 
 const CATEGORY_COLORS: Record<NewsCategoryEnum, string> = {
@@ -180,7 +180,7 @@ export default function NewsTable() {
         },
         {
             accessorKey: 'titleUz',
-            header: 'Title',
+            header: 'Sarlavha',
             cell: ({ row }) => {
                 const news = row.original;
                 return (
@@ -197,7 +197,7 @@ export default function NewsTable() {
         },
         {
             accessorKey: 'category',
-            header: 'Category',
+            header: 'Kategoriya',
             cell: ({ row }) => {
                 const category = row.getValue('category') as NewsCategoryEnum;
                 return (
@@ -224,14 +224,14 @@ export default function NewsTable() {
                             <>
                                 <Eye className="w-4 h-4 text-green-600" />
                                 <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                                    Published
+                                    Nashr etilgan
                                 </span>
                             </>
                         ) : (
                             <>
                                 <EyeOff className="w-4 h-4 text-gray-400" />
                                 <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
-                                    Draft
+                                    Qoralama
                                 </span>
                             </>
                         )}
@@ -241,7 +241,7 @@ export default function NewsTable() {
         },
         {
             accessorKey: 'createdAt',
-            header: 'Created',
+            header: 'Yaratilgan',
             cell: ({ row }) => {
                 const date = new Date(row.getValue('createdAt') as string);
                 return (
@@ -256,7 +256,7 @@ export default function NewsTable() {
         },
         {
             id: 'actions',
-            header: 'Actions',
+            header: 'Amallar',
             cell: ({ row }) => (
                 <div className="flex gap-1">
                     <Button
@@ -318,7 +318,7 @@ export default function NewsTable() {
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
                     <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <div>
-                        <h3 className="font-semibold text-red-900">Error loading news</h3>
+                        <h3 className="font-semibold text-red-900">Yangiliklarni yuklashda xatolik</h3>
                         <p className="text-sm text-red-700 mt-1">
                             {error instanceof Error ? error.message : 'Unknown error'}
                         </p>
@@ -330,11 +330,11 @@ export default function NewsTable() {
             <div className="bg-white rounded-lg border p-4 shadow-sm">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <Search className="w-5 h-5 text-blue-600" />
-                    Filters
+                    Filtrlar
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                     <Input
-                        placeholder="Search by title..."
+                        placeholder="Sarlavha bo'yicha qidirish..."
                         value={filters.search}
                         onChange={(e) => {
                             setFilters({ ...filters, search: e.target.value });
@@ -350,10 +350,10 @@ export default function NewsTable() {
                         }}
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder="All Categories" />
+                            <SelectValue placeholder="Barcha kategoriyalar" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Categories</SelectItem>
+                            <SelectItem value="all">Barcha kategoriyalar</SelectItem>
                             {NEWS_CATEGORIES.map((cat) => (
                                 <SelectItem key={cat.value} value={cat.value}>
                                     {cat.label}
@@ -370,12 +370,12 @@ export default function NewsTable() {
                         }}
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder="All Status" />
+                            <SelectValue placeholder="Barcha statuslar" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Status</SelectItem>
-                            <SelectItem value="true">Published</SelectItem>
-                            <SelectItem value="false">Draft</SelectItem>
+                            <SelectItem value="all">Barcha statuslar</SelectItem>
+                            <SelectItem value="true">Nashr etilgan</SelectItem>
+                            <SelectItem value="false">Qoralama</SelectItem>
                         </SelectContent>
                     </Select>
 
@@ -385,7 +385,7 @@ export default function NewsTable() {
                         className="gap-2 col-span-2 md:col-span-1"
                     >
                         <RotateCcw className="w-4 h-4" />
-                        Reset
+                        Tozalash
                     </Button>
                 </div>
             </div>
@@ -394,7 +394,7 @@ export default function NewsTable() {
             {selectedRows.length > 0 && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
                     <span className="text-sm font-medium text-blue-900">
-                        {selectedRows.length} item{selectedRows.length !== 1 ? 's' : ''} selected
+                        {selectedRows.length} ta element tanlandi
                     </span>
                     <div className="flex gap-2">
                         <Button
@@ -412,7 +412,7 @@ export default function NewsTable() {
                             disabled={bulkDeleteQuery.isPending}
                         >
                             <Trash2 className="w-4 h-4 mr-2" />
-                            Delete Selected
+                            Tanlanganlarni o'chirish
                         </Button>
                     </div>
                 </div>
@@ -428,7 +428,7 @@ export default function NewsTable() {
                     className="gap-2"
                 >
                     <Plus className="w-5 h-5" />
-                    Create News
+                    Yangilik yaratish
                 </Button>
             </div>
 
@@ -460,7 +460,7 @@ export default function NewsTable() {
                         ) : table.getRowModel().rows.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="text-center py-8">
-                                    <span className="text-gray-500">No news found</span>
+                                    <span className="text-gray-500">Yangiliklar topilmadi</span>
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -485,7 +485,7 @@ export default function NewsTable() {
             {data && data.total > 0 && (
                 <div className="flex items-center justify-between bg-white rounded-lg border p-4">
                     <span className="text-sm text-gray-600">
-                        {data.total} total news • Page {pagination.pageIndex + 1} of{' '}
+                        jami {data.total} ta yangilik • Sahifa {pagination.pageIndex + 1} /{' '}
                         {Math.ceil(data.total / pagination.pageSize)}
                     </span>
                     <div className="flex gap-2">
@@ -494,14 +494,14 @@ export default function NewsTable() {
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
                         >
-                            Previous
+                            Oldingi
                         </Button>
                         <Button
                             variant="outline"
                             onClick={() => table.nextPage()}
                             disabled={!table.getCanNextPage()}
                         >
-                            Next
+                            Keyingi
                         </Button>
                     </div>
                 </div>
@@ -512,7 +512,7 @@ export default function NewsTable() {
                 <DialogContent className="max-w-[95vw] sm:max-w-6xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>
-                            {editingNews ? 'Edit News' : 'Create News'}
+                            {editingNews ? 'Yangilikni tahrirlash' : 'Yangilik yaratish'}
                         </DialogTitle>
                         <DialogDescription className="sr-only">
                             {editingNews ? 'Edit the details of the selected news item.' : 'Fill in the details to create a new news item.'}
@@ -530,14 +530,14 @@ export default function NewsTable() {
             <ConfirmDialog
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
-                title="Delete News?"
+                title="Yangilikni o'chirish?"
                 description={
                     newsToDelete
-                        ? `Are you sure you want to permanently delete "${newsToDelete.titleUz}"? This action cannot be undone.`
+                        ? `Haqiqatan ham "${newsToDelete.titleUz}" ni butunlay o'chirmoqchimisiz? Ushbu amalni ortga qaytarib bo'lmaydi.`
                         : ''
                 }
-                confirmText="Delete"
-                cancelText="Cancel"
+                confirmText="O'chirish"
+                cancelText="Bekor qilish"
                 onConfirm={handleConfirmDelete}
                 loading={deleteQuery.isPending}
                 destructive

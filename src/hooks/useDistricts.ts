@@ -16,8 +16,8 @@ export const useDistricts = (params: GetDistrictsParams = {}) => {
     return useQuery({
         queryKey: ['districts', params],
         queryFn: () => getDistricts(params),
-        staleTime: 10 * 60 * 1000,
-        gcTime: 30 * 60 * 1000,
+        staleTime: 10 * 60 * 1000, // 10 minutes (stale time)
+        gcTime: 30 * 60 * 1000, // 30 minutes (cache time)
     });
 };
 
@@ -36,10 +36,10 @@ export const useCreateDistrict = () => {
         mutationFn: createDistrict,
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['districts'] });
-            toast.success(`District "${data.nameUz}" created successfully`);
+            toast.success(`"${data.nameUz}" tumani muvaffaqiyatli yaratildi`);
         },
         onError: (error: any) => {
-            const errorMessage = error?.response?.data?.message || 'Failed to create district';
+            const errorMessage = error?.response?.data?.message || 'Tumanni yaratishda xatolik yuz berdi';
             toast.error(errorMessage);
         },
     });
@@ -53,10 +53,10 @@ export const useUpdateDistrict = (id: string) => {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['districts'] });
             queryClient.invalidateQueries({ queryKey: ['district', id] });
-            toast.success(`District "${data.nameUz}" updated successfully`);
+            toast.success(`"${data.nameUz}" tumani muvaffaqiyatli yangilandi`);
         },
         onError: (error: any) => {
-            const errorMessage = error?.response?.data?.message || 'Failed to update district';
+            const errorMessage = error?.response?.data?.message || 'Tumanni yangilashda xatolik yuz berdi';
             toast.error(errorMessage);
         },
     });
@@ -69,10 +69,10 @@ export const useDeleteDistrict = () => {
         mutationFn: deleteDistrict,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['districts'] });
-            toast.success('District deleted successfully');
+            toast.success('Tuman muvaffaqiyatli o\'chirildi');
         },
         onError: (error: any) => {
-            const errorMessage = error?.response?.data?.message || 'Failed to delete district';
+            const errorMessage = error?.response?.data?.message || 'Tumanni o\'chirishda xatolik yuz berdi';
             toast.error(errorMessage);
         },
     });

@@ -7,8 +7,8 @@ export default function NewsPage() {
     return (
         <div className="space-y-8">
             <PageHeader
-                title="News Management"
-                description="Create, edit, and publish news articles in multiple languages"
+                title="Yangiliklarni boshqarish"
+                description="Yangiliklarni yaratish, tahrirlash va ko'p tillarda nashr etish"
                 icon={<Newspaper className="w-6 h-6" />}
             />
 

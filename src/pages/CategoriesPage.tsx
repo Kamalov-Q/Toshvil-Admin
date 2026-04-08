@@ -6,8 +6,8 @@ export default function CategoriesPage() {
     return (
         <div className="space-y-8">
             <PageHeader
-                title="Category Management"
-                description="Manage categories for documents and other content"
+                title="Kategoriyalarni boshqarish"
+                description="Hujjatlar va boshqa kontentlar uchun kategoriyalarni boshqarish"
                 icon={<FolderTree className="w-6 h-6" />}
             />
 

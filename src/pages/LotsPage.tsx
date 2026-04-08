@@ -13,7 +13,7 @@ export default function LotsPage() {
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <MapPin className="w-8 h-8" />
-                            <h1 className="text-3xl font-bold">Lots Management</h1>
+                            <h1 className="text-3xl font-bold">Lotlarni boshqarish</h1>
                             
                             {/* WebSocket Status Indicator */}
                             <div className={`ml-4 flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${
@@ -28,19 +28,19 @@ export default function LotsPage() {
                                             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                                         </span>
                                         <Wifi className="w-3 h-3 ml-1" />
-                                        Live
+                                        Onlayn
                                     </>
                                 ) : (
                                     <>
                                         <span className="h-2 w-2 rounded-full bg-gray-500"></span>
                                         <WifiOff className="w-3 h-3 ml-1" />
-                                        Disconnected
+                                        Aloqa uzildi
                                     </>
                                 )}
                             </div>
                         </div>
                         <p className="text-blue-100 max-w-2xl">
-                            Manage land lots and properties. Create, edit, and delete lot listings with complete control over all details.
+                            Yer lotlari va mulklarni boshqaring. Lot ro'yxatlarini yaratish, tahrirlash va o'chirish bo'yicha to'liq nazorat.
                         </p>
                     </div>
                     <Layers className="w-12 h-12 opacity-20" />

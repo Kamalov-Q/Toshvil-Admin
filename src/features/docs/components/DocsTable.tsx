@@ -101,26 +101,26 @@ export default function DocsTable() {
     const columns: ColumnDef<Doc>[] = [
         {
             accessorKey: 'titleUz',
-            header: 'Title (UZ)',
+            header: 'Sarlavha (UZ)',
             cell: ({ row }) => (
                 <div className="font-medium text-gray-900">{row.original.titleUz}</div>
             ),
         },
         {
             accessorKey: 'category',
-            header: 'Category',
+            header: 'Kategoriya',
             cell: ({ row }) => {
                 const catInfo = row.original.category || categories.find(c => c.id === row.original.categoryId);
                 return (
                     <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {catInfo ? catInfo.nameUz : 'Unknown'}
+                        {catInfo ? catInfo.nameUz : 'Noma\'lum'}
                     </span>
                 );
             },
         },
         {
             accessorKey: 'url',
-            header: 'File',
+            header: 'Fayl',
             cell: ({ row }) => (
                 <a
                     href={getFileUrl(row.original.url)}
@@ -129,13 +129,13 @@ export default function DocsTable() {
                     className="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
                 >
                     <ExternalLink className="w-4 h-4 mr-1" />
-                    Open File
+                    Faylni ochish
                 </a>
             ),
         },
         {
             id: 'actions',
-            header: 'Actions',
+            header: 'Amallar',
             cell: ({ row }) => (
                 <div className="flex gap-2">
                     <Button
@@ -177,7 +177,7 @@ export default function DocsTable() {
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
                     <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <div>
-                        <h3 className="font-semibold text-red-900">Error loading docs</h3>
+                        <h3 className="font-semibold text-red-900">Hujjatlarni yuklashda xatolik</h3>
                         <p className="text-sm text-red-700 mt-1">
                             {error instanceof Error ? error.message : 'Unknown error'}
                         </p>
@@ -190,7 +190,7 @@ export default function DocsTable() {
                     <div className="relative max-w-sm w-full sm:w-[250px]">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <Input
-                            placeholder="Search docs..."
+                            placeholder="Hujjatlarni qidirish..."
                             value={search}
                             onChange={(e) => {
                                 setSearch(e.target.value);
@@ -207,10 +207,10 @@ export default function DocsTable() {
                         }}
                     >
                         <SelectTrigger className="w-full sm:w-[200px]">
-                            <SelectValue placeholder="All Categories" />
+                            <SelectValue placeholder="Barcha kategoriyalar" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Categories</SelectItem>
+                            <SelectItem value="all">Barcha kategoriyalar</SelectItem>
                             {categories.map((cat) => (
                                 <SelectItem key={cat.id} value={cat.id!}>
                                     {cat.nameUz}
@@ -228,7 +228,7 @@ export default function DocsTable() {
                     className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
                 >
                     <Plus className="w-5 h-5" />
-                    Create Document
+                    Hujjat yaratish
                 </Button>
             </div>
 
@@ -259,7 +259,7 @@ export default function DocsTable() {
                         ) : table.getRowModel().rows.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="text-center py-8">
-                                    <span className="text-gray-500">No documents found</span>
+                                    <span className="text-gray-500">Hujjatlar topilmadi</span>
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -283,8 +283,7 @@ export default function DocsTable() {
             {data && data.total > 0 && (
                 <div className="flex items-center justify-between bg-white rounded-lg border p-4">
                     <span className="text-sm text-gray-600">
-                        {data.total} total documents • Page {pagination.pageIndex + 1} of{' '}
-                        {data.totalPages}
+                        Jami {data.total} ta hujjat • Sahifa {pagination.pageIndex + 1} / {data.totalPages}
                     </span>
                     <div className="flex gap-2">
                         <Button
@@ -292,14 +291,14 @@ export default function DocsTable() {
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
                         >
-                            Previous
+                            Oldingi
                         </Button>
                         <Button
                             variant="outline"
                             onClick={() => table.nextPage()}
                             disabled={!table.getCanNextPage()}
                         >
-                            Next
+                            Keyingi
                         </Button>
                     </div>
                 </div>
@@ -309,7 +308,7 @@ export default function DocsTable() {
                 <DialogContent className="max-w-[95vw] sm:max-w-2xl">
                     <DialogHeader>
                         <DialogTitle>
-                            {editingDoc ? 'Edit Document' : 'Create Document'}
+                            {editingDoc ? 'Hujjatni tahrirlash' : 'Hujjat yaratish'}
                         </DialogTitle>
                         <DialogDescription className="sr-only">
                             {editingDoc ? 'Edit the document attributes.' : 'Create a new document.'}
@@ -326,14 +325,14 @@ export default function DocsTable() {
             <ConfirmDialog
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
-                title="Delete Document?"
+                title="Hujjatni o'chirish?"
                 description={
                     docToDelete
-                        ? `Are you sure you want to permanently delete "${docToDelete.titleUz}"?`
+                        ? `Haqiqatan ham "${docToDelete.titleUz}" hujjatini butunlay o'chirib tashlamoqchimisiz?`
                         : ''
                 }
-                confirmText="Delete"
-                cancelText="Cancel"
+                confirmText="O'chirish"
+                cancelText="Bekor qilish"
                 onConfirm={handleConfirmDelete}
                 loading={deleteQuery.isPending}
                 destructive

@@ -50,8 +50,8 @@ export default function DashboardPage() {
         <div className="space-y-6">
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-                <p className="text-gray-600 mt-1">Welcome back! Here's your system overview.</p>
+                <h1 className="text-3xl font-bold text-gray-900">Boshqaruv paneli</h1>
+                <p className="text-gray-600 mt-1">Xush kelibsiz! Tizim umumiy ko'rinishi.</p>
             </div>
 
             {/* Stats Cards */}
@@ -60,12 +60,12 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                             <MapPin className="w-5 h-5 text-blue-600" />
-                            Total Lots
+                            Jami lotlar
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-bold">{lots?.total || 0}</div>
-                        <p className="text-xs text-gray-500 mt-1">Land lots listed</p>
+                        <p className="text-xs text-gray-500 mt-1">Ro'yxatdagi yer lotlari</p>
                     </CardContent>
                 </Card>
 
@@ -73,12 +73,12 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                             <Newspaper className="w-5 h-5 text-purple-600" />
-                            News Posts
+                            Yangiliklar soni
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-bold">{news?.total || 0}</div>
-                        <p className="text-xs text-gray-500 mt-1">Articles published</p>
+                        <p className="text-xs text-gray-500 mt-1">Nashr etilgan maqolalar</p>
                     </CardContent>
                 </Card>
 
@@ -86,12 +86,12 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                             <Activity className="w-5 h-5 text-green-600" />
-                            Districts
+                            Tumanlar soni
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-bold">{districts?.total || 0}</div>
-                        <p className="text-xs text-gray-500 mt-1">Administrative areas</p>
+                        <p className="text-xs text-gray-500 mt-1">Ma'muriy hududlar</p>
                     </CardContent>
                 </Card>
 
@@ -99,14 +99,14 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                             <FileText className="w-5 h-5 text-amber-600" />
-                            Published News
+                            Nashr etilgan yangiliklar
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-bold">
                             {news?.data.filter((n) => n.isPublished).length || 0}
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">Live articles</p>
+                        <p className="text-xs text-gray-500 mt-1">Faol maqolalar</p>
                     </CardContent>
                 </Card>
             </div>
@@ -115,8 +115,8 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Monthly Activity</CardTitle>
-                        <CardDescription>Trends across all modules</CardDescription>
+                        <CardTitle>Oylik faollik</CardTitle>
+                        <CardDescription>Barcha modullar bo'yicha trendlar</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <ResponsiveContainer width="100%" height={300}>
@@ -139,9 +139,9 @@ export default function DashboardPage() {
                         <div className="flex items-center justify-between">
                             <div>
                                 <CardTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
-                                    Status Distribution
+                                    Statuslar taqsimoti
                                 </CardTitle>
-                                <CardDescription>Real-time breakdown of lot statuses</CardDescription>
+                                <CardDescription>Lot statuslarining real vaqtdagi ko'rinishi</CardDescription>
                             </div>
                             <div className="bg-blue-100 p-2 rounded-lg">
                                 <Activity className="w-5 h-5 text-blue-600" />
@@ -217,7 +217,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Recent Lots</CardTitle>
+                        <CardTitle>Oxirgi lotlar</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
@@ -236,7 +236,7 @@ export default function DashboardPage() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Recent News</CardTitle>
+                        <CardTitle>Oxirgi yangiliklar</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
@@ -248,11 +248,11 @@ export default function DashboardPage() {
                                     </div>
                                     {item.isPublished ? (
                                         <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
-                                            Published
+                                            Nashr etilgan
                                         </span>
                                     ) : (
                                         <span className="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded-full">
-                                            Draft
+                                            Qoralama
                                         </span>
                                     )}
                                 </div>

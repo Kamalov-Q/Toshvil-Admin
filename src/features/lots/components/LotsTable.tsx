@@ -121,7 +121,7 @@ export default function LotsTable() {
     const columns: ColumnDef<Lot>[] = [
         {
             accessorKey: 'lotNumber',
-            header: 'Lot #',
+            header: 'Lot №',
             size: 80,
             cell: ({ row }) => (
                 <span className="font-bold text-blue-600 text-lg">#{row.getValue('lotNumber')}</span>
@@ -129,7 +129,7 @@ export default function LotsTable() {
         },
         {
             accessorKey: 'titleUz',
-            header: 'Title',
+            header: 'Sarlavha',
             cell: ({ row }) => (
                 <div className="flex flex-col gap-1">
                     <span className="font-semibold text-gray-900 line-clamp-2">
@@ -154,7 +154,7 @@ export default function LotsTable() {
         },
         {
             accessorKey: 'tradeType',
-            header: 'Trade Type',
+            header: 'Savdo turi',
             cell: ({ row }) => (
                 <div className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-orange-500" />
@@ -166,7 +166,7 @@ export default function LotsTable() {
         },
         {
             accessorKey: 'paymentType',
-            header: 'Payment',
+            header: 'To\'lov turi',
             cell: ({ row }) => (
                 <div className="flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-green-500" />
@@ -178,7 +178,7 @@ export default function LotsTable() {
         },
         {
             accessorKey: 'landArea',
-            header: 'Area',
+            header: 'Maydoni',
             cell: ({ row }) => (
                 <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-blue-500" />
@@ -190,7 +190,7 @@ export default function LotsTable() {
         },
         {
             accessorKey: 'createdAt',
-            header: 'Created',
+            header: 'Yaratilgan',
             cell: ({ row }) => (
                 <span className="text-sm text-gray-600">
                     {formatDate(row.getValue('createdAt') as string)}
@@ -199,7 +199,7 @@ export default function LotsTable() {
         },
         {
             id: 'actions',
-            header: 'Actions',
+            header: 'Amallar',
             size: 100,
             cell: ({ row }) => (
                 <div className="flex gap-1">
@@ -246,7 +246,7 @@ export default function LotsTable() {
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
                     <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <div>
-                        <h3 className="font-semibold text-red-900">Error loading lots</h3>
+                        <h3 className="font-semibold text-red-900">Lotlarni yuklashda xatolik</h3>
                         <p className="text-sm text-red-700 mt-1">{error.message}</p>
                     </div>
                 </div>
@@ -256,11 +256,11 @@ export default function LotsTable() {
             <div className="bg-white rounded-lg border p-4 shadow-sm">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <Search className="w-5 h-5 text-blue-600" />
-                    Filters
+                    Filtrlar
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                     <Input
-                        placeholder="Search by title or code..."
+                        placeholder="Sarlavha yoki kod bo'yicha qidirish..."
                         value={filters.search}
                         onChange={(e) => {
                             setFilters({ ...filters, search: e.target.value });
@@ -277,10 +277,10 @@ export default function LotsTable() {
                         }}
                     >
                         <SelectTrigger className="focus:ring-blue-500">
-                            <SelectValue placeholder="All Statuses" />
+                            <SelectValue placeholder="Barcha statuslar" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Statuses</SelectItem>
+                            <SelectItem value="all">Barcha statuslar</SelectItem>
                             {STATUS_OPTIONS.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
                                     {option.label}
@@ -297,7 +297,7 @@ export default function LotsTable() {
                         }}
                     >
                         <SelectTrigger className="focus:ring-blue-500">
-                            <SelectValue placeholder="Payment Type" />
+                            <SelectValue placeholder="To'lov turi" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Types</SelectItem>
@@ -317,7 +317,7 @@ export default function LotsTable() {
                         }}
                     >
                         <SelectTrigger className="focus:ring-blue-500">
-                            <SelectValue placeholder="Trade Type" />
+                            <SelectValue placeholder="Savdo turi" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Types</SelectItem>
@@ -335,7 +335,7 @@ export default function LotsTable() {
                         className="gap-2"
                     >
                         <RotateCcw className="w-4 h-4" />
-                        Reset
+                        Tozalash
                     </Button>
                 </div>
             </div>
@@ -350,7 +350,7 @@ export default function LotsTable() {
                     className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md"
                 >
                     <Plus className="w-5 h-5" />
-                    Create New Lot
+                    Yangi lot yaratish
                 </Button>
             </div>
 
@@ -379,7 +379,7 @@ export default function LotsTable() {
                                 <TableCell colSpan={columns.length} className="text-center py-12">
                                     <div className="flex flex-col items-center justify-center gap-3">
                                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                                        <span className="text-gray-600 font-medium">Loading lots...</span>
+                                        <span className="text-gray-600 font-medium">Lotlar yuklanmoqda...</span>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -388,11 +388,11 @@ export default function LotsTable() {
                                 <TableCell colSpan={columns.length} className="text-center py-12">
                                     <div className="flex flex-col items-center gap-3">
                                         <Eye className="h-12 w-12 text-gray-300" />
-                                        <span className="text-gray-500 font-medium text-lg">No lots found</span>
+                                        <span className="text-gray-500 font-medium text-lg">Lotlar topilmadi</span>
                                         <span className="text-sm text-gray-400">
                                             {Object.values(filters).some((val) => val)
-                                                ? 'Try adjusting your filters'
-                                                : 'Start by creating a new lot'}
+                                                ? 'Filtrlarni o\'zgartirib ko\'ring'
+                                                : 'Yangi lot yaratishdan boshlang'}
                                         </span>
                                     </div>
                                 </TableCell>
@@ -419,15 +419,14 @@ export default function LotsTable() {
             {data && data.total > 0 && (
                 <div className="flex items-center justify-between bg-white rounded-lg border p-4 shadow-sm">
                     <div className="text-sm text-gray-600">
-                        <span className="font-semibold">{data.total}</span> total lots •{' '}
-                        <span className="font-semibold">
-                            {pagination.pageIndex + 1}
-                        </span>{' '}
-                        of{' '}
+                        jami <span className="font-semibold">{data.total}</span> ta lot •{' '}
                         <span className="font-semibold">
                             {Math.ceil(data.total / pagination.pageSize)}
                         </span>{' '}
-                        pages
+                        sahifadan{' '}
+                        <span className="font-semibold">
+                            {pagination.pageIndex + 1}
+                        </span>-si
                     </div>
                     <div className="flex gap-2">
                         <Button
@@ -436,7 +435,7 @@ export default function LotsTable() {
                             disabled={!table.getCanPreviousPage()}
                             className="gap-2"
                         >
-                            ← Previous
+                            ← Oldingi
                         </Button>
                         <Button
                             variant="outline"
@@ -444,7 +443,7 @@ export default function LotsTable() {
                             disabled={!table.getCanNextPage()}
                             className="gap-2"
                         >
-                            Next →
+                            Keyingi →
                         </Button>
                     </div>
                 </div>
@@ -455,7 +454,7 @@ export default function LotsTable() {
                 <DialogContent className="sm:max-w-[1600px] w-[95vw] max-h-[95vh] overflow-y-auto p-0">
                     <DialogHeader className="sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg">
                         <DialogTitle className="text-xl">
-                            {editingLot ? `Edit Lot #${editingLot.lotNumber}` : 'Create New Lot'}
+                            {editingLot ? `Lot №${editingLot.lotNumber} ni tahrirlash` : 'Yangi lot yaratish'}
                         </DialogTitle>
                     </DialogHeader>
                     <div className="px-6 py-4">
@@ -468,15 +467,15 @@ export default function LotsTable() {
             <ConfirmDialog
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
-                title="Delete Lot?"
+                title="Lotni o'chirish?"
                 description={
                     lotToDelete
-                        ? `Are you sure you want to permanently delete lot #${lotToDelete.lotNumber} "${lotToDelete.titleUz}"? This action cannot be undone and all associated data will be lost.`
-                        : 'Are you sure?'
+                        ? `Haqiqatan ham #${lotToDelete.lotNumber} "${lotToDelete.titleUz}" lotini butunlay o'chirmoqchimisiz? Ushbu amalni ortga qaytarib bo'lmaydi va barcha bog'liq ma'lumotlar yo'qoladi.`
+                        : 'Ishonchingiz komilmi?'
                 }
                 destructive={true}
-                confirmText="Delete Permanently"
-                cancelText="Keep It"
+                confirmText="Butunlay o'chirish"
+                cancelText="Bekor qilish"
                 loading={deleteQuery.isPending}
                 onConfirm={handleConfirmDelete}
                 icon="warning"
