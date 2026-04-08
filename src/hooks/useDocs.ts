@@ -9,10 +9,10 @@ import {
 
 export const useDocs = (params?: { page?: number; limit?: number; search?: string; categoryId?: string }) => {
     return useQuery<DocsResponse>({
-        queryKey: ['docs', params],
+        queryKey: ['documentation', params],
         queryFn: async () => {
             // Note: Use the admin endpoint to get all docs
-            const { data } = await apiClient.get('/docs/admin/all', { params });
+            const { data } = await apiClient.get('/documentation/admin/all', { params });
             return data;
         },
     });
@@ -23,12 +23,12 @@ export const useCreateDoc = () => {
 
     return useMutation({
         mutationFn: async (payload: CreateDocsDto) => {
-            const { data } = await apiClient.post('/docs/admin', payload);
+            const { data } = await apiClient.post('/documentation/admin', payload);
             return data;
         },
         onSuccess: () => {
             toast.success('Document created successfully');
-            queryClient.invalidateQueries({ queryKey: ['docs'] });
+            queryClient.invalidateQueries({ queryKey: ['documentation'] });
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || 'Failed to create document');
@@ -41,12 +41,12 @@ export const useUpdateDoc = (id: string) => {
 
     return useMutation({
         mutationFn: async (payload: UpdateDocsDto) => {
-            const { data } = await apiClient.patch(`/docs/admin/${id}`, payload);
+            const { data } = await apiClient.patch(`/documentation/admin/${id}`, payload);
             return data;
         },
         onSuccess: () => {
             toast.success('Document updated successfully');
-            queryClient.invalidateQueries({ queryKey: ['docs'] });
+            queryClient.invalidateQueries({ queryKey: ['documentation'] });
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || 'Failed to update document');
@@ -59,12 +59,12 @@ export const useDeleteDoc = () => {
 
     return useMutation({
         mutationFn: async (id: string) => {
-            const { data } = await apiClient.delete(`/docs/admin/${id}`);
+            const { data } = await apiClient.delete(`/documentation/admin/${id}`);
             return data;
         },
         onSuccess: () => {
             toast.success('Document deleted successfully');
-            queryClient.invalidateQueries({ queryKey: ['docs'] });
+            queryClient.invalidateQueries({ queryKey: ['documentation'] });
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || 'Failed to delete document');
