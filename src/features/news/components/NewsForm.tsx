@@ -136,7 +136,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Uzbek title"
+                                                    placeholder="Yangilik sarlavhasi (o'zbekcha)"
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -152,7 +152,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Russian title"
+                                                    placeholder="Заголовок новости (на русском)"
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -168,7 +168,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="English title"
+                                                    placeholder="News title (in English)"
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -196,7 +196,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Textarea
                                                     {...field}
-                                                    placeholder="Uzbek short description"
+                                                    placeholder="Qisqacha tavsif (o'zbekcha)"
                                                     maxLength={200}
                                                 />
                                             </FormControl>
@@ -213,7 +213,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Textarea
                                                     {...field}
-                                                    placeholder="Russian short description"
+                                                    placeholder="Краткое описание (на русском)"
                                                     maxLength={200}
                                                 />
                                             </FormControl>
@@ -230,7 +230,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Textarea
                                                     {...field}
-                                                    placeholder="English short description"
+                                                    placeholder="Short description (in English)"
                                                     maxLength={200}
                                                 />
                                             </FormControl>
@@ -259,7 +259,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Textarea
                                                     {...field}
-                                                    placeholder="Uzbek description"
+                                                    placeholder="To'liq matn (o'zbekcha)"
                                                     rows={4}
                                                 />
                                             </FormControl>
@@ -276,7 +276,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Textarea
                                                     {...field}
-                                                    placeholder="Russian description"
+                                                    placeholder="Полный текст (на русском)"
                                                     rows={4}
                                                 />
                                             </FormControl>
@@ -293,7 +293,7 @@ export default function NewsForm({
                                             <FormControl>
                                                 <Textarea
                                                     {...field}
-                                                    placeholder="English description"
+                                                    placeholder="Full description (in English)"
                                                     rows={4}
                                                 />
                                             </FormControl>

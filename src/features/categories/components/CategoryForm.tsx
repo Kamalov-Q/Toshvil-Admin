@@ -74,7 +74,7 @@ export default function CategoryForm({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Nomi (UZ)</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
+                                <FormControl><Input {...field} placeholder="Kategoriya nomi (o'zbekcha)" /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -85,7 +85,7 @@ export default function CategoryForm({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Nomi (RU)</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
+                                <FormControl><Input {...field} placeholder="Kategoriya nomi (ruscha)" /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -96,7 +96,7 @@ export default function CategoryForm({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Nomi (EN)</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
+                                <FormControl><Input {...field} placeholder="Kategoriya nomi (inglizcha)" /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}

@@ -84,119 +84,121 @@ export default function DocsForm({
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="categoryId"
-                        render={({ field }) => (
-                            <FormItem className="col-span-full">
-                                <FormLabel>Kategoriya</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col max-h-[80vh]">
+                <div className="flex-1 overflow-y-auto pr-2 py-1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="categoryId"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full">
+                                    <FormLabel>Kategoriya</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Kategoriyani tanlang" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {categories.map((cat) => (
+                                                <SelectItem value={cat.id!} key={cat.id}>
+                                                    {cat.nameUz}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        
+                        <FormField
+                            control={form.control}
+                            name="titleUz"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full sm:col-span-1">
+                                    <FormLabel>Sarlavha (UZ)</FormLabel>
+                                    <FormControl><Input {...field} placeholder="Hujjat sarlavhasi (o'zbekcha)" /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="titleRu"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full sm:col-span-1">
+                                    <FormLabel>Sarlavha (RU)</FormLabel>
+                                    <FormControl><Input {...field} placeholder="Hujjat sarlavhasi (ruscha)" /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="titleEn"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full sm:col-span-1">
+                                    <FormLabel>Sarlavha (EN)</FormLabel>
+                                    <FormControl><Input {...field} placeholder="Hujjat sarlavhasi (inglizcha)" /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="descriptionUz"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full">
+                                    <FormLabel>Tavsif (UZ) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
+                                    <FormControl><Textarea {...field} value={field.value || ''} placeholder="Hujjat tavsifi (o'zbekcha)" /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="descriptionRu"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full">
+                                    <FormLabel>Tavsif (RU) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
+                                    <FormControl><Textarea {...field} value={field.value || ''} placeholder="Hujjat tavsifi (ruscha)" /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="descriptionEn"
+                            render={({ field }) => (
+                                <FormItem className="col-span-full">
+                                    <FormLabel>Tavsif (EN) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
+                                    <FormControl><Textarea {...field} value={field.value || ''} placeholder="Hujjat tavsifi (inglizcha)" /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="url"
+                            render={() => (
+                                <FormItem className="col-span-full">
                                     <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Kategoriyani tanlang" />
-                                        </SelectTrigger>
+                                        <FileUploader
+                                            control={form.control}
+                                            name="url"
+                                            accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf"
+                                            folder="docs"
+                                            label="Hujjatni yuklash"
+                                        />
                                     </FormControl>
-                                    <SelectContent>
-                                        {categories.map((cat) => (
-                                            <SelectItem value={cat.id!} key={cat.id}>
-                                                {cat.nameUz}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    
-                    <FormField
-                        control={form.control}
-                        name="titleUz"
-                        render={({ field }) => (
-                            <FormItem className="col-span-full sm:col-span-1">
-                                <FormLabel>Sarlavha (UZ)</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="titleRu"
-                        render={({ field }) => (
-                            <FormItem className="col-span-full sm:col-span-1">
-                                <FormLabel>Sarlavha (RU)</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="titleEn"
-                        render={({ field }) => (
-                            <FormItem className="col-span-full sm:col-span-1">
-                                <FormLabel>Sarlavha (EN)</FormLabel>
-                                <FormControl><Input {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="descriptionUz"
-                        render={({ field }) => (
-                            <FormItem className="col-span-full">
-                                <FormLabel>Tavsif (UZ) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
-                                <FormControl><Textarea {...field} value={field.value || ''} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="descriptionRu"
-                        render={({ field }) => (
-                            <FormItem className="col-span-full">
-                                <FormLabel>Tavsif (RU) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
-                                <FormControl><Textarea {...field} value={field.value || ''} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="descriptionEn"
-                        render={({ field }) => (
-                            <FormItem className="col-span-full">
-                                <FormLabel>Tavsif (EN) <span className="text-gray-400 font-normal">(Ixtiyoriy)</span></FormLabel>
-                                <FormControl><Textarea {...field} value={field.value || ''} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="url"
-                        render={() => (
-                            <FormItem className="col-span-full">
-                                <FormControl>
-                                    <FileUploader
-                                        control={form.control}
-                                        name="url"
-                                        accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf"
-                                        folder="docs"
-                                        label="Hujjatni yuklash"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
                 </div>
 
                 <div className="flex gap-3 pt-6 border-t">

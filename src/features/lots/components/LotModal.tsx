@@ -451,7 +451,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Joylashuv (o'zbekcha)"
+                                                    placeholder="Savdo o'tkaziladigan joy (o'zbekcha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -468,7 +468,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Joylashuv (ruscha)"
+                                                    placeholder="Место проведения торгов (на русском)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -485,7 +485,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Joylashuv (inglizcha)"
+                                                    placeholder="Trade location (in English)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -647,7 +647,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                     type="number"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="Ish o'rinlari soni"
+                                                    placeholder="Yaratiladigan ish o'rinlari soni"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -671,7 +671,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Foydalanish (o'zbekcha)"
+                                                    placeholder="Ruxsat etilgan foydalanish maqsadlari"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -688,7 +688,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Foydalanish (ruscha)"
+                                                    placeholder="Разрешенное использование"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -705,7 +705,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Foydalanish (inglizcha)"
+                                                    placeholder="Permitted use"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -729,7 +729,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Toifa (o'zbekcha)"
+                                                    placeholder="Yer toifasi (o'zbekcha)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -746,7 +746,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Toifa (ruscha)"
+                                                    placeholder="Категория земли (на русском)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -763,7 +763,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                             <FormControl>
                                                 <Input
                                                     {...field}
-                                                    placeholder="Toifa (inglizcha)"
+                                                    placeholder="Land category (in English)"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>

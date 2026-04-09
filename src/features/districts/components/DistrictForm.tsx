@@ -158,6 +158,7 @@ export default function DistrictForm({
                                             <Input
                                                 type="number"
                                                 {...field}
+                                                placeholder="Tartib raqami"
                                                 onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                                             />
                                         </FormControl>
@@ -174,7 +175,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Nomi (UZ)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Tuman nomi (o'zbekcha)" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -185,7 +186,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Nomi (RU)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Tuman nomi (ruscha)" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -196,7 +197,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Nomi (EN)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Tuman nomi (inglizcha)" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -212,7 +213,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Hokim ismi (UZ)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Hokim ismi (o'zbekcha)" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -223,7 +224,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Hokim ismi (RU)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Hokim ismi (ruscha)" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -234,7 +235,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Hokim ismi (EN)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Hokim ismi (inglizcha)" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -248,7 +249,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Qabul kunlari (UZ)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Dushanba-Juma, 09:00-11:00" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -259,7 +260,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Qabul kunlari (RU)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Понедельник-Пятница, 09:00-11:00" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -270,7 +271,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Qabul kunlari (EN)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Monday-Friday, 09:00-11:00" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -286,7 +287,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Telefon raqami</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="+998 (__) ___-__-__" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -297,7 +298,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="example@toshkent.uz" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -308,7 +309,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Veb-sayt (ixtiyoriy)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="https://toshkent.uz" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -319,7 +320,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>E-Xat (ixtiyoriy)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="toshkent@exat.uz" /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -333,7 +334,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Manzil (UZ)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Toshkent shahri, ..." /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -344,7 +345,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Manzil (RU)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="город Ташкент, ..." /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -355,7 +356,7 @@ export default function DistrictForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Manzil (EN)</FormLabel>
-                                        <FormControl><Input {...field} /></FormControl>
+                                        <FormControl><Input {...field} placeholder="Tashkent city, ..." /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -374,6 +375,7 @@ export default function DistrictForm({
                                                 type="number"
                                                 {...field}
                                                 step="0.0001"
+                                                placeholder="41.2995"
                                                 onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                                             />
                                         </FormControl>
@@ -392,6 +394,7 @@ export default function DistrictForm({
                                                 type="number"
                                                 {...field}
                                                 step="0.0001"
+                                                placeholder="69.2401"
                                                 onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                                             />
                                         </FormControl>
