@@ -418,7 +418,7 @@ export default function DistrictForm({
                                                 name="hokimPhoto"
                                                 accept="image/*"
                                                 folder="districts"
-                                                label="Hokim rasmini yuklash"
+                                                label="Hokim rasmini yuklash (ixtiyoriy)"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -436,7 +436,7 @@ export default function DistrictForm({
                                                 name="hokimDocumentUz"
                                                 accept=".pdf,.doc,.docx"
                                                 folder="districts"
-                                                label="Hujjat yuklash (UZ)"
+                                                label="Hujjat yuklash (UZ) (ixtiyoriy)"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -454,7 +454,7 @@ export default function DistrictForm({
                                                 name="hokimDocumentRu"
                                                 accept=".pdf,.doc,.docx"
                                                 folder="districts"
-                                                label="Hujjat yuklash (RU)"
+                                                label="Hujjat yuklash (RU) (ixtiyoriy)"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -472,7 +472,7 @@ export default function DistrictForm({
                                                 name="hokimDocumentEn"
                                                 accept=".pdf,.doc,.docx"
                                                 folder="districts"
-                                                label="Hujjat yuklash (EN)"
+                                                label="Hujjat yuklash (EN) (ixtiyoriy)"
                                             />
                                         </FormControl>
                                         <FormMessage />
