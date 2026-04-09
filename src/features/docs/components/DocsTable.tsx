@@ -30,11 +30,13 @@ import {
     AlertCircle,
     Search,
     ExternalLink,
+    Eye,
 } from 'lucide-react';
 import { useDocs, useDeleteDoc } from '@/hooks/useDocs';
 import { type Doc } from '@/types/docs.types';
 import DocsForm from './DocsForm';
 import ConfirmDialog from '@/features/lots/components/modals/ConfirmDialog';
+import DocViewerModal from './DocViewerModal';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
     Select,
@@ -59,6 +61,8 @@ export default function DocsTable() {
     const [editingDoc, setEditingDoc] = useState<Doc | null>(null);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [docToDelete, setDocToDelete] = useState<Doc | null>(null);
+    const [viewerOpen, setViewerOpen] = useState(false);
+    const [viewingDoc, setViewingDoc] = useState<Doc | null>(null);
 
     const { data: categoriesData } = useCategories({ page: 1, limit: 100 });
     const categories = categoriesData?.data || [];
@@ -138,6 +142,18 @@ export default function DocsTable() {
             header: 'Amallar',
             cell: ({ row }) => (
                 <div className="flex gap-2">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                            setViewingDoc(row.original);
+                            setViewerOpen(true);
+                        }}
+                        className="text-emerald-600"
+                        title="Ko'rish"
+                    >
+                        <Eye className="w-4 h-4" />
+                    </Button>
                     <Button
                         variant="ghost"
                         size="sm"
@@ -337,6 +353,14 @@ export default function DocsTable() {
                 loading={deleteQuery.isPending}
                 destructive
             />
+
+            {viewingDoc && (
+                <DocViewerModal
+                    open={viewerOpen}
+                    onOpenChange={setViewerOpen}
+                    doc={viewingDoc}
+                />
+            )}
         </div>
     );
 }
