@@ -126,7 +126,7 @@ export default function MultiSelect({
                   <CommandItem
                     key={option.value}
                     value={option.value}
-                    onSelect={(currentValue) => {
+                    onSelect={() => {
                       // Let cmdk handle its own internals if needed
                     }}
                     onMouseDown={(e) => {

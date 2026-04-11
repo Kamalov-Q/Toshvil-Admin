@@ -71,7 +71,7 @@ export const useCreateLot = () => {
             queryClient.invalidateQueries({ queryKey: ['lots'] });
             // Add to cache
             queryClient.setQueryData(['lot', data.id], data);
-            toast.success(`Lot #${data.lotNumber} muvaffaqiyatli yaratildi`);
+            toast.success(`Lot "${data.titleUz}" muvaffaqiyatli yaratildi`);
         },
         onError: (error: any) => {
             const errorMessage =
@@ -100,7 +100,7 @@ export const useUpdateLot = (id: string) => {
             queryClient.invalidateQueries({ queryKey: ['lot', id] });
             // Update cache
             queryClient.setQueryData(['lot', id], data);
-            toast.success(`Lot #${data.lotNumber} muvaffaqiyatli yangilandi`);
+            toast.success(`Lot "${data.titleUz}" muvaffaqiyatli yangilandi`);
         },
         onError: (error: any) => {
             const errorMessage =

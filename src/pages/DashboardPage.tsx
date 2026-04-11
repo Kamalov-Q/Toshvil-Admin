@@ -225,9 +225,9 @@ export default function DashboardPage() {
                                 <div key={lot.id} className="flex justify-between items-center pb-4 border-b last:border-b-0">
                                     <div>
                                         <p className="font-medium text-gray-900">{lot.titleUz}</p>
-                                        <p className="text-xs text-gray-500">Lot #{lot.lotNumber}</p>
+                                        <p className="text-xs text-gray-500">{lot.titleUz}</p>
                                     </div>
-                                    <span className="text-sm font-semibold text-blue-600">#{lot.lotNumber}</span>
+                                    <span className="text-sm font-semibold text-blue-600 truncate max-w-[100px]">{lot.titleUz}</span>
                                 </div>
                             ))}
                         </div>
