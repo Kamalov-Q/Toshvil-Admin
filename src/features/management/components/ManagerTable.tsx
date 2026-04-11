@@ -230,7 +230,7 @@ export default function ManagerTable() {
                     </TableBody>
                 </Table>
 
-                {data?.totalPages !== undefined && data.totalPages > 1 && (
+                {data && data.totalPages > 1 && (
                     <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-t">
                         <div className="text-sm text-gray-700">
                             Jami: <span className="font-medium">{data?.total}</span>
