@@ -54,7 +54,7 @@ export const formatNumber = (num: number): string => {
 };
 
 export const formatArea = (area: number): string => {
-    return `${formatNumber(area)} m²`;
+    return `${formatNumber(area)} ga`;
 };
 
 export const truncate = (text: string, length: number): string => {

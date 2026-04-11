@@ -38,18 +38,12 @@ import {
     RotateCcw,
     Eye,
     MapPin,
-    DollarSign,
-    Zap,
 } from 'lucide-react';
 import { useLots, useDeleteLot } from '../api/hooks';
 import {
     type Lot,
     STATUS_OPTIONS,
-    TRADE_TYPE_OPTIONS,
-    PAYMENT_TYPE_OPTIONS,
     getStatusColor,
-    getTradeTypeLabel,
-    getPaymentTypeLabel,
 } from '../schemas/schemas';
 import LotModal from './LotModal';
 import { formatDate, formatArea } from '../../../utils/formatters';
@@ -64,8 +58,6 @@ export default function LotsTable() {
     const [filters, setFilters] = useState({
         search: '',
         status: '',
-        paymentType: '',
-        tradeType: '',
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,8 +70,6 @@ export default function LotsTable() {
         limit: pagination.pageSize,
         search: filters.search || undefined,
         status: filters.status || undefined,
-        paymentType: filters.paymentType || undefined,
-        tradeType: filters.tradeType || undefined,
     });
 
     const deleteQuery = useDeleteLot();
@@ -112,21 +102,11 @@ export default function LotsTable() {
         setFilters({
             search: '',
             status: '',
-            paymentType: '',
-            tradeType: '',
         });
         setPagination({ pageIndex: 0, pageSize: 10 });
     };
 
     const columns: ColumnDef<Lot>[] = [
-        {
-            accessorKey: 'lotNumber',
-            header: 'Lot №',
-            size: 80,
-            cell: ({ row }) => (
-                <span className="font-bold text-blue-600 text-lg">#{row.getValue('lotNumber')}</span>
-            ),
-        },
         {
             accessorKey: 'titleUz',
             header: 'Sarlavha',
@@ -135,7 +115,6 @@ export default function LotsTable() {
                     <span className="font-semibold text-gray-900 line-clamp-2">
                         {row.getValue('titleUz')}
                     </span>
-                    <span className="text-xs text-gray-500 font-mono">{row.original.lotCode}</span>
                 </div>
             ),
         },
@@ -151,30 +130,6 @@ export default function LotsTable() {
                     </span>
                 );
             },
-        },
-        {
-            accessorKey: 'tradeType',
-            header: 'Savdo turi',
-            cell: ({ row }) => (
-                <div className="flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-orange-500" />
-                    <span className="text-sm font-medium">
-                        {getTradeTypeLabel(row.getValue('tradeType') as string)}
-                    </span>
-                </div>
-            ),
-        },
-        {
-            accessorKey: 'paymentType',
-            header: 'To\'lov turi',
-            cell: ({ row }) => (
-                <div className="flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-green-500" />
-                    <span className="text-sm text-gray-600">
-                        {getPaymentTypeLabel(row.getValue('paymentType') as string)}
-                    </span>
-                </div>
-            ),
         },
         {
             accessorKey: 'landArea',
@@ -258,9 +213,9 @@ export default function LotsTable() {
                     <Search className="w-5 h-5 text-blue-600" />
                     Filtrlar
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <Input
-                        placeholder="Sarlavha yoki kod bo'yicha qidirish..."
+                        placeholder="Sarlavha bo'yicha qidirish..."
                         value={filters.search}
                         onChange={(e) => {
                             setFilters({ ...filters, search: e.target.value });
@@ -282,46 +237,6 @@ export default function LotsTable() {
                         <SelectContent>
                             <SelectItem value="all">Barcha statuslar</SelectItem>
                             {STATUS_OPTIONS.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-
-                    <Select
-                        value={filters.paymentType || "all"}
-                        onValueChange={(val) => {
-                            setFilters({ ...filters, paymentType: val === "all" ? "" : val });
-                            setPagination({ pageIndex: 0, pageSize: 10 });
-                        }}
-                    >
-                        <SelectTrigger className="focus:ring-blue-500">
-                            <SelectValue placeholder="To'lov turi" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Types</SelectItem>
-                            {PAYMENT_TYPE_OPTIONS.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-
-                    <Select
-                        value={filters.tradeType || "all"}
-                        onValueChange={(val) => {
-                            setFilters({ ...filters, tradeType: val === "all" ? "" : val });
-                            setPagination({ pageIndex: 0, pageSize: 10 });
-                        }}
-                    >
-                        <SelectTrigger className="focus:ring-blue-500">
-                            <SelectValue placeholder="Savdo turi" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Types</SelectItem>
-                            {TRADE_TYPE_OPTIONS.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
                                     {option.label}
                                 </SelectItem>
@@ -454,7 +369,7 @@ export default function LotsTable() {
                 <DialogContent className="sm:max-w-[1600px] w-[95vw] max-h-[95vh] overflow-y-auto p-0">
                     <DialogHeader className="sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg">
                         <DialogTitle className="text-xl">
-                            {editingLot ? `Lot №${editingLot.lotNumber} ni tahrirlash` : 'Yangi lot yaratish'}
+                            {editingLot ? `Lotni tahrirlash` : 'Yangi lot yaratish'}
                         </DialogTitle>
                     </DialogHeader>
                     <div className="px-6 py-4">
@@ -470,7 +385,7 @@ export default function LotsTable() {
                 title="Lotni o'chirish?"
                 description={
                     lotToDelete
-                        ? `Haqiqatan ham #${lotToDelete.lotNumber} "${lotToDelete.titleUz}" lotini butunlay o'chirmoqchimisiz? Ushbu amalni ortga qaytarib bo'lmaydi va barcha bog'liq ma'lumotlar yo'qoladi.`
+                        ? `Haqiqatan ham "${lotToDelete.titleUz}" lotini butunlay o'chirmoqchimisiz? Ushbu amalni ortga qaytarib bo'lmaydi va barcha bog'liq ma'lumotlar yo'qoladi.`
                         : 'Ishonchingiz komilmi?'
                 }
                 destructive={true}

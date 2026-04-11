@@ -12,6 +12,10 @@ import CategoriesPage from './pages/CategoriesPage';
 import DocsPage from './pages/DocsPage';
 import { useAuthStore } from './store/authStore';
 import DashboardLayout from './components/layout/Dashboard';
+import DepartmentsPage from './pages/management/DepartmentsPage';
+import PositionsPage from './pages/management/PositionsPage';
+import LeadershipPage from './pages/management/LeadershipPage';
+import ManagersPage from './pages/management/ManagersPage';
 
 // Create Query Client
 const queryClient = new QueryClient({
@@ -56,6 +60,12 @@ export default function App() {
             <Route path="news" element={<NewsPage />} />
             <Route path="categories" element={<CategoriesPage />} />
             <Route path="docs" element={<DocsPage />} />
+            <Route path="management">
+              <Route path="departments" element={<DepartmentsPage />} />
+              <Route path="positions" element={<PositionsPage />} />
+              <Route path="leadership" element={<LeadershipPage />} />
+              <Route path="managers" element={<ManagersPage />} />
+            </Route>
           </Route>
 
           {/* Fallback */}

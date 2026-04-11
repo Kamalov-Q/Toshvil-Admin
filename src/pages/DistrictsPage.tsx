@@ -25,35 +25,44 @@ import {
     DialogTitle,
 } from '../components/ui/dialog';
 import { useDistricts, useDeleteDistrict } from '../hooks/useDistricts';
-import { DISTRICT_TYPE_OPTIONS, getDistrictTypeLabel } from '../types/district.types';
-import { formatDate } from '../utils/formatters';
+import { useDepartments } from '../hooks/useDepartments';
+import { usePositions } from '../hooks/usePositions';
+import { DISTRICT_TYPE_OPTIONS, getDistrictTypeLabel, type District } from '../types/district.types';
+import type { Department } from '../types/department.types';
+import type { Position } from '../types/position.types';
 import ConfirmDialog from '@/features/lots/components/modals/ConfirmDialog';
 import DistrictForm from '../features/districts/components/DistrictForm';
 
 export default function DistrictsPage() {
     const [pagination, setPagination] = useState({ page: 1, limit: 10 });
     const [filters, setFilters] = useState({
-        search: '',
+        name: '',
         type: '',
+        departmentId: '',
+        positionId: '',
     });
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-    const [districtToDelete, setDistrictToDelete] = useState<any | null>(null);
+    const [districtToDelete, setDistrictToDelete] = useState<District | null>(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingDistrict, setEditingDistrict] = useState<any | null>(null);
+    const [editingDistrict, setEditingDistrict] = useState<District | null>(null);
 
-    const debouncedSearch = useDebounce(filters.search, 500);
+    const debouncedName = useDebounce(filters.name, 500);
 
     const { data, isLoading, error } = useDistricts({
         page: pagination.page,
         limit: pagination.limit,
-        search: debouncedSearch || undefined,
+        name: debouncedName || undefined,
         type: filters.type || undefined,
+        departmentId: filters.departmentId || undefined,
+        positionId: filters.positionId || undefined,
     });
-
     const deleteQuery = useDeleteDistrict();
 
-    const handleDelete = (district: any) => {
+    const { data: departmentsData } = useDepartments();
+    const { data: positionsData } = usePositions();
+
+    const handleDelete = (district: District) => {
         setDistrictToDelete(district);
         setDeleteConfirmOpen(true);
     };
@@ -72,7 +81,7 @@ export default function DistrictsPage() {
         setIsModalOpen(true);
     };
 
-    const handleEdit = (district: any) => {
+    const handleEdit = (district: District) => {
         setEditingDistrict(district);
         setIsModalOpen(true);
     };
@@ -93,7 +102,7 @@ export default function DistrictsPage() {
                             <h1 className="text-3xl font-bold">Tumanlarni boshqarish</h1>
                         </div>
                         <p className="text-green-100 max-w-2xl">
-                            Ma'muriy tumanlar va shaharlarni boshqaring. Tuman ma'lumotlari, hokim ma'lumotlari va qabulxona ma'lumotlarini nazorat qiling.
+                            Ma'muriy tumanlar va shaharlarni boshqaring. Tuman ma'lumotlari, sanoat korxonalari va yer maydonlarini nazorat qiling.
                         </p>
                     </div>
                 </div>
@@ -119,9 +128,9 @@ export default function DistrictsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                     <Input
                         placeholder="Tumanlarni qidirish..."
-                        value={filters.search}
+                        value={filters.name}
                         onChange={(e) => {
-                            setFilters({ ...filters, search: e.target.value });
+                            setFilters({ ...filters, name: e.target.value });
                             setPagination({ page: 1, limit: 10 });
                         }}
                         className="focus:ring-green-500"
@@ -147,10 +156,53 @@ export default function DistrictsPage() {
                         </SelectContent>
                     </Select>
 
+                    {/* Department Filter */}
+                    <Select
+                        value={filters.departmentId || 'all'}
+                        onValueChange={(val) => {
+                            setFilters({ ...filters, departmentId: val === 'all' ? '' : val });
+                            setPagination({ page: 1, limit: 10 });
+                        }}
+                    >
+                        <SelectTrigger className="focus:ring-green-500">
+                            <SelectValue placeholder="Barcha bo'limlar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Barcha bo'limlar</SelectItem>
+                            {departmentsData?.data?.map((dept: Department) => (
+                                <SelectItem key={dept.id} value={dept.id}>
+                                    {dept.nameUz}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    {/* Position Filter */}
+                    <Select
+                        value={filters.positionId || 'all'}
+                        onValueChange={(val) => {
+                            setFilters({ ...filters, positionId: val === 'all' ? '' : val });
+                            setPagination({ page: 1, limit: 10 });
+                        }}
+                    >
+                        <SelectTrigger className="focus:ring-green-500">
+                            <SelectValue placeholder="Barcha lavozimlar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Barcha lavozimlar</SelectItem>
+                            {positionsData?.data?.map((pos: Position) => (
+                                <SelectItem key={pos.id} value={pos.id}>
+                                    {pos.nameUz}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+
                     <Button
                         variant="outline"
                         onClick={() => {
-                            setFilters({ search: '', type: '' });
+                            setFilters({ name: '', type: '', departmentId: '', positionId: '' });
                             setPagination({ page: 1, limit: 10 });
                         }}
                         className="gap-2 col-span-2 md:col-span-1"
@@ -181,20 +233,21 @@ export default function DistrictsPage() {
                                 Nomi
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Turi
+                                Um. Maydon (GA)
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Hokim
+                                Band Maydon
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Telefon
+                                Bo'sh Maydon
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Email
+                                Zonalar
                             </TableHead>
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
-                                Yaratilgan
+                                Korxonalar
                             </TableHead>
+
                             <TableHead className="px-4 py-3 text-left font-semibold text-gray-700">
                                 Amallar
                             </TableHead>
@@ -218,28 +271,31 @@ export default function DistrictsPage() {
                                     <TableCell className="px-4 py-4">
                                         <div className="flex flex-col">
                                             <span className="font-semibold text-gray-900">{district.nameUz}</span>
-                                            <span className="text-xs text-gray-500">{district.nameEn}</span>
+                                            <span className="px-2 py-0.5 mt-1 rounded text-[10px] font-bold uppercase tracking-wider w-fit bg-blue-100 text-blue-800">
+                                                {getDistrictTypeLabel(district.type)}
+                                            </span>
                                         </div>
                                     </TableCell>
                                     <TableCell className="px-4 py-4">
-                                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                            {getDistrictTypeLabel(district.type)}
+                                        <span className="text-sm font-medium text-gray-900">{district.totalArea}</span>
+                                    </TableCell>
+                                    <TableCell className="px-4 py-4">
+                                        <span className="text-sm font-medium text-orange-600">{district.occupiedArea}</span>
+                                    </TableCell>
+                                    <TableCell className="px-4 py-4">
+                                        <span className="text-sm font-medium text-green-600">{district.emptyArea}</span>
+                                    </TableCell>
+                                    <TableCell className="px-4 py-4">
+                                        <span className="text-sm font-medium text-blue-600">
+                                            {district.industrialZonesCount ?? district.industrialZones?.length ?? 0} ta
                                         </span>
                                     </TableCell>
                                     <TableCell className="px-4 py-4">
-                                        <span className="text-sm text-gray-900">{district.hokimNameUz}</span>
-                                    </TableCell>
-                                    <TableCell className="px-4 py-4">
-                                        <span className="text-sm text-gray-600 font-mono">{district.phone}</span>
-                                    </TableCell>
-                                    <TableCell className="px-4 py-4">
-                                        <span className="text-sm text-gray-600">{district.email}</span>
-                                    </TableCell>
-                                    <TableCell className="px-4 py-4">
-                                        <span className="text-sm text-gray-600">
-                                            {formatDate(district.createdAt)}
+                                        <span className="text-sm font-medium text-gray-900">
+                                            {district.industrialEnterprisesCount ?? district.industrialEnterprises?.length ?? 0} ta
                                         </span>
                                     </TableCell>
+
                                     <TableCell className="px-4 py-4">
                                         <div className="flex gap-1">
                                             <Button

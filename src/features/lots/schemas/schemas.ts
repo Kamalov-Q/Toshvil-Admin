@@ -18,16 +18,10 @@ export const CreateLotSchema = z.object({
     titleUz: z.string().min(1, 'Title UZ is required').max(255),
     titleRu: z.string().min(1, 'Title RU is required').max(255),
     titleEn: z.string().min(1, 'Title EN is required').max(255),
-    lotNumber: z.coerce.number().min(1, 'Lot number must be positive').int(),
-    lotCode: z.string().min(1, 'Lot code is required').max(50),
     status: LotStatusEnum,
 
-    // Payment Information
-    paymentType: PaymentTypeEnum,
-    paymentMonths: z.coerce.number().min(1, 'Payment months must be at least 1').int(),
-
     // Trade Information
-    tradeType: TradeTypeEnum,
+    tradeType: z.literal('tender').default('tender'),
     tradeDate: z.string().refine(
         (date) => !isNaN(Date.parse(date)),
         'Invalid trade date format'
@@ -44,13 +38,12 @@ export const CreateLotSchema = z.object({
     addressUz: z.string().min(1, 'Address UZ is required'),
     addressRu: z.string().min(1, 'Address RU is required'),
     addressEn: z.string().min(1, 'Address EN is required'),
-    region: z.string().min(1, 'Region is required'),
     locationAddressUz: z.string().min(1, 'Location address UZ is required'),
     locationAddressRu: z.string().min(1, 'Location address RU is required'),
     locationAddressEn: z.string().min(1, 'Location address EN is required'),
 
     // Land Information
-    landRightType: LandRightTypeEnum,
+    landRightType: z.literal('ijara').default('ijara'),
     leaseYears: z.coerce.number().min(1, 'Lease years must be at least 1').int(),
     permittedUseUz: z.string().min(1, 'Permitted use UZ is required'),
     permittedUseRu: z.string().min(1, 'Permitted use RU is required'),
@@ -63,11 +56,10 @@ export const CreateLotSchema = z.object({
 
     // Investment Information
     jobsToCreate: z.coerce.number().min(0, 'Jobs to create cannot be negative').int(),
-    requiredInvestmentUz: z.string().min(1, 'Required investment UZ is required'),
-    requiredInvestmentRu: z.string().min(1, 'Required investment RU is required'),
-    requiredInvestmentEn: z.string().min(1, 'Required investment EN is required'),
+    requiredInvestment: z.coerce.number().min(0, 'Required investment cannot be negative'),
 
     // Infrastructure
+    hasRoad: z.boolean().default(false),
     hasGas: z.boolean().default(false),
     hasElectricity: z.boolean().default(false),
     hasWater: z.boolean().default(false),

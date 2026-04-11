@@ -28,9 +28,6 @@ import {
     type UpdateLotDto,
     type Lot,
     STATUS_OPTIONS,
-    TRADE_TYPE_OPTIONS,
-    PAYMENT_TYPE_OPTIONS,
-    LAND_RIGHT_TYPE_OPTIONS,
 } from '../schemas/schemas';
 import { useCreateLot, useUpdateLot } from '../api/hooks';
 import { AlertCircle, Loader, Save, X } from 'lucide-react';
@@ -65,11 +62,16 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
         mode: 'onChange',
         defaultValues: lot ? {
             ...lot,
+            districtId: lot.districtId || (lot as any).district?.id || '',
             tradeDate: formatDateForInput(lot.tradeDate),
             applicationDeadline: formatDateForInput(lot.applicationDeadline),
-            lotNumber: lot.lotNumber ?? 0,
+            tradeType: 'tender',
+            landRightType: 'ijara',
             landArea: lot.landArea ? parseFloat(String(lot.landArea)) : 0,
             jobsToCreate: lot.jobsToCreate ?? 0,
+            requiredInvestment: lot.requiredInvestment ? parseFloat(String(lot.requiredInvestment)) : 0,
+            hasRoad: lot.hasRoad ?? false,
+            hasBuilding: lot.hasBuilding ?? false,
             buildingArea: lot.buildingArea ? parseFloat(String(lot.buildingArea)) : 0,
             latitude: lot.latitude ? parseFloat(String(lot.latitude)) : 0,
             longitude: lot.longitude ? parseFloat(String(lot.longitude)) : 0,
@@ -78,11 +80,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
             titleUz: '',
             titleRu: '',
             titleEn: '',
-            lotNumber: 0,
-            lotCode: '',
             status: 'active',
-            paymentType: 'muddatli_bolib_tolash',
-            paymentMonths: 12,
             tradeType: 'tender',
             tradeDate: new Date().toISOString().slice(0, 16),
             applicationDeadline: new Date().toISOString().slice(0, 16),
@@ -92,7 +90,6 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
             addressUz: '',
             addressRu: '',
             addressEn: '',
-            region: '',
             landRightType: 'ijara',
             leaseYears: 1,
             permittedUseUz: '',
@@ -102,9 +99,8 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
             landCategoryRu: '',
             landCategoryEn: '',
             jobsToCreate: 0,
-            requiredInvestmentUz: '',
-            requiredInvestmentRu: '',
-            requiredInvestmentEn: '',
+            requiredInvestment: 0,
+            hasRoad: false,
             hasGas: false,
             hasElectricity: false,
             hasWater: false,
@@ -176,7 +172,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         <TabsTrigger value="basic" className="relative">
                             Asosiy
                             {Object.keys(form.formState.errors).some((key) =>
-                                ['titleUz', 'titleRu', 'titleEn', 'lotNumber', 'lotCode', 'status', 'districtId', 'region'].includes(key)
+                                ['titleUz', 'titleRu', 'titleEn', 'status', 'districtId'].includes(key)
                             ) && (
                                     <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
                                 )}
@@ -184,7 +180,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                         <TabsTrigger value="trade" className="relative">
                             Savdo
                             {Object.keys(form.formState.errors).some((key) =>
-                                ['tradeType', 'tradeDate', 'applicationDeadline', 'tradeLocationUz', 'paymentType', 'paymentMonths'].includes(key)
+                                ['tradeType', 'tradeDate', 'applicationDeadline', 'tradeLocationUz', 'requiredInvestment'].includes(key)
                             ) && (
                                     <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
                                 )}
@@ -197,14 +193,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
                                 )}
                         </TabsTrigger>
-                        <TabsTrigger value="investment" className="relative">
-                            Investitsiya
-                            {Object.keys(form.formState.errors).some((key) =>
-                                ['requiredInvestmentUz', 'jobsToCreate'].includes(key)
-                            ) && (
-                                    <span className="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
-                                )}
-                        </TabsTrigger>
+
                         <TabsTrigger value="additional">Qo'shimcha</TabsTrigger>
                     </TabsList>
 
@@ -262,38 +251,6 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <FormField
                                     control={form.control}
-                                    name="lotNumber"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Lot raqami *</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    {...field}
-                                                    onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="masalan, 1"
-                                                    className="focus:ring-blue-500"
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="lotCode"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Lot kodi *</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} placeholder="masalan, LOT-001" className="focus:ring-blue-500" />
-                                            </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
                                     name="status"
                                     render={({ field }) => (
                                         <FormItem>
@@ -335,7 +292,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                         <SelectValue placeholder="Tumanni tanlang" />
                                                     </SelectTrigger>
                                                 </FormControl>
-                                                <SelectContent className="max-h-60">
+                                                <SelectContent position="popper" className="max-h-60 w-full">
                                                     {districtData?.data && districtData.data.length > 0 ? (
                                                         districtData.data.map((district) => (
                                                             <SelectItem key={district.id} value={district.id}>
@@ -353,24 +310,6 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         </FormItem>
                                     )}
                                 />
-
-                                <FormField
-                                    control={form.control}
-                                    name="region"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Viloyat *</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    {...field}
-                                                    placeholder="masalan, Toshkent shahri"
-                                                    className="focus:ring-blue-500"
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
                             </div>
                         </div>
                     </TabsContent>
@@ -381,30 +320,6 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                             <h3 className="font-semibold text-lg text-gray-900">Savdo tafsilotlari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="tradeType"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Savdo turi *</FormLabel>
-                                            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger className="focus:ring-blue-500">
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    {TRADE_TYPE_OPTIONS.map((option) => (
-                                                        <SelectItem key={option.value} value={option.value}>
-                                                            {option.label}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
                                 <FormField
                                     control={form.control}
                                     name="tradeDate"
@@ -496,46 +411,28 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">To'lov ma'lumotlari</h3>
+                        <div className="space-y-4 pt-4 border-t border-gray-200 mt-6">
+                            <h3 className="font-semibold text-lg text-gray-900">Investitsiya talablari</h3>
+
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                <p className="text-sm text-blue-700">
+                                    Ushbu lot uchun talab qilinadigan investitsiya miqdorini ko'rsating.
+                                </p>
+                            </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
-                                    name="paymentType"
+                                    name="requiredInvestment"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>To'lov turi *</FormLabel>
-                                            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger className="focus:ring-blue-500">
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    {PAYMENT_TYPE_OPTIONS.map((option) => (
-                                                        <SelectItem key={option.value} value={option.value}>
-                                                            {option.label}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="paymentMonths"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>To'lov oylari *</FormLabel>
+                                            <FormLabel>Talab qilinadigan investitsiya (USD) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
                                                     {...field}
                                                     onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="Oylar soni"
+                                                    placeholder="masalan, 100000"
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
@@ -558,7 +455,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="landArea"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Yer maydoni (m²) *</FormLabel>
+                                            <FormLabel>Yer maydoni (GA) *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
@@ -578,7 +475,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="distanceToRoad"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Yo'lgacha bo'lgan masofa *</FormLabel>
+                                            <FormLabel>Avtomagistral yo'lgacha bo'lgan masofa *</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
@@ -586,30 +483,6 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                     className="focus:ring-blue-500"
                                                 />
                                             </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="landRightType"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Yerga egalik huquqi turi *</FormLabel>
-                                            <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger className="focus:ring-blue-500">
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    {LAND_RIGHT_TYPE_OPTIONS.map((option) => (
-                                                        <SelectItem key={option.value} value={option.value}>
-                                                            {option.label}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
                                             <FormMessage className="text-xs text-red-600" />
                                         </FormItem>
                                     )}
@@ -780,6 +653,24 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                 <FormField
                                     control={form.control}
+                                    name="hasRoad"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 pt-2">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={field.onChange}
+                                                    className="h-5 w-5 border-gray-300"
+                                                />
+                                            </FormControl>
+                                            <FormLabel className="font-normal cursor-pointer">
+                                                Avtomobil yo'li
+                                            </FormLabel>
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
                                     name="hasGas"
                                     render={({ field }) => (
                                         <FormItem className="flex flex-row items-center space-x-3 space-y-0 pt-2">
@@ -791,7 +682,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Gaz bor
+                                                Tabiiy gaz
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -809,7 +700,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Elektr bor
+                                                Elektr energiyasi
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -827,7 +718,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Suv bor
+                                                Ichimlik suvi
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -845,7 +736,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">
-                                                Kanalizatsiya bor
+                                                Oqava suv tizimi
                                             </FormLabel>
                                         </FormItem>
                                     )}
@@ -1021,71 +912,51 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                 </div>
                             </div>
                         </div>
-                    </TabsContent>
 
-                    {/* TAB 4: INVESTMENT INFORMATION */}
-                    <TabsContent value="investment" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Investitsiya talablari</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Bino ma'lumotlari</h3>
 
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                                <p className="text-sm text-blue-700">
-                                    Ushbu lot uchun talab qilinadigan investitsiya miqdorini ko'rsating.
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
-                                    name="requiredInvestmentUz"
+                                    name="hasBuilding"
                                     render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Talab qilinadigan investitsiya (UZ) *</FormLabel>
+                                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 pt-2">
                                             <FormControl>
-                                                <Input
-                                                    {...field}
-                                                    placeholder="masalan, 100,000,000 USD"
-                                                    className="focus:ring-blue-500"
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={field.onChange}
+                                                    className="h-5 w-5 border-gray-300"
                                                 />
                                             </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
+                                            <FormLabel className="font-normal cursor-pointer">
+                                                Bino
+                                            </FormLabel>
                                         </FormItem>
                                     )}
                                 />
-                                <FormField
-                                    control={form.control}
-                                    name="requiredInvestmentRu"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Talab qilinadigan investitsiya (RU) *</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    {...field}
-                                                    placeholder="masalan, 100,000,000 USD"
-                                                    className="focus:ring-blue-500"
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="requiredInvestmentEn"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Talab qilinadigan investitsiya (EN) *</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    {...field}
-                                                    placeholder="masalan, 100,000,000 USD"
-                                                    className="focus:ring-blue-500"
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="text-xs text-red-600" />
-                                        </FormItem>
-                                    )}
-                                />
+                                {form.watch('hasBuilding') && (
+                                    <FormField
+                                        control={form.control}
+                                        name="buildingArea"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Bino maydoni (m²)</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="number"
+                                                        step="0.01"
+                                                        {...field}
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        placeholder="masalan, 2000"
+                                                        className="focus:ring-blue-500"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage className="text-xs text-red-600" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                )}
                             </div>
                         </div>
                     </TabsContent>
@@ -1093,7 +964,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                     {/* TAB 5: ADDITIONAL INFORMATION */}
                     <TabsContent value="additional" className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Mijoz ma'lumotlari</h3>
+                            <h3 className="font-semibold text-lg text-gray-900">Buyurtmachi ma'lumotlari</h3>
 
                             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1102,7 +973,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerName"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Mijoz nomi</FormLabel>
+                                                <FormLabel>Buyurtmachi nomi</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
@@ -1119,7 +990,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerType"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Mijoz turi</FormLabel>
+                                                <FormLabel>Buyurtmachi turi</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
@@ -1136,7 +1007,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerPhone"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Mijoz telefoni</FormLabel>
+                                                <FormLabel>Buyurtmachi telefoni</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
@@ -1170,7 +1041,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerEmail"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Mijoz elektron pochtasi</FormLabel>
+                                                <FormLabel>Buyurtmachi elektron pochtasi</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         type="email"
@@ -1188,7 +1059,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         name="customerDistrict"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Mijoz tumani</FormLabel>
+                                                <FormLabel>Buyurtmachi tumani</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...field}
@@ -1207,7 +1078,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                     name="customerAddress"
                                     render={({ field }) => (
                                         <FormItem className="mt-4">
-                                            <FormLabel>Mijoz manzili</FormLabel>
+                                            <FormLabel>Buyurtmachi manzili</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}
@@ -1345,53 +1216,6 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         />
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <h3 className="font-semibold text-lg text-gray-900">Bino ma'lumotlari</h3>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="hasBuilding"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 pt-2">
-                                            <FormControl>
-                                                <Checkbox
-                                                    checked={field.value}
-                                                    onCheckedChange={field.onChange}
-                                                    className="h-5 w-5 border-gray-300"
-                                                />
-                                            </FormControl>
-                                            <FormLabel className="font-normal cursor-pointer">
-                                                Bino mavjud
-                                            </FormLabel>
-                                        </FormItem>
-                                    )}
-                                />
-                                {form.watch('hasBuilding') && (
-                                    <FormField
-                                        control={form.control}
-                                        name="buildingArea"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Bino maydoni (m²)</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        type="number"
-                                                        step="0.01"
-                                                        {...field}
-                                                        onChange={(e) => field.onChange(e.target.value)}
-                                                        placeholder="masalan, 2000"
-                                                        className="focus:ring-blue-500"
-                                                    />
-                                                </FormControl>
-                                                <FormMessage className="text-xs text-red-600" />
-                                            </FormItem>
-                                        )}
-                                    />
-                                )}
                             </div>
                         </div>
 

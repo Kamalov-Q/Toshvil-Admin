@@ -13,7 +13,9 @@ export const getDistricts = async (params: GetDistrictsParams = {}) => {
             page: params.page || 1,
             limit: params.limit || 10,
             ...(params.type && { type: params.type }),
-            ...(params.search && { search: params.search }),
+            ...(params.name && { name: params.name }),
+            ...(params.departmentId && { departmentId: params.departmentId }),
+            ...(params.positionId && { positionId: params.positionId }),
         },
     });
     return response.data;

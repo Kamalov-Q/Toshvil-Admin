@@ -44,7 +44,7 @@ export function useLotWebSocket(): UseLotWebSocketReturn {
         socket.on('connect', () => {
             setIsConnected(true);
             console.log('[LotWS] Connected to /lots namespace');
-            
+
             // Subscribe to all active timers for the list page
             socket.emit('subscribeActiveTimers');
         });
@@ -57,12 +57,13 @@ export function useLotWebSocket(): UseLotWebSocketReturn {
         // Handle full list updates (received every second)
         socket.on('activeTimers', (data: LotTimerInfo[]) => {
             setActiveTimers(data);
-            
+
+
             // Periodically invalidate the main lots list to keep data in sync
             // We do this sparingly to avoid too many refetches while showing live countdowns locally
-            if (Math.random() < 0.05) { // ~5% of ticks trigger a full refresh
-                queryClient.invalidateQueries({ queryKey: ['lots'] });
-            }
+            // if (Math.random() < 0.05) { // ~5% of ticks trigger a full refresh
+            //     queryClient.invalidateQueries({ queryKey: ['lots'] });
+            // }
         });
 
         // Handle single lot updates

@@ -82,18 +82,29 @@ export const FileUploader = <T extends FieldValues>({
                     throw new Error(data.message || 'File upload failed');
                 }
 
-                if (multiple && Array.isArray(data)) {
-                    const newUrls = data.map((item: any) => item.url).filter(Boolean);
-                    const currentUrls = Array.isArray(field.value) ? field.value : [];
-                    field.onChange([...currentUrls, ...newUrls]);
-                    toast.success(`${newUrls.length} file(s) uploaded successfully`);
-                } else if (!multiple && data?.url) {
-                    field.onChange(data.url);
-                    toast.success('File uploaded successfully');
-                } else if (multiple && data?.urls) {
-                    const currentUrls = Array.isArray(field.value) ? field.value : [];
-                    field.onChange([...currentUrls, ...data.urls]);
-                    toast.success(`${data.urls.length} file(s) uploaded successfully`);
+                // Handle both multiple and single response formats more robustly
+                const currentUrls = Array.isArray(field.value) ? [...field.value] : [];
+                let newUrls: string[] = [];
+
+                if (multiple) {
+                    if (Array.isArray(data)) {
+                        newUrls = data.map((item: any) => item.url || item).filter(Boolean);
+                    } else if (data.urls && Array.isArray(data.urls)) {
+                        newUrls = data.urls;
+                    } else if (data.url) {
+                        newUrls = [data.url];
+                    }
+
+                    if (newUrls.length > 0) {
+                        field.onChange([...currentUrls, ...newUrls]);
+                        toast.success(`${newUrls.length} file(s) uploaded successfully`);
+                    }
+                } else {
+                    const singleUrl = data.url || (Array.isArray(data) ? data[0]?.url : null);
+                    if (singleUrl) {
+                        field.onChange(singleUrl);
+                        toast.success('File uploaded successfully');
+                    }
                 }
 
                 setUploadProgress(100);

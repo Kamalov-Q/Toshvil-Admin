@@ -50,7 +50,6 @@ export const FileUploader = React.forwardRef<
             setUploadProgress(0);
 
             try {
-
                 const formData = new FormData();
                 formData.append('folder', folder);
 
@@ -77,11 +76,26 @@ export const FileUploader = React.forwardRef<
                     throw new Error(data.message || 'File upload failed');
                 }
 
-                if (multiple && data.urls) {
-                    const currentUrls = Array.isArray(field.value) ? field.value : [];
-                    field.onChange([...currentUrls, ...data.urls]);
-                } else if (!multiple && data.url) {
-                    field.onChange(data.url);
+                const currentUrls = Array.isArray(field.value) ? [...field.value] : [];
+                let newUrls: string[] = [];
+
+                if (multiple) {
+                    if (Array.isArray(data)) {
+                        newUrls = data.map((item: any) => item.url || item).filter(Boolean);
+                    } else if (data.urls && Array.isArray(data.urls)) {
+                        newUrls = data.urls;
+                    } else if (data.url) {
+                        newUrls = [data.url];
+                    }
+
+                    if (newUrls.length > 0) {
+                        field.onChange([...currentUrls, ...newUrls]);
+                    }
+                } else {
+                    const singleUrl = data.url || (Array.isArray(data) ? data[0]?.url : null);
+                    if (singleUrl) {
+                        field.onChange(singleUrl);
+                    }
                 }
 
                 setUploadProgress(100);
