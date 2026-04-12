@@ -1,22 +1,22 @@
 import * as React from "react";
-import { X, Check, ChevronsUpDown } from "lucide-react";
+import { X, ChevronsUpDown } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Command,
-  CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
-  CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
+
 
 export interface Option {
   label: string;
@@ -56,7 +56,8 @@ export default function MultiSelect({
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal={false}>
+
       <PopoverTrigger asChild>
         <Button
           type="button"
@@ -109,46 +110,52 @@ export default function MultiSelect({
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
-        <Command shouldFilter={false}>
+      <PopoverContent 
+        className="w-[var(--radix-popover-trigger-width)] p-0" 
+        align="start"
+      >
+        <Command shouldFilter={false} className="flex flex-col border-none">
           <CommandInput 
             placeholder="Qidirish..." 
-            className="h-9" 
+            className="h-9 border-none focus:ring-0" 
             value={searchQuery}
             onValueChange={setSearchQuery}
           />
-          <CommandList className="max-h-64 overflow-auto">
-            {filteredOptions.length === 0 && <CommandEmpty>Topilmadi.</CommandEmpty>}
-            <CommandGroup className="p-1">
-              {filteredOptions.map((option) => {
-                const isSelected = safeSelected.includes(option.value);
-                return (
-                  <CommandItem
-                    key={option.value}
-                    value={option.value}
-                    onSelect={() => {
-                      toggleOption(option.value);
-                    }}
-                    className="relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors aria-selected:bg-blue-50 aria-selected:text-blue-700 data-[selected=true]:bg-blue-50 data-[selected=true]:text-blue-700"
-                  >
-                    <div
-                      className={cn(
-                        "flex h-4 w-4 items-center justify-center rounded-sm border border-gray-300 transition-all mr-2",
-                        isSelected
-                          ? "bg-blue-600 border-blue-600 text-white"
-                          : "bg-white"
-                      )}
-                    >
-                      {isSelected && <Check className="h-3 w-3" />}
-                    </div>
-                    <span className="transition-colors">
-                      {option.label}
-                    </span>
-                  </CommandItem>
-                );
-              })}
-            </CommandGroup>
-          </CommandList>
+          
+          <div className="max-h-64 overflow-auto p-1 border-t">
+            {filteredOptions.length === 0 && (
+              <div className="py-6 text-center text-sm text-gray-500">
+                Topilmadi.
+              </div>
+            )}
+            {filteredOptions.map((option) => {
+              const isSelected = safeSelected.includes(option.value);
+              return (
+                <div
+                  key={option.value}
+                  onPointerDown={(e) => {
+                    // Using onPointerDown to handle selection reliably vs onClick
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleOption(option.value);
+                  }}
+                  className={cn(
+                    "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-blue-50 hover:text-blue-700",
+                    isSelected ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
+                  )}
+                >
+                  <Checkbox
+                    checked={isSelected}
+                    className="mr-2 pointer-events-none"
+                  />
+                  <span className="flex-1">
+                    {option.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
           {safeSelected.length > 0 && (
             <>
               <CommandSeparator />
@@ -169,6 +176,8 @@ export default function MultiSelect({
           )}
         </Command>
       </PopoverContent>
+
     </Popover>
   );
 }
+
