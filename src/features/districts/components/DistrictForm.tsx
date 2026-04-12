@@ -191,7 +191,6 @@ export default function DistrictForm({
                 } else {
                     const createData = {
                         ...baseData,
-                        industries: cleanEnterprises.length,
                         slug: data.slug || undefined,
                     };
                     console.log('--- POST SUBMISSION START ---');

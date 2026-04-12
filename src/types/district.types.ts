@@ -11,10 +11,10 @@ export const IndustrialItemSchema = z.object({
 export const CreateDistrictSchema = z.object({
     slug: z.string().optional(),
     nameUz: z.string().min(1, 'Name UZ is required').max(255),
-    nameRu: z.string().max(255).optional().or(z.literal('')).nullable(),
-    nameEn: z.string().max(255).optional().or(z.literal('')).nullable(),
+    nameRu: z.string().min(1, 'Name RU is required').max(255),
+    nameEn: z.string().min(1, 'Name EN is required').max(255),
     type: DistrictTypeEnum,
-    totalArea: z.coerce.number().min(0, 'Total area must be non-negative'),
+    totalArea: z.coerce.number().min(0.01, 'Total area must be greater than 0'),
     industrialZones: z.array(IndustrialItemSchema).optional(),
     industrialEnterprises: z.array(IndustrialItemSchema).optional()
 });
