@@ -16,8 +16,7 @@ export const CreateDistrictSchema = z.object({
     type: DistrictTypeEnum,
     totalArea: z.coerce.number().min(0, 'Total area must be non-negative'),
     industrialZones: z.array(IndustrialItemSchema).optional(),
-    industrialEnterprises: z.array(IndustrialItemSchema).optional(),
-    industries: z.number().optional(),
+    industrialEnterprises: z.array(IndustrialItemSchema).optional()
 });
 
 export const UpdateDistrictSchema = CreateDistrictSchema.partial();
