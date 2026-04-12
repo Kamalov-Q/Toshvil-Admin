@@ -109,7 +109,7 @@ export default function MultiSelect({
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+      <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput 
             placeholder="Qidirish..." 
@@ -127,11 +127,6 @@ export default function MultiSelect({
                     key={option.value}
                     value={option.value}
                     onSelect={() => {
-                      // Let cmdk handle its own internals if needed
-                    }}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
                       toggleOption(option.value);
                     }}
                     className="relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors aria-selected:bg-blue-50 aria-selected:text-blue-700 data-[selected=true]:bg-blue-50 data-[selected=true]:text-blue-700"
