@@ -56,7 +56,9 @@ export default function LeadershipForm({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         resolver: zodResolver(isEditing ? UpdateLeadershipSchema : CreateLeadershipSchema) as any,
         defaultValues: {
-            name: initialData?.name || '',
+            nameUz: initialData?.nameUz || '',
+            nameRu: initialData?.nameRu || '',
+            nameEn: initialData?.nameEn || '',
             image: initialData?.image || null,
             email: initialData?.email || '',
             phone: initialData?.phone || '',
@@ -112,17 +114,41 @@ export default function LeadershipForm({
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>F.I.O.</FormLabel>
-                                    <FormControl><Input {...field} placeholder="Toliq ism sharifi" /></FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <div className="grid grid-cols-1 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="nameUz"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>F.I.O. (UZ)</FormLabel>
+                                        <FormControl><Input {...field} placeholder="To'liq ism sharifi" /></FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="nameRu"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Ф.И.О. (RU)</FormLabel>
+                                        <FormControl><Input {...field} placeholder="Полное имя" /></FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="nameEn"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Full Name (EN)</FormLabel>
+                                        <FormControl><Input {...field} placeholder="Full name" /></FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                             <FormField
                                 control={form.control}

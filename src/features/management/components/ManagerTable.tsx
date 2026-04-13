@@ -158,7 +158,7 @@ export default function ManagerTable() {
                                     <TableCell>
                                         <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden border border-gray-200">
                                             {item.image ? (
-                                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                                <img src={item.image} alt={item.nameUz} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-gray-400">
                                                     <Search className="w-5 h-5" />
@@ -168,7 +168,7 @@ export default function ManagerTable() {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex flex-col gap-1.5">
-                                            <span className="font-bold text-gray-900 leading-tight">{item.name}</span>
+                                            <span className="font-bold text-gray-900 leading-tight">{item.nameUz}</span>
                                             <div className="flex flex-wrap gap-1">
                                                 {item.districts?.map((d) => (
                                                     <Badge key={d.id} variant="outline" className="text-[10px] bg-amber-50 border-amber-200 font-normal">
@@ -264,7 +264,7 @@ export default function ManagerTable() {
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
                 title="Mas'ulni o'chirish?"
-                description={`Haqiqatan ham "${itemToDelete?.name}" nomli mas'ul ma'lumotlarini o'chirib tashlamoqchimisiz?`}
+                description={`Haqiqatan ham "${itemToDelete?.nameUz}" nomli mas'ul ma'lumotlarini o'chirib tashlamoqchimisiz?`}
                 destructive={true}
                 confirmText="O'chirish"
                 cancelText="Bekor qilish"

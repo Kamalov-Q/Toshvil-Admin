@@ -216,7 +216,7 @@ export default function LeadershipTable() {
                                     <TableCell>
                                         <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden border border-gray-200">
                                             {item.image ? (
-                                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                                <img src={item.image} alt={item.nameUz} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-gray-400">
                                                     <Search className="w-5 h-5" />
@@ -226,7 +226,7 @@ export default function LeadershipTable() {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-gray-900 leading-tight">{item.name}</span>
+                                            <span className="font-bold text-gray-900 leading-tight">{item.nameUz}</span>
                                             <span className="text-sm text-blue-600 font-medium">
                                                 {item.position?.nameUz}
                                             </span>
@@ -330,7 +330,7 @@ export default function LeadershipTable() {
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
                 title="Rahbarni o'chirish?"
-                description={`Haqiqatan ham "${itemToDelete?.name}" nomli rahbar ma'lumotlarini o'chirib tashlamoqchimisiz?`}
+                description={`Haqiqatan ham "${itemToDelete?.nameUz}" nomli rahbar ma'lumotlarini o'chirib tashlamoqchimisiz?`}
                 destructive={true}
                 confirmText="O'chirish"
                 cancelText="Bekor qilish"

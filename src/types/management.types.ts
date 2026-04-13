@@ -4,7 +4,9 @@ import type { Position } from './position.types';
 import type { District } from './district.types';
 
 export const CreateLeadershipSchema = z.object({
-    name: z.string().min(1, 'Name is required').max(255),
+    nameUz: z.string().min(1, 'Ism (O‘zbek) majburiy').max(255),
+    nameRu: z.string().min(1, 'Имя (Русский) обязательно').max(255),
+    nameEn: z.string().min(1, 'Name (English) is required').max(255),
     image: z.string().url('Image must be a valid URL').optional().or(z.literal('')).nullable(),
     email: z.string().email('Invalid email address').optional().or(z.literal('')).nullable(),
     phone: z.string().optional().or(z.literal('')).nullable(),
@@ -16,7 +18,9 @@ export const CreateLeadershipSchema = z.object({
 export const UpdateLeadershipSchema = CreateLeadershipSchema.partial();
 
 export const CreateManagerSchema = z.object({
-    name: z.string().min(1, 'Name is required').max(255),
+    nameUz: z.string().min(1, 'Ism (O‘zbek) majburiy').max(255),
+    nameRu: z.string().min(1, 'Имя (Русский) обязательно').max(255),
+    nameEn: z.string().min(1, 'Name (English) is required').max(255),
     image: z.string().url('Image must be a valid URL').optional().or(z.literal('')).nullable(),
     email: z.string().email('Invalid email address').optional().or(z.literal('')).nullable(),
     phone: z.string().optional().or(z.literal('')).nullable(),
@@ -32,7 +36,10 @@ export type UpdateManagerDto = z.infer<typeof UpdateManagerSchema>;
 
 export interface Leadership {
     id: string;
-    name: string;
+    nameUz: string;
+    nameRu: string;
+    nameEn: string;
+    name?: string; // Keep for compatibility if needed, but primarily use Uz/Ru/En
     image?: string;
     email?: string;
     phone?: string;
@@ -47,7 +54,10 @@ export interface Leadership {
 
 export interface Manager {
     id: string;
-    name: string;
+    nameUz: string;
+    nameRu: string;
+    nameEn: string;
+    name?: string;
     image?: string;
     email?: string;
     phone?: string;
