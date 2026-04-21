@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { io, Socket } from 'socket.io-client';
 
-export type LotStatus = 'active' | 'upcoming' | 'sold' | 'cancelled';
+export type LotStatus = 'active' | 'upcoming' | 'completed' | 'cancelled';
 
 export interface LotTimerInfo {
     lotId: string;
@@ -76,6 +76,21 @@ export function useLotWebSocket(): UseLotWebSocketReturn {
         });
 
         // Handle expiration
+        socket.on('lotStatusChanged', (data: { lotId: string; status: LotStatus }) => {
+            console.log(`[LotWS] Lot ${data.lotId} status changed to ${data.status}`);
+            // Invalidate the main list and the specific lot query
+            void queryClient.invalidateQueries({ queryKey: ['lots'] });
+            void queryClient.invalidateQueries({ queryKey: ['lot', data.lotId] });
+
+            // Update local query data directly for immediate feedback
+            queryClient.setQueryData(['lot', data.lotId], (old: any) => {
+                if (!old) return old;
+                return { ...old, status: data.status };
+            });
+
+            setLastEvent({ type: 'lot_status_changed', ...data });
+        });
+
         socket.on('lotExpired', (data: { lotId: string }) => {
             console.log(`[LotWS] Lot ${data.lotId} expired`);
             queryClient.invalidateQueries({ queryKey: ['lots'] });

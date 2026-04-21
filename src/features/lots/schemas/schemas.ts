@@ -19,6 +19,7 @@ export const CreateLotSchema = z.object({
     titleRu: z.string().min(1, 'Title RU is required').max(255),
     titleEn: z.string().min(1, 'Title EN is required').max(255),
     status: LotStatusEnum,
+    lotNumber: z.coerce.number().min(1, 'Lot number must be at least 1'),
 
     // Trade Information
     tradeType: z.literal('tender').default('tender'),

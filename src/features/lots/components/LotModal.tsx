@@ -43,7 +43,15 @@ const formatDateForInput = (dateStr?: string) => {
     try {
         const date = new Date(dateStr);
         if (isNaN(date.getTime())) return '';
-        return date.toISOString().slice(0, 16);
+        
+        // Return local time formatted as YYYY-MM-DDTHH:mm
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     } catch {
         return '';
     }
@@ -76,6 +84,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
             latitude: lot.latitude ? parseFloat(String(lot.latitude)) : 0,
             longitude: lot.longitude ? parseFloat(String(lot.longitude)) : 0,
             imageUrls: lot.images?.map(img => img.url) ?? lot.imageUrls ?? [],
+            lotNumber: (lot as any).lotNumber ?? 0,
         } : {
             titleUz: '',
             titleRu: '',
@@ -130,15 +139,23 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
             geoPolygon: { type: 'Polygon', coordinates: [] },
             districtId: '',
             imageUrls: [],
+            lotNumber: 0,
         },
     });
 
+    const selectedDistrictId = form.watch('districtId');
+    const selectedDistrict = districtData?.data?.find(d => d.id === selectedDistrictId);
+
     const onSubmit = async (data: CreateLotDto) => {
         try {
+            const submissionData = {
+                ...data,
+                lotNumber: Number(data.lotNumber),
+            };
             if (isEditing) {
-                await updateMutation.mutateAsync(data as UpdateLotDto);
+                await updateMutation.mutateAsync(submissionData as UpdateLotDto);
             } else {
-                await createMutation.mutateAsync(data);
+                await createMutation.mutateAsync(submissionData as CreateLotDto);
             }
             onClose();
         } catch (error) {
@@ -249,6 +266,24 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                             <h3 className="font-semibold text-lg text-gray-900">Lot tafsilotlari</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="lotNumber"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Lot raqami *</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    {...field}
+                                                    placeholder="masalan, 123"
+                                                    className="focus:ring-blue-500"
+                                                />
+                                            </FormControl>
+                                            <FormMessage className="text-xs text-red-600" />
+                                        </FormItem>
+                                    )}
+                                />
                                 <FormField
                                     control={form.control}
                                     name="status"
@@ -457,14 +492,22 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                         <FormItem>
                                             <FormLabel>Yer maydoni (GA) *</FormLabel>
                                             <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    {...field}
-                                                    onChange={(e) => field.onChange(e.target.value)}
-                                                    placeholder="masalan, 5000.50"
-                                                    className="focus:ring-blue-500"
-                                                />
+                                                <div className="space-y-2">
+                                                    <Input
+                                                        type="number"
+                                                        step="0.01"
+                                                        {...field}
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        placeholder="masalan, 5000.50"
+                                                        className="focus:ring-blue-500"
+                                                    />
+                                                    {selectedDistrict && (
+                                                        <p className="text-xs font-medium text-green-600 bg-green-50 p-2 rounded border border-green-100 flex items-center gap-2">
+                                                            <AlertCircle className="w-3 h-3" />
+                                                            Tanlangan tumanda {selectedDistrict.emptyArea} GA bo'sh maydon mavjud.
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </FormControl>
                                             <FormMessage className="text-xs text-red-600" />
                                         </FormItem>

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,14 +19,13 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, Save, Plus, Trash2, Building2, Map, Activity } from 'lucide-react';
+import { AlertCircle, Save, Building2, Activity } from 'lucide-react';
 import {
     CreateDistrictSchema,
     UpdateDistrictSchema,
     type CreateDistrictDto,
     type UpdateDistrictDto,
     type District,
-    type IndustrialItem,
     DISTRICT_TYPE_OPTIONS,
 } from '../../../types/district.types';
 import { useCreateDistrict, useUpdateDistrict, useDistrict } from '../../../hooks/useDistricts';
@@ -45,7 +44,7 @@ export default function DistrictForm({
 }: DistrictFormProps) {
     const isEditing = !!initialData;
     
-    // Fetch full district data if editing to ensure we have all industrial arrays
+    // Fetch full district data if editing
     const { data: fullDistrictData, isLoading: isFetchingFull } = useDistrict(initialData?.id || '');
     const districtData = fullDistrictData || initialData;
 
@@ -63,63 +62,15 @@ export default function DistrictForm({
             nameEn: '',
             type: 'tuman',
             totalArea: 0,
-            industrialZones: [],
-            industrialEnterprises: [],
+            industrialZones: 0,
+            industrialEnterprises: 0,
             slug: '',
         },
-    });
-
-    const {
-        fields: zones,
-        append: addZone,
-        remove: removeZone,
-        replace: replaceZones,
-    } = useFieldArray({
-        control: form.control,
-        name: 'industrialZones',
-    });
-
-    const {
-        fields: enterprises,
-        append: addEnterprise,
-        remove: removeEnterprise,
-        replace: replaceEnterprises,
-    } = useFieldArray({
-        control: form.control,
-        name: 'industrialEnterprises',
     });
 
     // Reset form when full data is loaded or initialData changes
     useEffect(() => {
         if (districtData && !isFetchingFull) {
-            console.log('--- FORM DATA LOAD START ---');
-            console.log('Original districtData:', districtData);
-            
-            const mapIndustrialItems = (items: any) => {
-                if (!items || !Array.isArray(items)) return [];
-                return items.map((item: any) => {
-                    // Deeply extract the first non-array object
-                    let data = item;
-                    while (Array.isArray(data) && data.length > 0) {
-                        data = data[0];
-                    }
-                    const obj = (data && typeof data === 'object' && !Array.isArray(data)) ? data : {};
-                    
-                    return {
-                        nameUz: obj.nameUz || obj.name_uz || '',
-                        nameRu: obj.nameRu || obj.name_ru || '',
-                        nameEn: obj.nameEn || obj.name_en || '',
-                    };
-                }).filter((item: any) => item.nameUz || item.nameRu || item.nameEn);
-            };
-
-            const rawData = districtData as any;
-            const cleanZones = mapIndustrialItems(districtData.industrialZones || rawData.industrial_zones);
-            const cleanEnterprises = mapIndustrialItems(districtData.industrialEnterprises || rawData.industrial_enterprises);
-
-            console.log('Processed for form - cleanZones:', cleanZones);
-            console.log('Processed for form - cleanEnterprises:', cleanEnterprises);
-
             const formData = {
                 nameUz: districtData.nameUz || '',
                 nameRu: districtData.nameRu || '',
@@ -127,74 +78,33 @@ export default function DistrictForm({
                 type: (districtData.type as CreateDistrictDto['type']) || 'tuman',
                 totalArea: districtData.totalArea ? Number(districtData.totalArea) : 0,
                 slug: districtData.slug || '',
-                industrialZones: cleanZones,
-                industrialEnterprises: cleanEnterprises,
+                industrialZones: Number(districtData.industrialZones) || 0,
+                industrialEnterprises: Number(districtData.industrialEnterprises) || 0,
             };
 
             form.reset(formData);
-            
-            // Forces useFieldArray to catch up with the reset data
-            replaceZones(cleanZones);
-            replaceEnterprises(cleanEnterprises);
-            
-            console.log('--- FORM DATA LOAD COMPLETE ---');
         }
-    }, [districtData, isFetchingFull, form, replaceZones, replaceEnterprises]);
+    }, [districtData, isFetchingFull, form]);
 
     const errorCount = Object.keys(form.formState.errors).length;
 
     const onSubmit = useCallback(
         async (data: CreateDistrictDto) => {
             try {
-                const formatIndustrialItem = (item: IndustrialItem) => ({
-                    nameUz: item.nameUz || '',
-                    nameRu: item.nameRu || '',
-                    nameEn: item.nameEn || '',
-                });
-
-                const cleanZones = (data.industrialZones || [])
-                    .filter((item: IndustrialItem) => 
-                        item && (
-                            (item.nameUz && item.nameUz.trim() !== '') || 
-                            (item.nameRu && item.nameRu.trim() !== '') || 
-                            (item.nameEn && item.nameEn.trim() !== '')
-                        )
-                    )
-                    .map(formatIndustrialItem);
-
-                const cleanEnterprises = (data.industrialEnterprises || [])
-                    .filter((item: IndustrialItem) => 
-                        item && (
-                            (item.nameUz && item.nameUz.trim() !== '') || 
-                            (item.nameRu && item.nameRu.trim() !== '') || 
-                            (item.nameEn && item.nameEn.trim() !== '')
-                        )
-                    )
-                    .map(formatIndustrialItem);
                 const baseData = {
-                    nameUz: data.nameUz,
-                    nameRu: data.nameRu || '',
-                    nameEn: data.nameEn || '',
-                    type: data.type,
+                    ...data,
                     totalArea: Number(data.totalArea) || 0,
-                    industrialZones: cleanZones,
-                    industrialEnterprises: cleanEnterprises,
+                    industrialZones: Number(data.industrialZones) || 0,
+                    industrialEnterprises: Number(data.industrialEnterprises) || 0,
                 };
 
                 if (isEditing) {
-                    const updateData = {
-                        ...baseData,
-                    };
-                    console.log('--- PATCH SUBMISSION START ---');
-                    console.log('Payload:', JSON.parse(JSON.stringify(updateData)));
-                    await updateMutation.mutateAsync(updateData as UpdateDistrictDto);
+                    await updateMutation.mutateAsync(baseData as UpdateDistrictDto);
                 } else {
                     const createData = {
                         ...baseData,
                         slug: data.slug || undefined,
                     };
-                    console.log('--- POST SUBMISSION START ---');
-                    console.log('Payload:', JSON.parse(JSON.stringify(createData)));
                     await createMutation.mutateAsync(createData as CreateDistrictDto);
                 }
                 onSuccess?.();
@@ -202,7 +112,7 @@ export default function DistrictForm({
                 console.error('Form submission error:', error);
             }
         },
-        [isEditing, createMutation, updateMutation, onSuccess, districtData?.id]
+        [isEditing, createMutation, updateMutation, onSuccess]
     );
 
     return (
@@ -308,179 +218,83 @@ export default function DistrictForm({
 
                     {/* Industries and Area Tab */}
                     <TabsContent value="industries" className="space-y-8 pt-4">
-                        {/* Area Stats */}
-                        <div className="p-4 bg-gray-50 border rounded-lg max-w-md">
-                            <FormField
-                                control={form.control}
-                                name="totalArea"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="font-semibold text-gray-700">Umumiy yer maydoni (GA)</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="number"
-                                                {...field}
-                                                value={field.value ?? ''}
-                                                step="0.01"
-                                                placeholder="0.00"
-                                                className="bg-white"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-
-                        {/* Industrial Zones Repeater */}
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold flex items-center gap-2">
-                                    <Map className="w-5 h-5 text-blue-600" />
-                                    Sanoat zonalari
-                                </h3>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => addZone({ nameUz: '', nameRu: '', nameEn: '' })}
-                                    className="text-blue-600 border-blue-200 hover:bg-blue-50"
-                                >
-                                    <Plus className="w-4 h-4 mr-1" /> Qo'shish
-                                </Button>
-                            </div>
-                            
-                            {zones.length === 0 && (
-                                <p className="text-sm text-gray-500 italic py-4 text-center border-2 border-dashed rounded-lg">
-                                    Hech qanday sanoat zonasi qo'shilmagan
-                                </p>
-                            )}
-
-                            <div className="space-y-4">
-                                {zones.map((field, index) => (
-                                    <div key={field.id} className="p-4 border rounded-lg bg-white shadow-sm space-y-4 relative">
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => removeZone(index)}
-                                            className="absolute top-2 right-2 text-red-500 hover:text-red-700 hover:bg-red-50"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </Button>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mr-8">
-                                            <FormField
-                                                control={form.control}
-                                                name={`industrialZones.${index}.nameUz`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs text-gray-500">Nomi (UZ)</FormLabel>
-                                                        <FormControl><Input {...field} value={field.value ?? ''} placeholder="Sanoat zonasi nomi" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name={`industrialZones.${index}.nameRu`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs text-gray-500">Nomi (RU)</FormLabel>
-                                                        <FormControl><Input {...field} value={field.value ?? ''} placeholder="Название промзоны" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name={`industrialZones.${index}.nameEn`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs text-gray-500">Nomi (EN)</FormLabel>
-                                                        <FormControl><Input {...field} value={field.value ?? ''} placeholder="Industrial zone name" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Area Stats */}
+                            <div className="p-4 bg-gray-50 border rounded-lg">
+                                <FormField
+                                    control={form.control}
+                                    name="totalArea"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="font-semibold text-gray-700">Umumiy yer maydoni (GA)</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                    step="0.01"
+                                                    placeholder="0.00"
+                                                    className="bg-white"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
                         </div>
 
-                        {/* Industrial Enterprises Repeater */}
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold flex items-center gap-2">
-                                    <Building2 className="w-5 h-5 text-green-600" />
-                                    Sanoat korxonalari
-                                </h3>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => addEnterprise({ nameUz: '', nameRu: '', nameEn: '' })}
-                                    className="text-green-600 border-green-200 hover:bg-green-50"
-                                >
-                                    <Plus className="w-4 h-4 mr-1" /> Qo'shish
-                                </Button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Industrial Zones Count */}
+                            <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-lg">
+                                <FormField
+                                    control={form.control}
+                                    name="industrialZones"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Activity className="w-4 h-4 text-blue-600" />
+                                                <FormLabel className="font-semibold text-blue-900 mb-0">Sanoat zonalari soni</FormLabel>
+                                            </div>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                    placeholder="0"
+                                                    className="bg-white"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
 
-                            {enterprises.length === 0 && (
-                                <p className="text-sm text-gray-500 italic py-4 text-center border-2 border-dashed rounded-lg">
-                                    Hech qanday sanoat korxonasi qo'shilmagan
-                                </p>
-                            )}
-
-                            <div className="space-y-4">
-                                {enterprises.map((field, index) => (
-                                    <div key={field.id} className="p-4 border rounded-lg bg-white shadow-sm space-y-4 relative">
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => removeEnterprise(index)}
-                                            className="absolute top-2 right-2 text-red-500 hover:text-red-700 hover:bg-red-50"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </Button>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mr-8">
-                                            <FormField
-                                                control={form.control}
-                                                name={`industrialEnterprises.${index}.nameUz`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs text-gray-500">Nomi (UZ)</FormLabel>
-                                                        <FormControl><Input {...field} value={field.value ?? ''} placeholder="Korxona nomi" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name={`industrialEnterprises.${index}.nameRu`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs text-gray-500">Nomi (RU)</FormLabel>
-                                                        <FormControl><Input {...field} value={field.value ?? ''} placeholder="Название предприятия" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name={`industrialEnterprises.${index}.nameEn`}
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs text-gray-500">Nomi (EN)</FormLabel>
-                                                        <FormControl><Input {...field} value={field.value ?? ''} placeholder="Enterprise name" /></FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
+                            {/* Industrial Enterprises Count */}
+                            <div className="p-4 bg-green-50/50 border border-green-100 rounded-lg">
+                                <FormField
+                                    control={form.control}
+                                    name="industrialEnterprises"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Building2 className="w-4 h-4 text-green-600" />
+                                                <FormLabel className="font-semibold text-green-900 mb-0">Sanoat korxonalari soni</FormLabel>
+                                            </div>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                    placeholder="0"
+                                                    className="bg-white"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
                         </div>
                     </TabsContent>

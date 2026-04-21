@@ -287,12 +287,12 @@ export default function DistrictsPage() {
                                     </TableCell>
                                     <TableCell className="px-4 py-4">
                                         <span className="text-sm font-medium text-blue-600">
-                                            {district.industrialZonesCount ?? district.industrialZones?.length ?? 0} ta
+                                            {district.industrialZones} ta
                                         </span>
                                     </TableCell>
                                     <TableCell className="px-4 py-4">
                                         <span className="text-sm font-medium text-gray-900">
-                                            {district.industrialEnterprisesCount ?? district.industrialEnterprises?.length ?? 0} ta
+                                            {district.industrialEnterprises} ta
                                         </span>
                                     </TableCell>
 
