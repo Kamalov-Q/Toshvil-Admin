@@ -62,6 +62,7 @@ export default function DistrictForm({
             nameEn: '',
             type: 'tuman',
             totalArea: 0,
+            occupiedArea: 0,
             industrialZones: 0,
             industrialEnterprises: 0,
             slug: '',
@@ -80,6 +81,7 @@ export default function DistrictForm({
                 slug: districtData.slug || '',
                 industrialZones: Number(districtData.industrialZones) || 0,
                 industrialEnterprises: Number(districtData.industrialEnterprises) || 0,
+                occupiedArea: districtData.occupiedArea ? Number(districtData.occupiedArea) : 0,
             };
 
             form.reset(formData);
@@ -94,6 +96,7 @@ export default function DistrictForm({
                 const baseData = {
                     ...data,
                     totalArea: Number(data.totalArea) || 0,
+                    occupiedArea: Number(data.occupiedArea) || 0,
                     industrialZones: Number(data.industrialZones) || 0,
                     industrialEnterprises: Number(data.industrialEnterprises) || 0,
                 };
@@ -218,31 +221,53 @@ export default function DistrictForm({
 
                     {/* Industries and Area Tab */}
                     <TabsContent value="industries" className="space-y-8 pt-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* Area Stats */}
-                            <div className="p-4 bg-gray-50 border rounded-lg">
-                                <FormField
-                                    control={form.control}
-                                    name="totalArea"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel className="font-semibold text-gray-700">Umumiy yer maydoni (GA)</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    {...field}
-                                                    value={field.value ?? ''}
-                                                    step="0.01"
-                                                    placeholder="0.00"
-                                                    className="bg-white"
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="p-4 bg-gray-50 border rounded-lg">
+                                    <FormField
+                                        control={form.control}
+                                        name="totalArea"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="font-semibold text-gray-700">Umumiy yer maydoni (GA)</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="number"
+                                                        {...field}
+                                                        value={field.value ?? ''}
+                                                        step="0.0001"
+                                                        placeholder="0.00"
+                                                        className="bg-white"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className="p-4 bg-orange-50 border border-orange-100 rounded-lg">
+                                    <FormField
+                                        control={form.control}
+                                        name="occupiedArea"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="font-semibold text-orange-700">Band yer maydoni (GA)</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="number"
+                                                        {...field}
+                                                        value={field.value ?? ''}
+                                                        step="0.0001"
+                                                        placeholder="0.00"
+                                                        className="bg-white"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
                             </div>
-                        </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Industrial Zones Count */}

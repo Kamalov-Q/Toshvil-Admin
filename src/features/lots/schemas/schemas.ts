@@ -52,12 +52,12 @@ export const CreateLotSchema = z.object({
     landCategoryUz: z.string().min(1, 'Land category UZ is required'),
     landCategoryRu: z.string().min(1, 'Land category RU is required'),
     landCategoryEn: z.string().min(1, 'Land category EN is required'),
-    landArea: z.coerce.number().min(0.1, 'Land area must be greater than 0'),
+    landArea: z.coerce.number().min(0.0001, 'Land area must be greater than 0'),
     distanceToRoad: z.string().min(1, 'Distance to road is required'),
 
     // Investment Information
     jobsToCreate: z.coerce.number().min(0, 'Jobs to create cannot be negative').int(),
-    requiredInvestment: z.coerce.number().min(0, 'Required investment cannot be negative'),
+    requiredInvestment: z.coerce.number().min(0.01, 'Talab qilinadigan investitsiya kiritilishi shart'),
 
     // Infrastructure
     hasRoad: z.boolean().default(false),
@@ -121,14 +121,19 @@ export type Lot = CreateLotDto & {
         isMain: boolean;
         sortOrder: number;
     }>;
+    district?: {
+        id: string;
+        nameUz: string;
+        nameRu: string;
+        nameEn: string;
+        type: string;
+    };
 };
 
 // Constants for UI
 export const STATUS_OPTIONS = [
-    { value: 'active', label: 'Active', color: 'bg-green-100 text-green-800 border-green-300' },
-    { value: 'upcoming', label: 'Upcoming', color: 'bg-blue-100 text-blue-800 border-blue-300' },
-    { value: 'completed', label: 'Completed', color: 'bg-gray-100 text-gray-800 border-gray-300' },
-    { value: 'cancelled', label: 'Cancelled', color: 'bg-red-100 text-red-800 border-red-300' },
+    { value: 'active', label: 'Faol', color: 'bg-green-100 text-green-800 border-green-300' },
+    { value: 'completed', label: 'Yakunlangan', color: 'bg-gray-100 text-gray-800 border-gray-300' },
 ];
 
 export const TRADE_TYPE_OPTIONS = [

@@ -46,7 +46,7 @@ import {
     getStatusColor,
 } from '../schemas/schemas';
 import LotModal from './LotModal';
-import { formatDate, formatArea } from '../../../utils/formatters';
+import { formatArea } from '../../../utils/formatters';
 import ConfirmDialog from './modals/ConfirmDialog';
 
 export default function LotsTable() {
@@ -144,13 +144,16 @@ export default function LotsTable() {
             ),
         },
         {
-            accessorKey: 'createdAt',
-            header: 'Yaratilgan',
-            cell: ({ row }) => (
-                <span className="text-sm text-gray-600">
-                    {formatDate(row.getValue('createdAt') as string)}
-                </span>
-            ),
+            accessorKey: 'district',
+            header: 'Tuman',
+            cell: ({ row }) => {
+                const district = (row.original as any).district;
+                return (
+                    <span className="text-sm font-medium text-gray-700">
+                        {district?.nameUz || '—'}
+                    </span>
+                );
+            },
         },
         {
             id: 'actions',

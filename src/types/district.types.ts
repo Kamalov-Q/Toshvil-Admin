@@ -14,7 +14,8 @@ export const CreateDistrictSchema = z.object({
     nameRu: z.string().min(1, 'Name RU is required').max(255),
     nameEn: z.string().min(1, 'Name EN is required').max(255),
     type: DistrictTypeEnum,
-    totalArea: z.coerce.number().min(0.01, 'Total area must be greater than 0'),
+    totalArea: z.coerce.number().min(0.0001, 'Total area must be greater than 0'),
+    occupiedArea: z.coerce.number().min(0).default(0),
     industrialZones: z.coerce.number().min(0).default(0),
     industrialEnterprises: z.coerce.number().min(0).default(0)
 });
@@ -23,9 +24,8 @@ export const UpdateDistrictSchema = CreateDistrictSchema.partial();
 
 export type CreateDistrictDto = z.infer<typeof CreateDistrictSchema>;
 export type UpdateDistrictDto = z.infer<typeof UpdateDistrictSchema>;
-export type District = Omit<CreateDistrictDto, 'industrialZones' | 'industrialEnterprises'> & {
+export type District = CreateDistrictDto & {
     id: string;
-    occupiedArea: number;
     emptyArea: number;
     industrialZones: number;
     industrialEnterprises: number;

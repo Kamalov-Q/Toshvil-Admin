@@ -143,8 +143,7 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
         },
     });
 
-    const selectedDistrictId = form.watch('districtId');
-    const selectedDistrict = districtData?.data?.find(d => d.id === selectedDistrictId);
+    // No longer needed
 
     const onSubmit = async (data: CreateLotDto) => {
         try {
@@ -495,18 +494,12 @@ export default function LotModal({ lot, onClose }: LotModalProps) {
                                                 <div className="space-y-2">
                                                     <Input
                                                         type="number"
-                                                        step="0.01"
+                                                        step="0.0001"
                                                         {...field}
                                                         onChange={(e) => field.onChange(e.target.value)}
                                                         placeholder="masalan, 5000.50"
                                                         className="focus:ring-blue-500"
                                                     />
-                                                    {selectedDistrict && (
-                                                        <p className="text-xs font-medium text-green-600 bg-green-50 p-2 rounded border border-green-100 flex items-center gap-2">
-                                                            <AlertCircle className="w-3 h-3" />
-                                                            Tanlangan tumanda {selectedDistrict.emptyArea} GA bo'sh maydon mavjud.
-                                                        </p>
-                                                    )}
                                                 </div>
                                             </FormControl>
                                             <FormMessage className="text-xs text-red-600" />
