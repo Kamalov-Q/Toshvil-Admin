@@ -12,6 +12,7 @@ import CategoriesPage from './pages/CategoriesPage';
 import DocsPage from './pages/DocsPage';
 import { useAuthStore } from './store/authStore';
 import DashboardLayout from './components/layout/Dashboard';
+import AuctionsPage from './pages/AuctionsPage';
 import DepartmentsPage from './pages/management/DepartmentsPage';
 import PositionsPage from './pages/management/PositionsPage';
 import LeadershipPage from './pages/management/LeadershipPage';
@@ -57,6 +58,7 @@ export default function App() {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="lots" element={<LotsPage />} />
             <Route path="districts" element={<DistrictsPage />} />
+            <Route path="auctions" element={<AuctionsPage />} />
             <Route path="news" element={<NewsPage />} />
             <Route path="categories" element={<CategoriesPage />} />
             <Route path="docs" element={<DocsPage />} />

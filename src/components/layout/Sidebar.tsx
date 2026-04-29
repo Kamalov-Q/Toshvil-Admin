@@ -17,6 +17,7 @@ import {
     FileStack,
     PanelLeftClose,
     PanelLeftOpen,
+    Gavel,
 } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
@@ -54,6 +55,11 @@ const menuItems: MenuItem[] = [
         icon: <LayoutDashboard className="w-[22px] h-[22px]" />,
         label: 'Tumanlar',
         path: '/districts',
+    },
+    {
+        icon: <Gavel className="w-[22px] h-[22px]" />,
+        label: 'Auksionlar',
+        path: '/auctions',
     },
     {
         icon: <Newspaper className="w-[22px] h-[22px]" />,
