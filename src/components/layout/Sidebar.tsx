@@ -18,6 +18,7 @@ import {
     PanelLeftClose,
     PanelLeftOpen,
     Gavel,
+    Factory,
 } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
@@ -27,6 +28,7 @@ import { toast } from '../../utils/toast';
 import { useNewsList } from '../../hooks/useNewsQueries';
 import { useDistricts } from '../../hooks/useDistricts';
 import { useLots } from '../../features/lots/api/hooks';
+import { useIndustries } from '../../hooks/useIndustries';
 
 interface MenuItem {
     icon: React.ReactNode;
@@ -56,6 +58,12 @@ const menuItems: MenuItem[] = [
         label: 'Tumanlar',
         path: '/districts',
     },
+    {
+        icon: <Factory className="w-[22px] h-[22px]" />,
+        label: 'Sanoat zonalari',
+        path: '/industries',
+    },
+
     {
         icon: <Gavel className="w-[22px] h-[22px]" />,
         label: 'Auksionlar',
@@ -138,6 +146,9 @@ export default function Sidebar() {
 
     const { data: lotsData } = useLots({ limit: 1 });
     const totalLots = lotsData?.total || 0;
+
+    const { data: industriesData } = useIndustries();
+    const totalIndustries = industriesData?.length || 0;
 
     const handleLogout = async () => {
         try {
@@ -238,6 +249,8 @@ export default function Sidebar() {
                             if (item.path === '/news' && totalNews > 0) displayBadge = totalNews;
                             if (item.path === '/districts' && totalDistricts > 0) displayBadge = totalDistricts;
                             if (item.path === '/lots' && totalLots > 0) displayBadge = totalLots;
+                            if (item.path === '/industries' && totalIndustries > 0) displayBadge = totalIndustries;
+
 
                             return (
                                 <div key={item.label} className="relative group">

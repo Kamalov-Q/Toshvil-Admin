@@ -24,11 +24,15 @@ export const UpdateDistrictSchema = CreateDistrictSchema.partial();
 
 export type CreateDistrictDto = z.infer<typeof CreateDistrictSchema>;
 export type UpdateDistrictDto = z.infer<typeof UpdateDistrictSchema>;
+import type { Industry } from './industry.types';
+
+
 export type District = CreateDistrictDto & {
     id: string;
     emptyArea: number;
     industrialZones: number;
     industrialEnterprises: number;
+    industries: Industry[];
     createdAt: string;
     updatedAt: string;
 };

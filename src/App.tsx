@@ -17,6 +17,8 @@ import DepartmentsPage from './pages/management/DepartmentsPage';
 import PositionsPage from './pages/management/PositionsPage';
 import LeadershipPage from './pages/management/LeadershipPage';
 import ManagersPage from './pages/management/ManagersPage';
+import IndustriesPage from './pages/IndustriesPage';
+
 
 // Create Query Client
 const queryClient = new QueryClient({
@@ -58,6 +60,7 @@ export default function App() {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="lots" element={<LotsPage />} />
             <Route path="districts" element={<DistrictsPage />} />
+            <Route path="industries" element={<IndustriesPage />} />
             <Route path="auctions" element={<AuctionsPage />} />
             <Route path="news" element={<NewsPage />} />
             <Route path="categories" element={<CategoriesPage />} />
