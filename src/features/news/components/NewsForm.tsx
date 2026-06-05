@@ -70,7 +70,7 @@ export default function NewsForm({
             shortDescriptionUz: '',
             shortDescriptionRu: '',
             shortDescriptionEn: '',
-            image: '',
+            images: [],
             category: NewsCategoryEnum.ANNOUNCEMENTS,
             isPublished: false,
         },
@@ -314,13 +314,14 @@ export default function NewsForm({
 
                         <FormField
                             control={form.control}
-                            name="image"
+                            name="images"
                             render={() => (
                                 <FormItem>
                                     <FormControl>
                                         <FileUploader
                                             control={form.control}
-                                            name="image"
+                                            name="images"
+                                            multiple={true}
                                             accept="image/*"
                                             folder="news"
                                         />
@@ -402,13 +403,20 @@ export default function NewsForm({
                         <div className="bg-white border border-gray-200 rounded-lg p-6">
                             <div className="space-y-6">
                                 {/* Preview Image */}
-                                {form.getValues('image') && (
-                                    <div className="rounded-lg overflow-hidden bg-gray-100">
-                                        <img
-                                            src={form.getValues('image')}
-                                            alt="Preview"
-                                            className="w-full h-96 object-cover"
-                                        />
+                                {form.getValues('images') && (form.getValues('images') as string[]).length > 0 && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {(form.getValues('images') as string[]).map((img, index) => (
+                                            <div key={index} className="rounded-lg overflow-hidden bg-gray-100 aspect-video relative">
+                                                <img
+                                                    src={img}
+                                                    alt={`Preview ${index + 1}`}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                <div className="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded">
+                                                    {index === 0 ? 'Featured' : `Image ${index + 1}`}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
 

@@ -52,9 +52,10 @@ export const NewsCreateSchema = z.object({
         .min(1, 'Short description (EN) is required')
         .max(200, 'Short description must be less than 200 characters'),
 
-    image: z
-        .string()
-        .url('Image must be a valid URL'),
+    images: z
+        .array(z.string().url('Image must be a valid URL'))
+        .min(1, 'At least one image is required')
+        .max(10, 'Maximum 10 images are allowed'),
 
     category: z.nativeEnum(NewsCategoryEnum),
     isPublished: z.boolean().default(false),

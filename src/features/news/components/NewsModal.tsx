@@ -57,7 +57,7 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
             shortDescriptionUz: '',
             shortDescriptionRu: '',
             shortDescriptionEn: '',
-            image: '',
+            images: [],
             category: 'announcements',
             isPublished: false,
         },
@@ -275,30 +275,31 @@ export default function NewsModal({ news, onClose }: NewsModalProps) {
                             <h3 className="font-semibold text-lg text-gray-900">Asosiy rasm</h3>
                             <FormField
                                 control={form.control}
-                                name="image"
+                                name="images"
                                 render={({field}) => (
                                     <FormItem>
                                         <FileUploader
                                             control={form.control}
-                                            name="image"
+                                            name="images"
                                             folder="news"
                                             accept="image/*"
-                                            multiple={false}
+                                            multiple={true}
                                             label="Rasm yuklash"
                                             description="PNG, JPG, GIF 10MB gacha."
                                             maxSize={50}
                                         />
                                         <FormMessage className="text-xs text-red-600" />
-                                        {field.value && (
-                                            <div className="mt-4">
-                                                <p className="text-sm font-medium text-gray-700">Oldindan ko'rish</p>
-                                                <div className="relative overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
-                                                    <img
-                                                        src={field.value}
-                                                        alt="Preview"
-                                                        className="w-full h-64 object-cover"
-                                                    />
-                                                </div>
+                                        {field.value && Array.isArray(field.value) && field.value.length > 0 && (
+                                            <div className="mt-4 grid grid-cols-2 gap-2">
+                                                {field.value.map((url: string, idx: number) => (
+                                                    <div key={idx} className="relative overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
+                                                        <img
+                                                            src={url}
+                                                            alt={`Preview ${idx}`}
+                                                            className="w-full h-32 object-cover"
+                                                        />
+                                                    </div>
+                                                ))}
                                             </div>
                                         )}
                                     </FormItem>

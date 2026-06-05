@@ -43,6 +43,7 @@ import {
     EyeOff,
     Calendar,
     Tag,
+    Image as ImageIcon,
 } from 'lucide-react';
 import {
     useNewsList,
@@ -177,6 +178,29 @@ export default function NewsTable() {
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
                 />
             ),
+        },
+        {
+            accessorKey: 'images',
+            header: 'Rasm',
+            cell: ({ row }) => {
+                const images = row.getValue('images') as string[];
+                const firstImage = images?.[0];
+                return (
+                    <div className="w-16 h-10 rounded overflow-hidden bg-gray-100 border">
+                        {firstImage ? (
+                            <img
+                                src={firstImage}
+                                alt=""
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                <ImageIcon className="w-4 h-4" />
+                            </div>
+                        )}
+                    </div>
+                );
+            },
         },
         {
             accessorKey: 'titleUz',
