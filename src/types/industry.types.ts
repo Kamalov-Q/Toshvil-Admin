@@ -29,3 +29,18 @@ export type Industry = {
     createdAt: string;
     updatedAt: string;
 };
+
+export interface GetIndustriesParams {
+    page?: number;
+    limit?: number;
+    districtId?: string;
+    name?: string;
+}
+
+export interface IndustriesResponse {
+    data: Industry[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}

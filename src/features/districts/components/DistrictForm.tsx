@@ -63,7 +63,6 @@ export default function DistrictForm({
             type: 'tuman',
             totalArea: 0,
             occupiedArea: 0,
-            industrialZones: 0,
             industrialEnterprises: 0,
             slug: '',
         },
@@ -79,7 +78,6 @@ export default function DistrictForm({
                 type: (districtData.type as CreateDistrictDto['type']) || 'tuman',
                 totalArea: districtData.totalArea ? Number(districtData.totalArea) : 0,
                 slug: districtData.slug || '',
-                industrialZones: Number(districtData.industrialZones) || 0,
                 industrialEnterprises: Number(districtData.industrialEnterprises) || 0,
                 occupiedArea: districtData.occupiedArea ? Number(districtData.occupiedArea) : 0,
             };
@@ -97,7 +95,6 @@ export default function DistrictForm({
                     ...data,
                     totalArea: Number(data.totalArea) || 0,
                     occupiedArea: Number(data.occupiedArea) || 0,
-                    industrialZones: Number(data.industrialZones) || 0,
                     industrialEnterprises: Number(data.industrialEnterprises) || 0,
                 };
 
@@ -270,30 +267,19 @@ export default function DistrictForm({
                             </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* Industrial Zones Count */}
                             <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-lg">
-                                <FormField
-                                    control={form.control}
-                                    name="industrialZones"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Activity className="w-4 h-4 text-blue-600" />
-                                                <FormLabel className="font-semibold text-blue-900 mb-0">Sanoat zonalari soni</FormLabel>
-                                            </div>
-                                            <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    {...field}
-                                                    value={field.value ?? ''}
-                                                    placeholder="0"
-                                                    className="bg-white"
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                <FormItem>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Activity className="w-4 h-4 text-blue-600" />
+                                        <FormLabel className="font-semibold text-blue-900 mb-0">Sanoat zonalari soni</FormLabel>
+                                    </div>
+                                    <div className="h-10 flex items-center px-3 bg-white border rounded-md text-sm font-medium text-blue-700">
+                                        {districtData?.industries?.length || 0} ta
+                                    </div>
+                                    <p className="text-[10px] text-blue-600/70 mt-1">
+                                        * Sanoat zonalari ro'yxatidan avtomatik hisoblanadi
+                                    </p>
+                                </FormItem>
                             </div>
 
                             {/* Industrial Enterprises Count */}

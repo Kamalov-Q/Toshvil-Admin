@@ -44,7 +44,7 @@ export default function IndustryForm({
     
     const { data: districtsData } = useDistricts({ limit: 100 });
     const createMutation = useCreateIndustry();
-    const updateMutation = useUpdateIndustry(initialData?.id || '');
+    const updateMutation = useUpdateIndustry();
     
     const isLoading = createMutation.isPending || updateMutation.isPending;
 
@@ -62,31 +62,43 @@ export default function IndustryForm({
 
     useEffect(() => {
         if (initialData) {
+            const districtId = initialData.districtId || (initialData as any).district_id || (initialData as any).district?.id || '';
+            
             form.reset({
                 nameUz: initialData.nameUz,
-                nameRu: initialData.nameRu,
-                nameEn: initialData.nameEn,
+                nameRu: initialData.nameRu || '',
+                nameEn: initialData.nameEn || '',
                 latitude: Number(initialData.latitude),
                 longitude: Number(initialData.longitude),
-                districtId: initialData.districtId,
+                districtId,
             });
         }
     }, [initialData, form]);
 
+    useEffect(() => {
+        const currentDistrictId = initialData?.districtId || (initialData as any)?.district_id || (initialData as any)?.district?.id;
+        if (currentDistrictId && districtsData?.data?.length) {
+            const hasDistrict = districtsData.data.some(d => d.id === currentDistrictId);
+            if (hasDistrict) {
+                form.setValue('districtId', currentDistrictId);
+            }
+        }
+    }, [districtsData, initialData, form]);
+
     const onSubmit = useCallback(
         async (data: CreateIndustryDto) => {
             try {
-                if (isEditing) {
-                    await updateMutation.mutateAsync(data);
+                if (isEditing && initialData?.id) {
+                    await updateMutation.mutateAsync({ id: initialData.id, data });
                 } else {
                     await createMutation.mutateAsync(data);
                 }
                 onSuccess?.();
             } catch (error) {
-                console.error('Form submission error:', error);
+                // Error is handled in the hook
             }
         },
-        [isEditing, createMutation, updateMutation, onSuccess]
+        [isEditing, initialData?.id, createMutation, updateMutation, onSuccess]
     );
 
     return (
@@ -141,24 +153,34 @@ export default function IndustryForm({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Tuman / Shahar</FormLabel>
-                                <Select onValueChange={field.onChange} value={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Tumanni tanlang" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {districtsData?.data?.map((district) => (
-                                            <SelectItem key={district.id} value={district.id}>
-                                                {district.nameUz}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                <Select 
+                                    key={field.value || 'empty'}
+                                    onValueChange={field.onChange} 
+                                    value={field.value || ''}
+                                >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Tumanni tanlang" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {districtsData?.data?.map((district) => (
+                                                <SelectItem key={district.id} value={district.id}>
+                                                    {district.nameUz}
+                                                </SelectItem>
+                                            ))}
+                                            {/* Safety: explicitly include the current district if it's not in the list */}
+                                            {field.value && !districtsData?.data?.some(d => d.id === field.value) && (
+                                                <SelectItem key={field.value} value={field.value}>
+                                                    {(initialData as any)?.district?.nameUz || 'Noma\'lum tuman'} (Tanlangan)
+                                                </SelectItem>
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     <div className="grid grid-cols-2 gap-4">
                         <FormField
                             control={form.control}

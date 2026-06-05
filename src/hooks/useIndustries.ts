@@ -7,13 +7,14 @@ import {
     deleteIndustry 
 } from '../api/industries.api';
 import type { UpdateIndustryDto } from '../api/industries.api';
+import type { GetIndustriesParams } from '../types/industry.types';
 
 import { toast } from '../utils/toast';
 
-export const useIndustries = (districtId?: string) => {
+export const useIndustries = (params: GetIndustriesParams = {}) => {
     return useQuery({
-        queryKey: ['industries', districtId],
-        queryFn: () => getIndustries(districtId),
+        queryKey: ['industries', params],
+        queryFn: () => getIndustries(params),
     });
 };
 
@@ -42,12 +43,12 @@ export const useCreateIndustry = () => {
     });
 };
 
-export const useUpdateIndustry = (id: string) => {
+export const useUpdateIndustry = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (data: UpdateIndustryDto) => updateIndustry(id, data),
-        onSuccess: (data) => {
+        mutationFn: ({ id, data }: { id: string; data: UpdateIndustryDto }) => updateIndustry(id, data),
+        onSuccess: (data, { id }) => {
             queryClient.invalidateQueries({ queryKey: ['industries'] });
             queryClient.invalidateQueries({ queryKey: ['industry', id] });
             queryClient.invalidateQueries({ queryKey: ['districts'] });

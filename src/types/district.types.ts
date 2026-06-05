@@ -16,7 +16,6 @@ export const CreateDistrictSchema = z.object({
     type: DistrictTypeEnum,
     totalArea: z.coerce.number().min(0.0001, 'Total area must be greater than 0'),
     occupiedArea: z.coerce.number().min(0).default(0),
-    industrialZones: z.coerce.number().min(0).default(0),
     industrialEnterprises: z.coerce.number().min(0).default(0)
 });
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Factory, Plus, Edit2, Trash2, Search, MapPin, ExternalLink } from 'lucide-react';
+import { Factory, Plus, Edit2, Trash2, Search, MapPin, ExternalLink, RotateCcw } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -21,27 +21,29 @@ import { useDistricts } from '../hooks/useDistricts';
 import type { Industry } from '../types/industry.types';
 import ConfirmDialog from '@/features/lots/components/modals/ConfirmDialog';
 import IndustryForm from '../features/industries/components/IndustryForm';
+import { useDebounce } from '../hooks/useDebounce';
 
 export default function IndustriesPage() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [pagination, setPagination] = useState({ page: 1, limit: 10 });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingIndustry, setEditingIndustry] = useState<Industry | null>(null);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [industryToDelete, setIndustryToDelete] = useState<Industry | null>(null);
 
-    const { data: industries, isLoading } = useIndustries();
+    const debouncedSearch = useDebounce(searchQuery, 500);
+
+    const { data: industriesData, isLoading } = useIndustries({
+        page: pagination.page,
+        limit: pagination.limit,
+        name: debouncedSearch || undefined,
+    });
     const { data: districts } = useDistricts({ limit: 100 });
     const deleteMutation = useDeleteIndustry();
 
     const getDistrictName = (id: string) => {
         return districts?.data?.find(d => d.id === id)?.nameUz || 'Noma\'lum';
     };
-
-    const filteredIndustries = industries?.filter(item => 
-        item.nameUz.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.nameRu.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.nameEn.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
     const handleCreate = () => {
         setEditingIndustry(null);
@@ -83,14 +85,30 @@ export default function IndustriesPage() {
                     <Input
                         placeholder="Zonalarni qidirish..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            setPagination(prev => ({ ...prev, page: 1 }));
+                        }}
                         className="pl-10"
                     />
                 </div>
-                <Button onClick={handleCreate} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
-                    <Plus className="w-5 h-5" />
-                    Yangi zona
-                </Button>
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        onClick={() => {
+                            setSearchQuery('');
+                            setPagination({ page: 1, limit: 10 });
+                        }}
+                        className="gap-2"
+                    >
+                        <RotateCcw className="w-4 h-4" />
+                        Tozalash
+                    </Button>
+                    <Button onClick={handleCreate} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+                        <Plus className="w-5 h-5" />
+                        Yangi zona
+                    </Button>
+                </div>
             </div>
 
             <div className="rounded-lg border bg-white overflow-hidden shadow-sm">
@@ -110,8 +128,8 @@ export default function IndustriesPage() {
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
                                 </TableCell>
                             </TableRow>
-                        ) : filteredIndustries?.length ? (
-                            filteredIndustries.map((item) => (
+                        ) : industriesData?.data?.length ? (
+                            industriesData.data.map((item) => (
                                 <TableRow key={item.id} className="hover:bg-blue-50/30">
                                     <TableCell className="font-medium">{item.nameUz}</TableCell>
                                     <TableCell>{getDistrictName(item.districtId)}</TableCell>
@@ -151,6 +169,63 @@ export default function IndustriesPage() {
                         )}
                     </TableBody>
                 </Table>
+
+                {/* Pagination Controls */}
+                {industriesData && industriesData.totalPages > 1 && (
+                    <div className="flex items-center justify-between px-4 py-3 bg-white border-t">
+                        <div className="flex flex-1 justify-between sm:hidden">
+                            <Button
+                                variant="outline"
+                                onClick={() => setPagination(prev => ({ ...prev, page: Math.max(prev.page - 1, 1) }))}
+                                disabled={pagination.page === 1}
+                            >
+                                Oldingi
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.page + 1, industriesData.totalPages) }))}
+                                disabled={pagination.page === industriesData.totalPages}
+                            >
+                                Keyingi
+                            </Button>
+                        </div>
+                        <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                            <div>
+                                <p className="text-sm text-gray-700">
+                                    <span className="font-medium">{industriesData.total}</span> ta natijadan <span className="font-medium">{(pagination.page - 1) * pagination.limit + 1}</span> dan{' '}
+                                    <span className="font-medium">
+                                        {Math.min(pagination.page * pagination.limit, industriesData.total)}
+                                    </span> gachasi ko'rsatilmoqda
+                                </p>
+                            </div>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setPagination(prev => ({ ...prev, page: Math.max(prev.page - 1, 1) }))}
+                                    disabled={pagination.page === 1}
+                                    className="gap-2"
+                                >
+                                    ← Oldingi
+                                </Button>
+                                <div className="flex items-center px-4">
+                                    <span className="text-sm font-medium">
+                                        Sahifa {pagination.page} / {industriesData.totalPages}
+                                    </span>
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.page + 1, industriesData.totalPages) }))}
+                                    disabled={pagination.page === industriesData.totalPages}
+                                    className="gap-2"
+                                >
+                                    Keyingi →
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>

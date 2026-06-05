@@ -1,5 +1,5 @@
 import { apiClient } from './axios';
-import type { Industry } from '../types/industry.types';
+import type { Industry, GetIndustriesParams, IndustriesResponse } from '../types/industry.types';
 
 export interface CreateIndustryDto {
     nameUz: string;
@@ -12,9 +12,15 @@ export interface CreateIndustryDto {
 
 export type UpdateIndustryDto = Partial<CreateIndustryDto>;
 
-export const getIndustries = async (districtId?: string): Promise<Industry[]> => {
-    const params = districtId ? { districtId } : {};
-    const response = await apiClient.get('/industries', { params });
+export const getIndustries = async (params: GetIndustriesParams = {}): Promise<IndustriesResponse> => {
+    const response = await apiClient.get<IndustriesResponse>('/industries', {
+        params: {
+            page: params.page || 1,
+            limit: params.limit || 10,
+            ...(params.districtId && { districtId: params.districtId }),
+            ...(params.name && { name: params.name }),
+        },
+    });
     return response.data;
 };
 
