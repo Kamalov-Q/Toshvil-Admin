@@ -19,11 +19,11 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Save } from 'lucide-react';
-import { 
-    CreateIndustrySchema, 
-    UpdateIndustrySchema, 
-    type CreateIndustryDto, 
-    type Industry 
+import {
+    CreateIndustrySchema,
+    UpdateIndustrySchema,
+    type CreateIndustryDto,
+    type Industry
 } from '../../../types/industry.types';
 import { useCreateIndustry, useUpdateIndustry } from '../../../hooks/useIndustries';
 import { useDistricts } from '../../../hooks/useDistricts';
@@ -41,11 +41,11 @@ export default function IndustryForm({
     onCancel,
 }: IndustryFormProps) {
     const isEditing = !!initialData;
-    
+
     const { data: districtsData } = useDistricts({ limit: 100 });
     const createMutation = useCreateIndustry();
     const updateMutation = useUpdateIndustry();
-    
+
     const isLoading = createMutation.isPending || updateMutation.isPending;
 
     const form = useForm<CreateIndustryDto>({
@@ -63,7 +63,7 @@ export default function IndustryForm({
     useEffect(() => {
         if (initialData) {
             const districtId = initialData.districtId || (initialData as any).district_id || (initialData as any).district?.id || '';
-            
+
             form.reset({
                 nameUz: initialData.nameUz,
                 nameRu: initialData.nameRu || '',
@@ -96,6 +96,7 @@ export default function IndustryForm({
                 onSuccess?.();
             } catch (error) {
                 // Error is handled in the hook
+                console.error('Submission error:', error);
             }
         },
         [isEditing, initialData?.id, createMutation, updateMutation, onSuccess]
@@ -153,34 +154,34 @@ export default function IndustryForm({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Tuman / Shahar</FormLabel>
-                                <Select 
+                                <Select
                                     key={field.value || 'empty'}
-                                    onValueChange={field.onChange} 
+                                    onValueChange={field.onChange}
                                     value={field.value || ''}
                                 >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Tumanni tanlang" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {districtsData?.data?.map((district) => (
-                                                <SelectItem key={district.id} value={district.id}>
-                                                    {district.nameUz}
-                                                </SelectItem>
-                                            ))}
-                                            {/* Safety: explicitly include the current district if it's not in the list */}
-                                            {field.value && !districtsData?.data?.some(d => d.id === field.value) && (
-                                                <SelectItem key={field.value} value={field.value}>
-                                                    {(initialData as any)?.district?.nameUz || 'Noma\'lum tuman'} (Tanlangan)
-                                                </SelectItem>
-                                            )}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Tumanni tanlang" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {districtsData?.data?.map((district) => (
+                                            <SelectItem key={district.id} value={district.id}>
+                                                {district.nameUz}
+                                            </SelectItem>
+                                        ))}
+                                        {/* Safety: explicitly include the current district if it's not in the list */}
+                                        {field.value && !districtsData?.data?.some(d => d.id === field.value) && (
+                                            <SelectItem key={field.value} value={field.value}>
+                                                {(initialData as any)?.district?.nameUz || 'Noma\'lum tuman'} (Tanlangan)
+                                            </SelectItem>
+                                        )}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <div className="grid grid-cols-2 gap-4">
                         <FormField
                             control={form.control}

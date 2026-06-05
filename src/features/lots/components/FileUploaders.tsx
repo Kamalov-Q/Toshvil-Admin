@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Loader, Upload, X } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useController, type Control, type FieldValues, type Path } from "react-hook-form";
@@ -149,7 +148,7 @@ export const FileUploader = React.forwardRef<
                 )}
 
                 <div className="relative">
-                    <Input
+                    <input
                         ref={inputRef}
                         type="file"
                         accept={accept}

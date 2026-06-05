@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useController, type FieldValues, type Control, type Path } from 'react-hook-form';
 import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
 import { Upload, X, Loader, Image as ImageIcon, FileText } from 'lucide-react';
 import { toast } from '../../../utils/toast';
 import { getFileUrl } from '../../../utils/formatters';
@@ -157,7 +156,7 @@ export const FileUploader = <T extends FieldValues>({
             )}
 
             <div className="relative">
-                <Input
+                <input
                     ref={inputRef}
                     type="file"
                     accept={accept}
