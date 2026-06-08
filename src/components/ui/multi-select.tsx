@@ -44,7 +44,7 @@ export default function MultiSelect({
   // Safely ensure selected is an array
   const safeSelected = Array.isArray(selected) ? selected : [];
 
-  const filteredOptions = options.filter(option => 
+  const filteredOptions = (Array.isArray(options) ? options : []).filter(option => 
     option.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

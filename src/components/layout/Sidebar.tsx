@@ -148,7 +148,7 @@ export default function Sidebar() {
     const totalLots = lotsData?.total || 0;
 
     const { data: industriesData } = useIndustries();
-    const totalIndustries = industriesData?.length || 0;
+    const totalIndustries = industriesData?.total || 0;
 
     const handleLogout = async () => {
         try {

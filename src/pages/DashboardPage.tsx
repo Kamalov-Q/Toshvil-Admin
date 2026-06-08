@@ -38,10 +38,10 @@ export default function DashboardPage() {
     ];
 
     const statusData = [
-        { name: 'Active', value: lots?.data.filter((l) => l.status === 'active').length || 0 },
-        { name: 'Upcoming', value: lots?.data.filter((l) => l.status === 'upcoming').length || 0 },
-        { name: 'Completed', value: lots?.data.filter((l) => l.status === 'completed').length || 0 },
-        { name: 'Cancelled', value: lots?.data.filter((l) => l.status === 'cancelled').length || 0 },
+        { name: 'Active', value: (lots?.data || []).filter((l) => l.status === 'active').length || 0 },
+        { name: 'Upcoming', value: (lots?.data || []).filter((l) => l.status === 'upcoming').length || 0 },
+        { name: 'Completed', value: (lots?.data || []).filter((l) => l.status === 'completed').length || 0 },
+        { name: 'Cancelled', value: (lots?.data || []).filter((l) => l.status === 'cancelled').length || 0 },
     ];
 
     const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'];
@@ -104,7 +104,7 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-bold">
-                            {news?.data.filter((n) => n.isPublished).length || 0}
+                            {(news?.data || []).filter((n) => n.isPublished).length || 0}
                         </div>
                         <p className="text-xs text-gray-500 mt-1">Faol maqolalar</p>
                     </CardContent>
@@ -221,7 +221,7 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {lots?.data.slice(0, 5).map((lot) => (
+                            {(lots?.data || []).slice(0, 5).map((lot) => (
                                 <div key={lot.id} className="flex justify-between items-center pb-4 border-b last:border-b-0">
                                     <div>
                                         <p className="font-medium text-gray-900">{lot.titleUz}</p>
@@ -240,7 +240,7 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {news?.data.slice(0, 5).map((item) => (
+                            {(news?.data || []).slice(0, 5).map((item) => (
                                 <div key={item.id} className="flex justify-between items-center pb-4 border-b last:border-b-0">
                                     <div>
                                         <p className="font-medium text-gray-900">{item.titleUz}</p>

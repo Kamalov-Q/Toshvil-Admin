@@ -81,9 +81,9 @@ export const FileUploader = React.forwardRef<
                 if (multiple) {
                     if (Array.isArray(data)) {
                         newUrls = data.map((item: any) => item.url || item).filter(Boolean);
-                    } else if (data.urls && Array.isArray(data.urls)) {
+                    } else if (data && typeof data === 'object' && data.urls && Array.isArray(data.urls)) {
                         newUrls = data.urls;
-                    } else if (data.url) {
+                    } else if (data && typeof data === 'object' && data.url) {
                         newUrls = [data.url];
                     }
 
@@ -118,7 +118,7 @@ export const FileUploader = React.forwardRef<
 
         const handleRemoveFile = (index?: number) => {
             if (multiple && Array.isArray(field.value)) {
-                const updated = field.value.filter((_: string, i: number) => i !== index);
+                const updated = (field.value || []).filter((_: string, i: number) => i !== index);
                 field.onChange(updated);
             } else {
                 field.onChange(multiple ? [] : '');
